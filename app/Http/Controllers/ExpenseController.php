@@ -36,7 +36,7 @@ class ExpenseController extends Controller
         DB::beginTransaction();
         try {
             DB::commit();
-            $request['user_id'] = Auth::user()->id;
+            $request['user_id'] = 1; //Auth::user()->id
             $expenses = Expense::create($request->all());
             return new ExpensesResource($expenses);
         }catch (Exception $exception){
