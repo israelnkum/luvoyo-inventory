@@ -4,7 +4,14 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreSuppliersRequest;
 use App\Http\Requests\UpdateSuppliersRequest;
+use App\Http\Resources\SuppliersResource;
 use App\Models\Supplier;
+use Exception;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 class SuppliersController extends Controller
 {
@@ -13,9 +20,9 @@ class SuppliersController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(): AnonymousResourceCollection
     {
-        //
+        return SuppliersResource::collection(Supplier::paginate(10));
     }
 
     /**
@@ -36,7 +43,17 @@ class SuppliersController extends Controller
      */
     public function store(StoreSuppliersRequest $request)
     {
-        //
+        DB::beginTransaction();
+        try {
+            DB::commit();
+            $request['user_id'] = 1; //Auth::user()->id
+            $expenses = Supplier::create($request->all());
+            return new SuppliersResource($expenses);
+        }catch (Exception $exception){
+            return response()->json([
+                'message' => $exception->getMessage()
+            ], 400);
+        }
     }
 
     /**
@@ -81,6 +98,14 @@ class SuppliersController extends Controller
      */
     public function destroy(Supplier $suppliers)
     {
-        //
+        DB::beginTransaction();
+        try {
+            $suppliers->delete();
+            DB::commit();
+            return \response()->json('Suppliers Deleted');
+        } catch (Exception $exception) {
+            DB::rollBack();
+            return response()->json('Something went wrong', 422);
+        }
     }
 }
