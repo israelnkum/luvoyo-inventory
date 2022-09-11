@@ -3,8 +3,15 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreProductRequest;
+use App\Http\Resources\ProductsResource;
 use App\Http\Requests\UpdateProductRequest;
 use App\Models\Product;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Exception;
 
 class ProductController extends Controller
 {
@@ -15,7 +22,7 @@ class ProductController extends Controller
      */
     public function index()
     {
-        //
+        return ProductsResource::collection(Product::paginate(10));
     }
 
     /**
@@ -36,7 +43,17 @@ class ProductController extends Controller
      */
     public function store(StoreProductRequest $request)
     {
-        //
+        DB::beginTransaction();
+        try {
+            DB::commit();
+            $request['user_id'] = 1; //Auth::user()->id
+            $expenses = Product::create($request->all());
+            return new ProductsResource($expenses);
+        }catch (Exception $exception){
+            return response()->json([
+                'message' => $exception->getMessage()
+            ], 400);
+        }
     }
 
     /**

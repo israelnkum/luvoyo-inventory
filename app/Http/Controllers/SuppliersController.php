@@ -7,6 +7,11 @@ use App\Http\Requests\UpdateSuppliersRequest;
 use App\Http\Resources\SuppliersResource;
 use App\Models\Supplier;
 use Exception;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 class SuppliersController extends Controller
 {
@@ -43,7 +48,7 @@ class SuppliersController extends Controller
             DB::commit();
             $request['user_id'] = 1; //Auth::user()->id
             $expenses = Supplier::create($request->all());
-            return new SupplierResource($expenses);
+            return new SuppliersResource($expenses);
         }catch (Exception $exception){
             return response()->json([
                 'message' => $exception->getMessage()
