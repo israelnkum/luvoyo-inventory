@@ -14,6 +14,7 @@ class Supplier extends Model
         'name',
         'location',
         'contact_person',
+        'phone',
         'logo',
         'user_id'
     ];

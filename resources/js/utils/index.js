@@ -116,13 +116,13 @@ export const SidebarMenus = [
                 permission: '',
                 modal: true,
                 title: 'Add Cash-up',
-                link: '/cash-up/add',
+                link: '/cash-ups/add',
             },
             {
                 permission: '',
                 modal: false,
                 title: 'All Cash-ups',
-                link: '/cash-up',
+                link: '/cash-ups',
             }
         ],
         permissions: ['Admin'],
