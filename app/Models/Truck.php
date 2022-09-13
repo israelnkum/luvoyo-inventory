@@ -15,6 +15,7 @@ class Truck extends Model
         'vehicle_type',
         'vin_number',
         'license_plate',
-        'description'
+        'description',
+        'user_id'
     ];
 }

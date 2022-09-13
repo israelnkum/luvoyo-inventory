@@ -1,9 +1,11 @@
 <?php
 
+use App\Http\Controllers\CashUpController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\ExpenseController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\SuppliersController;
+use App\Http\Controllers\TruckController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -34,10 +36,16 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::apiResource('/employees', EmployeeController::class);
 
     Route::apiResource('/expenses', ExpenseController::class);
+
+    Route::apiResource('/trucks', TruckController::class);
+
+    Route::apiResource('/suppliers', SuppliersController::class);
+
+    Route::apiResource('/cash-ups', CashUpController::class);
 });
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::apiResource('/suppliers', SuppliersController::class);
+

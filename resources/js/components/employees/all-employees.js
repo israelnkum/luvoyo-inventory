@@ -32,7 +32,7 @@ function AllEmployees (props) {
                 <Column title="Name" dataIndex={'name'}/>
                 <Column title="D.o.B" dataIndex={'dob'}/>
                 <Column title="Phone" dataIndex={'telephone'}/>
-                <Column title="Phone" render={(record) => (
+                <Column title="Actions" render={(record) => (
                     <TlaEdit data={record} icon link={'edit'}/>
                 )}/>
             </TlaTableWrapper>
