@@ -1,9 +1,17 @@
 <?php
 
+use App\Http\Controllers\CashUpController;
+use App\Http\Controllers\CompanyController;
+use App\Http\Controllers\DispatchOrderController;
+use App\Http\Controllers\DispatchOrderReturnController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\ExpenseController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\ProductController;
+use App\Http\Controllers\ReceivedOrderController;
+use App\Http\Controllers\ReceivedOrderItemController;
 use App\Http\Controllers\SuppliersController;
+use App\Http\Controllers\TruckController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -41,3 +49,19 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 Route::apiResource('/suppliers', SuppliersController::class);
+
+Route::apiResource('/products', ProductController::class);
+
+Route::apiResource('/company', CompanyController::class);
+
+Route::apiResource('/dispatchorder', DispatchOrderController::class);
+
+Route::apiResponse('/dispatchorderreturn',DispatchOrderReturnController::class);
+
+Route::apiResponse('/cashup',CashUpController::class);
+
+Route::apiResponse('/truck', TruckController::class);
+
+Route::apiResource('/recievedorder',ReceivedOrderController::class);
+
+Route::apiResponse('/recievedorderitem', ReceivedOrderItemController::class);

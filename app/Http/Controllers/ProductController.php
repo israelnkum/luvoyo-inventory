@@ -20,7 +20,7 @@ class ProductController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(): AnonymousResourceCollection
     {
         return ProductsResource::collection(Product::paginate(10));
     }
@@ -47,8 +47,8 @@ class ProductController extends Controller
         try {
             DB::commit();
             $request['user_id'] = 1; //Auth::user()->id
-            $expenses = Product::create($request->all());
-            return new ProductsResource($expenses);
+            $products = Product::create($request->all());
+            return new ProductsResource($products);
         }catch (Exception $exception){
             return response()->json([
                 'message' => $exception->getMessage()

@@ -47,8 +47,8 @@ class SuppliersController extends Controller
         try {
             DB::commit();
             $request['user_id'] = 1; //Auth::user()->id
-            $expenses = Supplier::create($request->all());
-            return new SuppliersResource($expenses);
+            $suppliers = Supplier::create($request->all());
+            return new SuppliersResource($suppliers);
         }catch (Exception $exception){
             return response()->json([
                 'message' => $exception->getMessage()

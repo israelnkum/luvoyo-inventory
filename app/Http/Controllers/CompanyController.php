@@ -4,7 +4,15 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreCompanyRequest;
 use App\Http\Requests\UpdateCompanyRequest;
+use App\Http\Resources\CompanyResource;
 use App\Models\Company;
+use Exception;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class CompanyController extends Controller
 {
@@ -12,10 +20,11 @@ class CompanyController extends Controller
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
+     * @return AnonymousResourceCollection
      */
-    public function index()
+    public function index() : AnonymousResourceCollection
     {
-        //
+        return CompanyResource::collection(Company::Paginate(10));
     }
 
     /**
@@ -23,9 +32,20 @@ class CompanyController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(StoreCompanyRequest $request): CompanyResource|JsonResponse
     {
-        //
+        DB::beginTransaction();
+        try{
+            DB::commit();
+            $request['user_id'] = 1; //Auth::user()->id
+            $company = Company::create($request->all());
+            return new CompanyResource($company);
+        }
+        catch(Exception $exception){
+            return response()->json([
+                'message' => $exception->getMessage()
+            ], 400);
+        }
     }
 
     /**

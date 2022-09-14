@@ -4,7 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreDispatchOrderReturnRequest;
 use App\Http\Requests\UpdateDispatchOrderReturnRequest;
+use App\Http\Resources\DispatchOrderReturnResource;
 use App\Models\DispatchOrderReturn;
+use Exception;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 
 class DispatchOrderReturnController extends Controller
 {
@@ -13,9 +19,9 @@ class DispatchOrderReturnController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index() : AnonymousResourceCollection
     {
-        //
+        return DispatchOrderReturnResource::collection(DispatchOrderReturn::paginate(10));
     }
 
     /**
@@ -23,9 +29,20 @@ class DispatchOrderReturnController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(StoreDispatchOrderReturnRequest $request): DispatchOrderReturnResource|JsonResponse
     {
-        //
+        DB::beginTransaction();
+        try{
+            DB::commit();
+            $request['user_id'] = 1; //Auth::user()->id
+            $dispatchOrderReturn = DispatchOrderReturn::create($request->all());
+            return new DispatchOrderReturnResource($dispatchOrderReturn);
+        }
+        catch(Exception $exception){
+            return response()->json([
+                'message' => $exception->getMessage()
+            ], 400);
+        }
     }
 
     /**

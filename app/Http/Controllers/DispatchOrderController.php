@@ -4,7 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreDispatchOrderRequest;
 use App\Http\Requests\UpdateDispatchOrderRequest;
+use App\Http\Resources\DispatchOrderResource;
 use App\Models\DispatchOrder;
+use Exception;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Illuminate\Support\Facades\DB;
 
 class DispatchOrderController extends Controller
 {
@@ -13,9 +18,9 @@ class DispatchOrderController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(): AnonymousResourceCollection
     {
-        //
+        return DispatchOrderResource::collection(DispatchOrder::paginate(10));
     }
 
     /**
@@ -23,9 +28,20 @@ class DispatchOrderController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(StoreDispatchOrderRequest $request): DispatchOrderResource|JsonResponse
     {
-        //
+        DB::beginTransaction();
+        try{
+            DB::commit();
+            $request['user_id'] = 1; //Auth::user()->id 
+            $dispatchOrder = DispatchOrder::create($request->all());
+            return new DispatchOrderResource($dispatchOrder);
+        }
+        catch(Exception $exception){
+            return response()->json([
+                'message' => $exception->getMessage()
+            ], 400);
+        }
     }
 
     /**

@@ -4,7 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreReceivedOrderItemRequest;
 use App\Http\Requests\UpdateReceivedOrderItemRequest;
+use App\Http\Resources\ReceivedOrderItemResource;
 use App\Models\ReceivedOrderItem;
+use Exception;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 
 class ReceivedOrderItemController extends Controller
 {
@@ -13,9 +19,9 @@ class ReceivedOrderItemController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index():AnonymousResourceCollection
     {
-        //
+        return ReceivedOrderItemResource::collection(ReceivedOrderItem::paginate(10));
     }
 
     /**
@@ -23,9 +29,20 @@ class ReceivedOrderItemController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(StoreReceivedOrderItemRequest $request): ReceivedOrderItemResource|JsonResponse
     {
-        //
+        DB::beginTransaction();
+        try{
+            DB::commit();
+            $request['user_id'] = 1; //Auth::user()->id
+            $receivedOrderItem = ReceivedOrderItem::create($request->all());
+            return new ReceivedOrderItemResource($receivedOrderItem);
+        }
+        catch(Exception $exception){
+            return response()->json([
+                'message' => $exception->getMessage()
+            ], 400);
+        }
     }
 
     /**

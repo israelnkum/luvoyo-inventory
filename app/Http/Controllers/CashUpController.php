@@ -4,7 +4,14 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreCashUpRequest;
 use App\Http\Requests\UpdateCashUpRequest;
+use App\Http\Resources\CashUpResource;
+use App\Http\Resources\TruckResource;
 use App\Models\CashUp;
+use App\Models\Truck;
+use Exception;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Illuminate\Support\Facades\DB;
 
 class CashUpController extends Controller
 {
@@ -13,9 +20,9 @@ class CashUpController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index() : AnonymousResourceCollection
     {
-        //
+        return CashUpResource::collection(CashUp::paginate(10));
     }
 
     /**
@@ -23,9 +30,20 @@ class CashUpController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(StoreCashUpRequest $request) : CashUpResource|JsonResponse
     {
-        //
+        DB::beginTransaction();
+        try{
+            DB::commit();
+            $request['user_id'] = 1; //Auth::user()->id
+            $cashUp = Truck::create($request->all());
+            return new CashUpResource($cashUp);
+        }
+        catch(Exception $exception){
+            return response()->json([
+                'message' => $exception->getMessage()
+            ], 400);
+        }
     }
 
     /**
