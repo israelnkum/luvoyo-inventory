@@ -1,5 +1,5 @@
 import React, {useState} from 'react'
-import Logo from '../../components/Logo'
+import Logo from '../../components/logo'
 import {Affix, Button, Col, Layout, Row} from 'antd'
 import PoweroffOutlined from '@ant-design/icons/lib/icons/PoweroffOutlined'
 import {useDispatch} from 'react-redux'
