@@ -87,8 +87,16 @@ class EmployeeController extends Controller
      * @param Employee $employee
      * @return Response
      */
-    public function destroy(Employee $employee)
+    public function destroy(Employee $employee): JsonResponse
     {
-        //
+        DB::beginTransaction();
+        try {
+            $employee->delete();
+            DB::commit();
+            return \response()->json('Employee Deleted');
+        } catch (Exception $exception) {
+            DB::rollBack();
+            return response()->json('Something went wrong', 422);
+        } 
     }
 }

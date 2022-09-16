@@ -28,20 +28,9 @@ class DispatchOrderController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create(StoreDispatchOrderRequest $request): DispatchOrderResource|JsonResponse
+    public function create(StoreDispatchOrderRequest $request)
     {
-        DB::beginTransaction();
-        try{
-            DB::commit();
-            $request['user_id'] = 1; //Auth::user()->id 
-            $dispatchOrder = DispatchOrder::create($request->all());
-            return new DispatchOrderResource($dispatchOrder);
-        }
-        catch(Exception $exception){
-            return response()->json([
-                'message' => $exception->getMessage()
-            ], 400);
-        }
+       
     }
 
     /**
@@ -50,9 +39,21 @@ class DispatchOrderController extends Controller
      * @param  \App\Http\Requests\StoreDispatchOrderRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreDispatchOrderRequest $request)
+    public function store(StoreDispatchOrderRequest $request): DispatchOrderResource|JsonResponse
     {
-        //
+        DB::beginTransaction();
+        try{
+            $request['user_id'] = 1; //Auth::user()->id 
+            $dispatchOrder = DispatchOrder::create($request->all());
+            DB::commit();
+            return new DispatchOrderResource($dispatchOrder);
+        }
+        catch(Exception $exception){
+            DB::rollback();
+            return response()->json([
+                'message' => $exception->getMessage()
+            ], 400);
+        }
     }
 
     /**
@@ -84,9 +85,19 @@ class DispatchOrderController extends Controller
      * @param  \App\Models\DispatchOrder  $dispatchOrder
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateDispatchOrderRequest $request, DispatchOrder $dispatchOrder)
+    public function update(UpdateDispatchOrderRequest $request, DispatchOrder $dispatchOrder): DispatchOrderResource|JsonResponse
     {
-        //
+        DB::beginTransaction();
+        try {
+            $dispatchOrder->update($request->all());
+            DB::commit();
+            return new DispatchOrderResource($dispatchOrder);
+        }catch (Exception $exception){
+            DB::rollBack();
+            return response()->json([
+                'message' => $exception->getMessage()
+            ], 400);
+        }
     }
 
     /**
@@ -95,8 +106,16 @@ class DispatchOrderController extends Controller
      * @param  \App\Models\DispatchOrder  $dispatchOrder
      * @return \Illuminate\Http\Response
      */
-    public function destroy(DispatchOrder $dispatchOrder)
+    public function destroy(DispatchOrder $dispatchOrder): JsonResponse
     {
-        //
+        DB::beginTransaction();
+        try {
+            $dispatchOrder->delete();
+            DB::commit();
+            return \response()->json('Dispatch order Deleted');
+        } catch (Exception $exception) {
+            DB::rollBack();
+            return response()->json('Something went wrong', 422);
+        }
     }
 }

@@ -41,15 +41,16 @@ class SuppliersController extends Controller
      * @param  \App\Http\Requests\StoreSuppliersRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreSuppliersRequest $request)
+    public function store(StoreSuppliersRequest $request): SuppliersResource|JsonResponse
     {
         DB::beginTransaction();
         try {
-            DB::commit();
             $request['user_id'] = 1; //Auth::user()->id
             $suppliers = Supplier::create($request->all());
+            DB::commit();
             return new SuppliersResource($suppliers);
         }catch (Exception $exception){
+            DB::rollBack();
             return response()->json([
                 'message' => $exception->getMessage()
             ], 400);
@@ -85,9 +86,19 @@ class SuppliersController extends Controller
      * @param  \App\Models\Supplier  $suppliers
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateSuppliersRequest $request, Supplier $suppliers)
+    public function update(UpdateSuppliersRequest $request, Supplier $suppliers): SuppliersResource|JsonResponse
     {
-        //
+        DB::beginTransaction();
+        try {
+            $suppliers->update($request->all());
+            DB::commit();
+            return new SuppliersResource($suppliers);
+        }catch (Exception $exception){
+            DB::rollBack();
+            return response()->json([
+                'message' => $exception->getMessage()
+            ], 400);
+        }
     }
 
     /**
@@ -96,7 +107,7 @@ class SuppliersController extends Controller
      * @param  \App\Models\Supplier  $suppliers
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Supplier $suppliers)
+    public function destroy(Supplier $suppliers): JsonResponse
     {
         DB::beginTransaction();
         try {

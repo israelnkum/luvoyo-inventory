@@ -41,15 +41,16 @@ class ProductController extends Controller
      * @param  \App\Http\Requests\StoreProductRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreProductRequest $request)
+    public function store(StoreProductRequest $request): ProductsResource|JsonResponse
     {
         DB::beginTransaction();
         try {
-            DB::commit();
             $request['user_id'] = 1; //Auth::user()->id
             $products = Product::create($request->all());
+            DB::commit();
             return new ProductsResource($products);
         }catch (Exception $exception){
+            DB::rollBack();
             return response()->json([
                 'message' => $exception->getMessage()
             ], 400);
@@ -85,9 +86,19 @@ class ProductController extends Controller
      * @param  \App\Models\Product  $product
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateProductRequest $request, Product $product)
+    public function update(UpdateProductRequest $request, Product $product): ProductsResource|JsonResponse
     {
-        //
+        DB::beginTransaction();
+        try {
+            $product->update($request->all());
+            DB::commit();
+            return new ProductsResource($product);
+        }catch (Exception $exception){
+            DB::rollBack();
+            return response()->json([
+                'message' => $exception->getMessage()
+            ], 400);
+        }
     }
 
     /**
@@ -96,8 +107,16 @@ class ProductController extends Controller
      * @param  \App\Models\Product  $product
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Product $product)
+    public function destroy(Product $product): JsonResponse
     {
-        //
+        DB::beginTransaction();
+        try {
+            $product->delete();
+            DB::commit();
+            return \response()->json('Products Deleted');
+        } catch (Exception $exception) {
+            DB::rollBack();
+            return response()->json('Something went wrong', 422);
+        }
     }
 }

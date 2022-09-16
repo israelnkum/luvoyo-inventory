@@ -5,9 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreCashUpRequest;
 use App\Http\Requests\UpdateCashUpRequest;
 use App\Http\Resources\CashUpResource;
-use App\Http\Resources\TruckResource;
 use App\Models\CashUp;
-use App\Models\Truck;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
@@ -30,20 +28,9 @@ class CashUpController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create(StoreCashUpRequest $request) : CashUpResource|JsonResponse
+    public function create() 
     {
-        DB::beginTransaction();
-        try{
-            DB::commit();
-            $request['user_id'] = 1; //Auth::user()->id
-            $cashUp = Truck::create($request->all());
-            return new CashUpResource($cashUp);
-        }
-        catch(Exception $exception){
-            return response()->json([
-                'message' => $exception->getMessage()
-            ], 400);
-        }
+      
     }
 
     /**
@@ -52,9 +39,21 @@ class CashUpController extends Controller
      * @param  \App\Http\Requests\StoreCashUpRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreCashUpRequest $request)
+    public function store(StoreCashUpRequest $request) : CashUpResource|JsonResponse
     {
-        //
+        DB::beginTransaction();
+        try{
+            $request['user_id'] = 1; //Auth::user()->id
+            $cashUp = CashUp::create($request->all());
+            DB::commit();
+            return new CashUpResource($cashUp);
+        }
+        catch(Exception $exception){
+            DB::rollBack();
+            return response()->json([
+                'message' => $exception->getMessage()
+            ], 400);
+        }
     }
 
     /**
@@ -86,9 +85,19 @@ class CashUpController extends Controller
      * @param  \App\Models\CashUp  $cashUp
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateCashUpRequest $request, CashUp $cashUp)
+    public function update(UpdateCashUpRequest $request, CashUp $cashUp): CashUpResource|JsonResponse
     {
-        //
+        DB::beginTransaction();
+        try {
+            $cashUp->update($request->all());
+            DB::commit();
+            return new CashUpResource($cashUp);
+        }catch (Exception $exception){
+            DB::rollBack();
+            return response()->json([
+                'message' => $exception->getMessage()
+            ], 400);
+        }
     }
 
     /**
@@ -97,8 +106,16 @@ class CashUpController extends Controller
      * @param  \App\Models\CashUp  $cashUp
      * @return \Illuminate\Http\Response
      */
-    public function destroy(CashUp $cashUp)
+    public function destroy(CashUp $cashUp): JsonResponse
     {
-        //
+        DB::beginTransaction();
+        try {
+            $cashUp->delete();
+            DB::commit();
+            return \response()->json('Cash Up Deleted');
+        } catch (Exception $exception) {
+            DB::rollBack();
+            return response()->json('Something went wrong', 422);
+        }
     }
 }

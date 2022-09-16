@@ -29,20 +29,9 @@ class TruckController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create(StoreTruckRequest $request) : TruckResource|JsonResponse
+    public function create() 
     {
-        DB::beginTransaction();
-        try{
-            DB::commit();
-            $request['user_id'] = 1; //Auth::user()->id;
-            $truck = Truck::create($request->all());
-            return new TruckResource($truck);
-        }
-        catch(Exception $exception){
-            return response()->json([
-                'message' => $exception->getMessage()
-            ], 400);
-        }
+       
     }
 
     /**
@@ -51,9 +40,21 @@ class TruckController extends Controller
      * @param  \App\Http\Requests\StoreTruckRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreTruckRequest $request)
+    public function store(StoreTruckRequest $request): TruckResource|JsonResponse
     {
-        //
+        DB::beginTransaction();
+        try{
+            $request['user_id'] = 1; //Auth::user()->id;
+            $truck = Truck::create($request->all());
+            DB::commit();
+            return new TruckResource($truck);
+        }
+        catch(Exception $exception){
+            DB::rollBack();
+            return response()->json([
+                'message' => $exception->getMessage()
+            ], 400);
+        }
     }
 
     /**
@@ -85,9 +86,19 @@ class TruckController extends Controller
      * @param  \App\Models\Truck  $truck
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateTruckRequest $request, Truck $truck)
+    public function update(UpdateTruckRequest $request, Truck $truck): TruckResource|JsonResponse
     {
-        //
+        DB::beginTransaction();
+        try {
+            $truck->update($request->all());
+            DB::commit();
+            return new TruckResource($truck);
+        }catch (Exception $exception){
+            DB::rollBack();
+            return response()->json([
+                'message' => $exception->getMessage()
+            ], 400);
+        }
     }
 
     /**
@@ -96,8 +107,16 @@ class TruckController extends Controller
      * @param  \App\Models\Truck  $truck
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Truck $truck)
+    public function destroy(Truck $truck): JsonResponse
     {
-        //
+        DB::beginTransaction();
+        try {
+            $truck->delete();
+            DB::commit();
+            return \response()->json('Truck Deleted');
+        } catch (Exception $exception) {
+            DB::rollBack();
+            return response()->json('Something went wrong', 422);
+        }
     }
 }

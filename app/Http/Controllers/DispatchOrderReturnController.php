@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreDispatchOrderReturnRequest;
 use App\Http\Requests\UpdateDispatchOrderReturnRequest;
+use App\Http\Resources\DispatchOrderResource;
 use App\Http\Resources\DispatchOrderReturnResource;
 use App\Models\DispatchOrderReturn;
 use Exception;
@@ -29,20 +30,9 @@ class DispatchOrderReturnController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create(StoreDispatchOrderReturnRequest $request): DispatchOrderReturnResource|JsonResponse
+    public function create(StoreDispatchOrderReturnRequest $request)
     {
-        DB::beginTransaction();
-        try{
-            DB::commit();
-            $request['user_id'] = 1; //Auth::user()->id
-            $dispatchOrderReturn = DispatchOrderReturn::create($request->all());
-            return new DispatchOrderReturnResource($dispatchOrderReturn);
-        }
-        catch(Exception $exception){
-            return response()->json([
-                'message' => $exception->getMessage()
-            ], 400);
-        }
+       
     }
 
     /**
@@ -51,9 +41,21 @@ class DispatchOrderReturnController extends Controller
      * @param  \App\Http\Requests\StoreDispatchOrderReturnRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreDispatchOrderReturnRequest $request)
+    public function store(StoreDispatchOrderReturnRequest $request): DispatchOrderReturnResource|JsonResponse
     {
-        //
+        DB::beginTransaction();
+        try{
+            $request['user_id'] = 1; //Auth::user()->id
+            $dispatchOrderReturn = DispatchOrderReturn::create($request->all());
+            DB::commit();
+            return new DispatchOrderReturnResource($dispatchOrderReturn);
+        }
+        catch(Exception $exception){
+            DB::rollBack();
+            return response()->json([
+                'message' => $exception->getMessage()
+            ], 400);
+        }
     }
 
     /**
@@ -85,9 +87,19 @@ class DispatchOrderReturnController extends Controller
      * @param  \App\Models\DispatchOrderReturn  $dispatchOrderReturn
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateDispatchOrderReturnRequest $request, DispatchOrderReturn $dispatchOrderReturn)
+    public function update(UpdateDispatchOrderReturnRequest $request, DispatchOrderReturn $dispatchOrderReturn): DispatchOrderReturnResource|JsonResponse
     {
-        //
+        DB::beginTransaction();
+        try {
+            $dispatchOrderReturn->update($request->all());
+            DB::commit();
+            return new DispatchOrderReturnResource($dispatchOrderReturn);
+        }catch (Exception $exception){
+            DB::rollBack();
+            return response()->json([
+                'message' => $exception->getMessage()
+            ], 400);
+        }
     }
 
     /**
@@ -96,8 +108,16 @@ class DispatchOrderReturnController extends Controller
      * @param  \App\Models\DispatchOrderReturn  $dispatchOrderReturn
      * @return \Illuminate\Http\Response
      */
-    public function destroy(DispatchOrderReturn $dispatchOrderReturn)
+    public function destroy(DispatchOrderReturn $dispatchOrderReturn): JsonResponse
     {
-        //
+        DB::beginTransaction();
+        try {
+            $dispatchOrderReturn->delete();
+            DB::commit();
+            return \response()->json('Dispatch order return Deleted');
+        } catch (Exception $exception) {
+            DB::rollBack();
+            return response()->json('Something went wrong', 422);
+        } 
     }
 }

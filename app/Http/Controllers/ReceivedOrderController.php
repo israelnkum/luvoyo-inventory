@@ -29,20 +29,9 @@ class ReceivedOrderController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create(StoreReceivedOrderRequest $request): ReceivedOrderResource|JsonResponse
+    public function create()
     {
-        DB::beginTransaction();
-        try{
-            DB::commit();
-            $request['user_id'] = 1; //Auth::user()->id
-            $receivedOrder = ReceivedOrder::create($request->all());
-            return new ReceivedOrderResource($receivedOrder);
-        }
-        catch(Exception $exception){
-            return response()->json([
-                'message' => $exception->getMessage()
-            ]);
-        }
+        
     }
 
     /**
@@ -51,9 +40,21 @@ class ReceivedOrderController extends Controller
      * @param  \App\Http\Requests\StoreReceivedOrderRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreReceivedOrderRequest $request)
+    public function store(StoreReceivedOrderRequest $request): ReceivedOrderResource|JsonResponse
     {
-        //
+        DB::beginTransaction();
+        try{
+            $request['user_id'] = 1; //Auth::user()->id
+            $receivedOrder = ReceivedOrder::create($request->all());
+            DB::commit();
+            return new ReceivedOrderResource($receivedOrder);
+        }
+        catch(Exception $exception){
+            DB::rollBack();
+            return response()->json([
+                'message' => $exception->getMessage()
+            ]);
+        }
     }
 
     /**
@@ -85,9 +86,19 @@ class ReceivedOrderController extends Controller
      * @param  \App\Models\ReceivedOrder  $receivedOrder
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateReceivedOrderRequest $request, ReceivedOrder $receivedOrder)
+    public function update(UpdateReceivedOrderRequest $request, ReceivedOrder $receivedOrder): ReceivedOrderResource|JsonResponse
     {
-        //
+        DB::beginTransaction();
+        try {
+            $receivedOrder->update($request->all());
+            DB::commit();
+            return new ReceivedOrderResource($receivedOrder);
+        }catch (Exception $exception){
+            DB::rollBack();
+            return response()->json([
+                'message' => $exception->getMessage()
+            ], 400);
+        }
     }
 
     /**
@@ -96,8 +107,16 @@ class ReceivedOrderController extends Controller
      * @param  \App\Models\ReceivedOrder  $receivedOrder
      * @return \Illuminate\Http\Response
      */
-    public function destroy(ReceivedOrder $receivedOrder)
+    public function destroy(ReceivedOrder $receivedOrder): JsonResponse
     {
-        //
+        DB::beginTransaction();
+        try {
+            $receivedOrder->delete();
+            DB::commit();
+            return \response()->json('Received Order Deleted');
+        } catch (Exception $exception) {
+            DB::rollBack();
+            return response()->json('Something went wrong', 422);
+        }
     }
 }

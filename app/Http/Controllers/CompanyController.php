@@ -32,20 +32,9 @@ class CompanyController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create(StoreCompanyRequest $request): CompanyResource|JsonResponse
+    public function create()
     {
-        DB::beginTransaction();
-        try{
-            DB::commit();
-            $request['user_id'] = 1; //Auth::user()->id
-            $company = Company::create($request->all());
-            return new CompanyResource($company);
-        }
-        catch(Exception $exception){
-            return response()->json([
-                'message' => $exception->getMessage()
-            ], 400);
-        }
+       
     }
 
     /**
@@ -54,9 +43,21 @@ class CompanyController extends Controller
      * @param  \App\Http\Requests\StoreCompanyRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreCompanyRequest $request)
+    public function store(StoreCompanyRequest $request): CompanyResource|JsonResponse
     {
-        //
+        DB::beginTransaction();
+        try{
+            $request['user_id'] = 1; //Auth::user()->id
+            $company = Company::create($request->all());
+            DB::commit();
+            return new CompanyResource($company);
+        }
+        catch(Exception $exception){
+            DB::rollback();
+            return response()->json([
+                'message' => $exception->getMessage()
+            ], 400);
+        }
     }
 
     /**
@@ -88,9 +89,19 @@ class CompanyController extends Controller
      * @param  \App\Models\Company  $company
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateCompanyRequest $request, Company $company)
+    public function update(UpdateCompanyRequest $request, Company $company): CompanyResource|JsonResponse
     {
-        //
+        DB::beginTransaction();
+        try {
+            $company->update($request->all());
+            DB::commit();
+            return new CompanyResource($company);
+        }catch (Exception $exception){
+            DB::rollBack();
+            return response()->json([
+                'message' => $exception->getMessage()
+            ], 400);
+        }
     }
 
     /**
@@ -99,8 +110,16 @@ class CompanyController extends Controller
      * @param  \App\Models\Company  $company
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Company $company)
+    public function destroy(Company $company): JsonResponse
     {
-        //
+        DB::beginTransaction();
+        try {
+            $company->delete();
+            DB::commit();
+            return \response()->json('Company Deleted');
+        } catch (Exception $exception) {
+            DB::rollBack();
+            return response()->json('Something went wrong', 422);
+        }
     }
 }

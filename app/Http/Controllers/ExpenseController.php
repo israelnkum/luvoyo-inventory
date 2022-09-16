@@ -53,9 +53,19 @@ class ExpenseController extends Controller
      * @param Expense $expense
      * @return Response
      */
-    public function update(UpdateExpenseRequest $request, Expense $expense)
+    public function update(UpdateExpenseRequest $request, Expense $expense): ExpensesResource|JsonResponse
     {
-        //
+        DB::beginTransaction();
+        try {
+            $expense->update($request->all());
+            DB::commit();
+            return new ExpensesResource($expense);
+        }catch (Exception $exception){
+            DB::rollBack();
+            return response()->json([
+                'message' => $exception->getMessage()
+            ], 400);
+        }
     }
 
     /**
