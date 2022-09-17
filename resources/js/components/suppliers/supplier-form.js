@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useState} from 'react'
 import PropTypes from 'prop-types'
 import {Button, Col, Form, Input, notification, Row} from 'antd'
 import {connect} from 'react-redux'
@@ -6,10 +6,12 @@ import {TlaModal} from "../../commons/tla-modal";
 import {useLocation, useNavigate} from "react-router-dom";
 import CloseModal from "../../commons/close-modal";
 import {handleAddNewSuppliers, handleUpdateSuppliers} from "../../actions/suppliers/SuppliersAction";
+import ChangePicture from "../commons/change-picture";
 
 
 function SupplierForm (props) {
     const navigate = useNavigate()
+    const [selectedFile, setSelectedFile] = useState(null)
     const { addSuppliers, updateSuppliers } = props
     const [form] = Form.useForm()
     const { state } = useLocation()
@@ -19,6 +21,7 @@ function SupplierForm (props) {
 
     const submit = (values) => {
         const formData = new FormData()
+        formData.append('file', selectedFile);
         values.id !== 0 && formData.append('_method', 'PUT')
         for (const key in values) {
             if (Object.prototype.hasOwnProperty.call(values, key)) {
@@ -40,6 +43,19 @@ function SupplierForm (props) {
         })
     }
 
+    const uploadProps = {
+        beforeUpload: (file) => {
+            setSelectedFile(file)
+            return true
+        },
+        listType: 'picture-card',
+        maxCount: 1,
+        onRemove: () => {
+            setSelectedFile(null)
+        },
+        accept: 'image/*',
+        method: 'get'
+    }
     return (
         <TlaModal title={(formValues.id === 0 ? 'New' : 'Edit') + ' Supplier'}>
             <Form
@@ -49,6 +65,9 @@ function SupplierForm (props) {
                 name="createSupplierForm"
                 initialValues={formValues}>
                 <Row gutter={10}>
+                    <Col span={24}>
+                        <ChangePicture uploadProps={uploadProps} selectedFile={selectedFile}/>
+                    </Col>
                     <Col span={24}>
                         <Form.Item name="name" label="Business Name"
                                    rules={[

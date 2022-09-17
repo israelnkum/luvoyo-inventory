@@ -7,6 +7,7 @@ import {useOutletContext} from 'react-router'
 import ViewAllWrapper from "../../commons/view-all-wrapper";
 import {handleGetAllSuppliers} from "../../actions/suppliers/SuppliersAction";
 import TlaEdit from "../../commons/tla-edit";
+import TlaImage from "../../commons/tla-image";
 
 const { Column } = Table
 function AllSuppliers (props) {
@@ -15,7 +16,7 @@ function AllSuppliers (props) {
     const [loading, setLoading] = useState(true)
     const { setPageInfo } = useOutletContext();
     useEffect(() => {
-        setPageInfo({ title: 'Suppliers', addLink: 'trucks/add', buttonText: 'Suppliers' })
+        setPageInfo({ title: 'Suppliers', addLink: 'suppliers/add', buttonText: 'Supplier' })
         getSuppliers().then(() => {
             setLoading(false)
         })
@@ -24,6 +25,9 @@ function AllSuppliers (props) {
     return (
         <ViewAllWrapper loading={loading} noData={data.length === 0}>
             <TlaTableWrapper callbackFunction={getSuppliers} data={data} meta={meta}>
+                <Column title="Photo" render={({name, logo}) => (
+                    <TlaImage size={40} src={logo} name={name}/>
+                )}/>
                 <Column title="Name" dataIndex={'name'}/>
                 <Column title="Contact Person" dataIndex={'contact_person'}/>
                 <Column title="Phone" dataIndex={'phone'}/>

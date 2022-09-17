@@ -19,7 +19,6 @@ return new class extends Migration
             $table->string('name');
             $table->string('location');
             $table->string('contact_person');
-            $table->string('logo')->nullable();
             $table->string('phone')->nullable();
             $table->foreignIdFor(User::class);
             $table->softDeletes();

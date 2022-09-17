@@ -11,7 +11,7 @@ class StoreTruckRequest extends FormRequest
      *
      * @return bool
      */
-    public function authorize()
+    public function authorize(): bool
     {
         return true;
     }
@@ -21,10 +21,12 @@ class StoreTruckRequest extends FormRequest
      *
      * @return array<string, mixed>
      */
-    public function rules()
+    public function rules(): array
     {
         return [
-            //
+            'truck_code' => 'required|unique:trucks|max:255',
+            'vin_number' => 'required|unique:trucks|max:255',
+            'license_plate' => 'required|unique:trucks|max:255',
         ];
     }
 }

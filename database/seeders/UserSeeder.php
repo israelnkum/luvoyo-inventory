@@ -19,12 +19,12 @@ class UserSeeder extends Seeder
     public function run()
     {
        $user = User::updateOrcreate([ 'username' => 'techlineafrica'],[
-            'firstName' => 'Techline',
-            'lastName' => 'Africa',
+            'first_name' => 'Techline',
+            'last_name' => 'Africa',
             'username' => 'techlineafrica',
             'email' => 'info@techlineafrica.com',
             'password' => Hash::make('techlineafrica'),
-            'phoneNumber' => '0249051415',
+            'phone_number' => '0249051415',
         ]);
 
 

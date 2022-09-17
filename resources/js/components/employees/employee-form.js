@@ -1,13 +1,13 @@
 import React, {useState} from 'react'
 import PropTypes from 'prop-types'
-import {Button, Checkbox, Col, Form, Input, notification, Row, Select} from 'antd'
+import {Button, Checkbox, Col, DatePicker, Form, Input, notification, Row, Select} from 'antd'
 import {connect} from 'react-redux'
 import {TlaModal} from "../../commons/tla-modal";
 import {useLocation, useNavigate} from "react-router-dom";
 import CloseModal from "../../commons/close-modal";
 import ChangePicture from "../commons/change-picture";
 import {handleAddEmployee, handleUpdateEmployee} from "../../actions/employee/EmployeeAction";
-import {nationalities} from "../../utils/nationalities";
+import moment from "moment";
 
 
 function EmployeeForm (props) {
@@ -17,13 +17,17 @@ function EmployeeForm (props) {
     const [form] = Form.useForm()
     const { state } = useLocation()
     const formValues = {
-        id: 0, create_account: false, staff_id: null, ...state.data
+        id: 0,
+        create_account: false,
+        staff_id: null,
+        ...{...state.data, dob: state?.data ? moment(state?.data.dob) : ''}
     }
 
     const submit = (values) => {
 
         const formData = new FormData()
         values.id !== 0 && formData.append('_method', 'PUT')
+        formData.append('file', selectedFile);
         for (const key in values) {
             if (Object.prototype.hasOwnProperty.call(values, key)) {
                 formData.append(key, values[key])
@@ -57,11 +61,8 @@ function EmployeeForm (props) {
         method: 'get'
     }
 
-    const Render = ({ children, editing = true }) => (
-        (editing === false ? formValues.id !== 0 : formValues === 0) && children
-    )
     return (
-        <TlaModal width={800} title={(formValues.id === 0 ? 'New' : 'Edit') + ' Staff'}>
+        <TlaModal title={(formValues.id === 0 ? 'New' : 'Edit') + ' Staff'}>
             <Form
                 form={form}
                 onFinish={submit}
@@ -72,107 +73,114 @@ function EmployeeForm (props) {
                     <Col span={24}>
                         <ChangePicture uploadProps={uploadProps} selectedFile={selectedFile}/>
                     </Col>
-                    <Col span={24} xs={24} sm={12}>
-                        <Row gutter={10}>
-                            <Col span={12}>
-                                <Form.Item name="surname" label="Surname"
-                                           rules={[
-                                               {
-                                                   required: true,
-                                                   message: 'Surname is Required'
-                                               }
-                                           ]}>
-                                    <Input size={'large'}/>
-                                </Form.Item>
-                            </Col>
-                            <Col span={12}>
-                                <Form.Item name="other_names" label="Other Names"
-                                           rules={[
-                                               {
-                                                   required: true,
-                                                   message: 'Surname is Required'
-                                               }
-                                           ]}>
-                                    <Input size={'large'}/>
-                                </Form.Item>
-                            </Col>
-                            <Col span={12}>
-                                <Form.Item name="gender" label="Gender"  rules={[
-                                    {
-                                        required: true,
-                                        message: 'Gender is Required'
-                                    }
-                                ]}>
-                                    <Select size={'large'}>
-                                        <Select.Option value={'Male'}>Male</Select.Option>
-                                        <Select.Option value={'Female'}>Female</Select.Option>
-                                    </Select>
-                                </Form.Item>
-                            </Col>
-                            <Col span={12}>
-                                <Form.Item name="telephone" label="Mobile No."
-                                           rules={[
-                                               {
-                                                   required: true,
-                                                   message: 'Mobile No. is Required'
-                                               }
-                                           ]}>
-                                    <Input size={'large'}/>
-                                </Form.Item>
-                            </Col>
-                            <Col span={12}>
-                                <Form.Item name="id_type" label="ID Type"
-                                           rules={[
-                                               {
-                                                   required: true,
-                                                   message: 'ID Type is Required'
-                                               }
-                                           ]}>
-                                    <Input size={'large'}/>
-                                </Form.Item>
-                            </Col>
-                            <Col span={12}>
-                                <Form.Item name="id_number" label="ID Number"
-                                           rules={[
-                                               {
-                                                   required: true,
-                                                   message: 'ID Number is Required'
-                                               }
-                                           ]}>
-                                    <Input size={'large'}/>
-                                </Form.Item>
-                            </Col>
-                        </Row>
+                    {
+                        formValues.id === 0 &&
+                        <Col span={24}>
+                            <Form.Item name="create_account" valuePropName="checked">
+                                <Checkbox>Create user account</Checkbox>
+                            </Form.Item>
+                        </Col>
+                    }
+                    <Col span={8}>
+                        <Form.Item name="surname" label="Surname"
+                                   rules={[
+                                       {
+                                           required: true,
+                                           message: 'Surname is Required'
+                                       }
+                                   ]}>
+                            <Input size={'large'}/>
+                        </Form.Item>
                     </Col>
-                    <Col span={24} xs={24} sm={12}>
-                        <Row gutter={10}>
-                            <Col span={24}>
-                                <Form.Item name="home_address" label="Home Address">
-                                    <Input.TextArea size={'large'}/>
-                                </Form.Item>
-                            </Col>
-                            <Col span={24}>
-                                <Form.Item name="remarks" label="Remarks">
-                                    <Input.TextArea size={'large'}/>
-                                </Form.Item>
-                            </Col>
-                            <Col span={24} xs={24}>
-                                <Form.Item name="create_account" valuePropName="checked">
-                                    <Checkbox>Create user account</Checkbox>
-                                </Form.Item>
-                            </Col>
-                            <Col>
-                                <Form.Item hidden name="id" label="ID"
-                                           rules={[
-                                               {
-                                                   required: true,
-                                                   message: 'Required'
-                                               }
-                                           ]}>
-                                    <Input size={'large'}/>
-                                </Form.Item>
-                            </Col>
-                        </Row>
+                    <Col span={8}>
+                        <Form.Item name="other_names" label="Other Names"
+                                   rules={[
+                                       {
+                                           required: true,
+                                           message: 'Surname is Required'
+                                       }
+                                   ]}>
+                            <Input size={'large'}/>
+                        </Form.Item>
+                    </Col>
+                    <Col span={8}>
+                        <Form.Item name="gender" label="Gender"  rules={[
+                            {
+                                required: true,
+                                message: 'Gender is Required'
+                            }
+                        ]}>
+                            <Select size={'large'}>
+                                <Select.Option value={'Male'}>Male</Select.Option>
+                                <Select.Option value={'Female'}>Female</Select.Option>
+                            </Select>
+                        </Form.Item>
+                    </Col>
+                    <Col span={8}>
+                        <Form.Item name="telephone" label="Mobile No."
+                                   rules={[
+                                       {
+                                           required: true,
+                                           message: 'Mobile No. is Required'
+                                       }
+                                   ]}>
+                            <Input size={'large'}/>
+                        </Form.Item>
+                    </Col>
+                    <Col span={8}>
+                        <Form.Item name="id_type" label="ID Type"
+                                   rules={[
+                                       {
+                                           required: true,
+                                           message: 'ID Type is Required'
+                                       }
+                                   ]}>
+                            <Input size={'large'}/>
+                        </Form.Item>
+                    </Col>
+                    <Col span={8}>
+                        <Form.Item name="id_number" label="ID Number"
+                                   rules={[
+                                       {
+                                           required: true,
+                                           message: 'ID Number is Required'
+                                       }
+                                   ]}>
+                            <Input size={'large'}/>
+                        </Form.Item>
+                    </Col>
+                    <Col span={12}>
+                        <Form.Item name="dob" label="Date of Birth"
+                                   rules={[
+                                       {
+                                           required: true,
+                                           message: 'Date of Birth is Required'
+                                       }
+                                   ]}>
+                            <DatePicker size={'large'}/>
+                        </Form.Item>
+                    </Col>
+
+                    <Col span={12}>
+                        <Form.Item hidden name="id" label="ID"
+                                   rules={[
+                                       {
+                                           required: true,
+                                           message: 'Required'
+                                       }
+                                   ]}>
+                            <Input size={'large'}/>
+                        </Form.Item>
+                    </Col>
+                    <Col span={12}>
+                        <Form.Item name="home_address" label="Home Address">
+                            <Input.TextArea size={'large'}/>
+                        </Form.Item>
+                    </Col>
+                    <Col span={12}>
+                        <Form.Item name="remarks" label="Remarks">
+                            <Input.TextArea size={'large'}/>
+                        </Form.Item>
                     </Col>
                 </Row>
                 <Form.Item>

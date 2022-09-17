@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\HelperFunctions;
 use App\Http\Requests\StoreSuppliersRequest;
 use App\Http\Requests\UpdateSuppliersRequest;
-use App\Http\Resources\SuppliersResource;
+use App\Http\Resources\SupplierResource;
 use App\Models\Supplier;
 use Exception;
 use Illuminate\Http\JsonResponse;
@@ -22,23 +23,27 @@ class SuppliersController extends Controller
      */
     public function index(): AnonymousResourceCollection
     {
-        return SuppliersResource::collection(Supplier::paginate(10));
+        return SupplierResource::collection(Supplier::paginate(10));
     }
     /**
      * Store a newly created resource in storage.
      *
      * @param StoreSuppliersRequest $request
-     * @return JsonResponse|SuppliersResource
+     * @return JsonResponse|SupplierResource
      */
-    public function store(StoreSuppliersRequest $request): SuppliersResource|JsonResponse
+    public function store(StoreSuppliersRequest $request): SupplierResource|JsonResponse
     {
         DB::beginTransaction();
         try {
 
             $request['user_id'] = Auth::user()->id;
             $supplier = Supplier::create($request->all());
+
+            if ($request->has('file') && $request->file != "null"){
+                HelperFunctions::saveImage($supplier, $request->file('file'), 'suppliers');
+            }
             DB::commit();
-            return new SuppliersResource($supplier);
+            return new SupplierResource($supplier);
         }catch (Exception $exception){
             DB::rollBack();
             return response()->json([
@@ -52,15 +57,20 @@ class SuppliersController extends Controller
      *
      * @param UpdateSuppliersRequest $request
      * @param Supplier $supplier
-     * @return SuppliersResource|JsonResponse|Response
+     * @return SupplierResource|JsonResponse|Response
      */
-    public function update(UpdateSuppliersRequest $request, Supplier $supplier): Response|SuppliersResource|JsonResponse
+    public function update(UpdateSuppliersRequest $request, Supplier $supplier): Response|SupplierResource|JsonResponse
     {
         DB::beginTransaction();
         try {
             $supplier->update($request->all());
+
+            if ($request->has('file') && $request->file != "null"){
+                HelperFunctions::saveImage($supplier, $request->file('file'), 'suppliers');
+            }
+
             DB::commit();
-            return new SuppliersResource($supplier);
+            return new SupplierResource($supplier);
         }catch (Exception $exception){
             DB::rollBack();
             return response()->json([

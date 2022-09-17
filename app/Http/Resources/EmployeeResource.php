@@ -14,7 +14,7 @@ class EmployeeResource extends JsonResource
      * @param  \Illuminate\Http\Request  $request
      * @return array|Arrayable|\JsonSerializable
      */
-    public function toArray($request)
+    public function toArray($request): array|\JsonSerializable|Arrayable
     {
         return [
             'id' => $this->id,
@@ -24,6 +24,7 @@ class EmployeeResource extends JsonResource
             'dob' => $this->dob,
             'gender' => $this->gender,
             'telephone' => $this->telephone,
+            'photo' => '/storage/images/employees/' . $this->photo->file_name,
             'home_address' => $this->home_address,
             'id_type' => $this->id_type,
             'id_number' => $this->id_number,
