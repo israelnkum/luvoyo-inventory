@@ -21,6 +21,7 @@ import Salary from "../../components/employees/detail/salary";
 import ReportsTo from "../../components/employees/detail/reports-to";
 import Qualifications from "../../components/employees/detail/qualifications";
 import AllExpenses from "../../components/exepenses/all-expenses";
+import AllTrucks from "../../components/trucks/all-trucks";
 
 const ProtectedRoutes = (props) => {
     const {activeRoles} = props
@@ -46,6 +47,9 @@ const ProtectedRoutes = (props) => {
                         <Route path='reports-to' element={<ReportsTo/>}/>
                         <Route path='qualifications' element={<Qualifications/>}/>
                     </Route>*/}
+                </Route>
+                <Route exact path='trucks' element={ <AllTrucks /> }>
+
                 </Route>
                 <Route exact>
                     <>not found</>
