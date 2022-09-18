@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('logo')->nullable();
             $table->string('phone_number');
             $table->text('address')->nullable();
-            $table->text('email')->unique()->nullable();
+            $table->string('email')->unique()->nullable();
             $table->foreignIdFor(User::class);
             $table->softDeletes();
             $table->timestamps();

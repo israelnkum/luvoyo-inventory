@@ -7,6 +7,7 @@ use App\Http\Resources\ExpensesResource;
 use App\Http\Resources\ProductsResource;
 use App\Http\Requests\UpdateProductRequest;
 use App\Models\Product;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
@@ -19,11 +20,16 @@ class ProductController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return AnonymousResourceCollection|Response
+     * @return AnonymousResourceCollection
      */
-    public function index()
+    public function index(Request $request): AnonymousResourceCollection
     {
-        return ProductsResource::collection(Product::paginate(10));
+        if ($request->query('page') == 0){
+            $product = Product::all();
+        }else{
+            $product = Product::paginate(10);
+        }
+        return ProductsResource::collection($product);
     }
 
     /**

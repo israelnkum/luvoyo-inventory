@@ -1,12 +1,14 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import {Button, Card, Col, DatePicker, Form, Input, notification, Row, Select, TimePicker} from 'antd'
+import {Button, Card, Col, DatePicker, Form, Input, notification, Row, Select, Space, TimePicker} from 'antd'
 import {connect} from 'react-redux'
 import {TlaModal} from "../../commons/tla-modal";
 import {useLocation, useNavigate} from "react-router-dom";
 import CloseModal from "../../commons/close-modal";
 import {handleAddDispatchOrder, handleUpdateDispatchOrder} from "../../actions/dispatch-orders/DisptachOrderAction";
 import moment from "moment";
+import Products from "../../commons/form/products";
+import {MinusCircleOutlined, PlusOutlined} from "@ant-design/icons";
 
 
 function DispatchOrderForm (props) {
@@ -16,13 +18,13 @@ function DispatchOrderForm (props) {
     const { state } = useLocation()
     const formValues = {
         id: 0,
-        create_account: false,
         staff_id: null,
         ...{...state.data, dob: state?.data ? moment(state?.data.dob) : ''}
     }
 
     const submit = (values) => {
-        const formData = new FormData()
+        console.log(values)
+      /*  const formData = new FormData()
         values.id !== 0 && formData.append('_method', 'PUT')
 
         for (const key in values) {
@@ -42,7 +44,7 @@ function DispatchOrderForm (props) {
                 message: 'Warning',
                 description: error.response.data.message
             })
-        })
+        })*/
     }
 
     return (
@@ -54,7 +56,7 @@ function DispatchOrderForm (props) {
                 name="createDispatchOrderForm"
                 initialValues={formValues}>
                 <Row gutter={10}>
-                    <Col span={8}>
+                    <Col span={8} xs={24} sm={8} md={8}>
                         <Card>
                             <Row gutter={10}>
                                 <Col span={24}>
@@ -130,23 +132,51 @@ function DispatchOrderForm (props) {
                             </Row>
                         </Card>
                     </Col>
-                    <Col span={16}>
+                    <Col span={16} xs={24} sm={16} md={16}>
                         <Card>
-                           <Row>
-                               <Col span={24}>
-                                   <Form.Item name="truck_id" label="Items"  rules={[
-                                       {
-                                           required: true,
-                                           message: 'Truck is Required'
-                                       }
-                                   ]}>
-                                       <Select showSearch size={'large'}>
-                                           <Select.Option value={'Male'}>Male</Select.Option>
-                                           <Select.Option value={'Female'}>Female</Select.Option>
-                                       </Select>
-                                   </Form.Item>
-                               </Col>
-                           </Row>
+                            <Form.List name="products">
+                                {(fields, { add, remove }) => (
+                                    <>
+                                        {fields.map(({ key, name, ...restField }) => (
+                                            <Space
+                                                key={key}
+                                                style={{
+                                                    display: 'flex',
+                                                    marginBottom: 8,
+                                                }}
+                                                align="baseline"
+                                            >
+                                                <Form.Item
+                                                    {...restField}
+                                                    name={[name, 'name']}
+                                                    rules={[
+                                                        {
+                                                            required: true,
+                                                            message: 'Product Name',
+                                                        },
+                                                    ]}
+                                                >
+                                                    <Input placeholder="Product Name" />
+                                                </Form.Item>
+                                                <Form.Item
+                                                    {...restField}
+                                                    name={[name, 'qty']}
+                                                    rules={[
+                                                        {
+                                                            required: true,
+                                                            message: 'Qty',
+                                                        },
+                                                    ]}
+                                                >
+                                                    <Input placeholder="Qty" />
+                                                </Form.Item>
+                                                <MinusCircleOutlined onClick={() => remove(name)} />
+                                            </Space>
+                                        ))}
+                                        <Products onChange={(value) => add(value)}/>
+                                    </>
+                                )}
+                            </Form.List>
                         </Card>
                     </Col>
                 </Row>

@@ -15,9 +15,9 @@ Mobile: +233 544 513 074
 
 ### Installing Dependencies
 ```bash
-npm install
+npm install --legacy-peer-deps
 ```
-> _tip_: `npm i`is shorthand for `npm install`
+> _tip_: `npm i` is shorthand for `npm install`
 
 ### Backend Setup
 > _php version: 8.1_

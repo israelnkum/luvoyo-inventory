@@ -7,3 +7,11 @@ export const commonSuppliers = (payload) => {
       payload: payload
   }
 }
+
+
+export const commonProducts = (payload) => {
+  return {
+    type: Types.COMMON_PRODUCTS,
+      payload: payload
+  }
+}
