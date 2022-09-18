@@ -1,11 +1,15 @@
 import api from '../../utils/api'
 import {addSuppliers, allSuppliers, deleteSuppliers, updateSuppliers} from "./ActionCreators";
 
-export const handleGetAllSuppliers = () => async (dispatch) => {
-    await api().get('/suppliers')
-        .then((res) => {
+export const handleGetAllSuppliers = (pageNumber = 1) => async (dispatch) => {
+    return new Promise((resolve, reject) => {
+        api().get(`/suppliers?page=${pageNumber}`).then((res) => {
             dispatch(allSuppliers(res.data))
+            resolve(res)
+        }).catch((err) => {
+            reject(err)
         })
+    })
 }
 
 
