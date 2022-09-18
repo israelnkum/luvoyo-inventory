@@ -155,13 +155,13 @@ export const SidebarMenus = [
             {
                 permission: '',
                 modal: true,
-                title: 'Add Order',
+                title: 'Add Dispatch Order',
                 link: '/dispatch-orders/add',
             },
             {
                 permission: '',
                 modal: false,
-                title: 'All Orders',
+                title: 'All Dispatch Orders',
                 link: '/dispatch-orders',
             }
         ],
