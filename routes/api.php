@@ -5,6 +5,7 @@ use App\Http\Controllers\DispatchOrderController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\ExpenseController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\ProductController;
 use App\Http\Controllers\SuppliersController;
 use App\Http\Controllers\TruckController;
 use App\Http\Controllers\UserController;
@@ -45,6 +46,8 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::apiResource('/cash-ups', CashUpController::class);
 
     Route::apiResource('/dispatch-orders', DispatchOrderController::class);
+
+    Route::apiResource('/products', ProductController::class);
 });
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {

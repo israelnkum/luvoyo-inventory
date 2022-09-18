@@ -9,6 +9,7 @@ use App\Http\Resources\SupplierResource;
 use App\Models\Supplier;
 use Exception;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
@@ -21,9 +22,14 @@ class SuppliersController extends Controller
      *
      * @return AnonymousResourceCollection
      */
-    public function index(): AnonymousResourceCollection
+    public function index(Request $request): AnonymousResourceCollection
     {
-        return SupplierResource::collection(Supplier::paginate(10));
+        if ($request->query('page') == 0){
+            $suppliers = Supplier::all();
+        }else{
+            $suppliers = Supplier::paginate(10);
+        }
+        return SupplierResource::collection($suppliers);
     }
     /**
      * Store a newly created resource in storage.
