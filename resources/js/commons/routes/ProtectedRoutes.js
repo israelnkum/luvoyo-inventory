@@ -13,7 +13,6 @@ import AllTrucks from "../../components/trucks/all-trucks";
 import AllCashUps from "../../components/cash-ups/all-cash-ups";
 import AllDispatchOrders from "../../components/dispatch-orders/all-dispatch-orders";
 
-
 const ProtectedRoutes = (props) => {
     const {activeRoles} = props
     const location = useLocation()
@@ -31,6 +30,9 @@ const ProtectedRoutes = (props) => {
                    <Route path='trucks' element={<AllTrucks/>}/>
                    <Route path='cash-ups' element={<AllCashUps/>}/>
                    <Route path='dispatch-orders' element={<AllDispatchOrders/>}/>
+                </Route>
+                <Route exact path='trucks' element={ <AllTrucks /> }>
+
                 </Route>
                 <Route exact>
                     <>not found</>
