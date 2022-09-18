@@ -8,6 +8,8 @@ import suppliersReducer from "./suppliers-reducer";
 import trucksReducer from "./trucks-reducer";
 import cashUpsReducer from "./cashup-reducer";
 import dispatchOrderReducer from "./dispatch-order-reducer";
+import productReducer from "./product-reducer";
+import commonReducer from "./common-reducer";
 
 const persistConfig = {
     key: 'root',
@@ -20,6 +22,8 @@ const persistConfig = {
         'trucksReducer',
         'cashUpsReducer',
         'dispatchOrderReducer',
+        'productReducer',
+        'commonReducer',
     ]
 }
 
@@ -30,7 +34,9 @@ const rootReducer = combineReducers({
     suppliersReducer,
     trucksReducer,
     cashUpsReducer,
-    dispatchOrderReducer
+    dispatchOrderReducer,
+    productReducer,
+    commonReducer
 })
 
 export default persistReducer(persistConfig, rootReducer)

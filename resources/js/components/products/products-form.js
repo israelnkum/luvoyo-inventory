@@ -1,19 +1,17 @@
-import React, {useState} from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
-import {Button, Checkbox, Col, Form, Input, notification, Row, Select} from 'antd'
+import {Button, Col, Form, Input, notification, Row} from 'antd'
 import {connect} from 'react-redux'
 import {TlaModal} from "../../commons/tla-modal";
 import {useLocation, useNavigate} from "react-router-dom";
 import CloseModal from "../../commons/close-modal";
-import ChangePicture from "../commons/change-picture";
-import {handleAddEmployee, handleUpdateEmployee} from "../../actions/employee/EmployeeAction";
-import {nationalities} from "../../utils/nationalities";
+import {handleAddProduct, handleUpdateProduct} from "../../actions/products/ProductAction";
+import Suppliers from "../../commons/form/suppliers";
 
 
 function ProductsForm (props) {
     const navigate = useNavigate()
-    const [selectedFile, setSelectedFile] = useState(null)
-    const { addEmployee, updateEmployee } = props
+    const { addProduct, updateProduct } = props
     const [form] = Form.useForm()
     const { state } = useLocation()
     const formValues = {
@@ -29,7 +27,7 @@ function ProductsForm (props) {
                 formData.append(key, values[key])
             }
         }
-        (values.id === 0 ? addEmployee(formData) : updateEmployee(formData)).then(() => {
+        (values.id === 0 ? addProduct(formData) : updateProduct(formData)).then(() => {
             notification.success({
                 message: 'Success',
                 description: 'Product ' + (values.id === 0 ? 'Created' : 'Updated')
@@ -43,13 +41,8 @@ function ProductsForm (props) {
             })
         })
     }
-
-    const Render = ({ children, editing = true }) => (
-        (editing === false ? formValues.id !== 0 : formValues === 0) && children
-    )
     return (
         <TlaModal
-            width={800}
             title={(formValues.id === 0 ? "New" : "Edit") + " Product"}
         >
             <Form
@@ -60,114 +53,90 @@ function ProductsForm (props) {
                 initialValues={formValues}
             >
                 <Row gutter={10}>
-                            <Col span={12}>
-                                <Form.Item
-                                    name="item_ID"
-                                    label="Item ID"
-                                    rules={[
-                                        {
-                                            required: true,
-                                            message: "Item ID is Required",
-                                        },
-                                    ]}
-                                >
-                                    <Input size={"large"} />
-                                </Form.Item>
-                            </Col>
-                            <Col span={12}>
-                                <Form.Item
-                                    name="item_name"
-                                    label="Item Name"
-                                    rules={[
-                                        {
-                                            required: true,
-                                            message: "Item Name is Required",
-                                        },
-                                    ]}
-                                >
-                                    <Input size={'large'} />
-                                </Form.Item>
-                            </Col>
-                            <Col span={8}>
-                                <Form.Item
-                                    name="selling_price"
-                                    label="Selling Price"
-                                    rules={[
-                                        {
-                                            required: true,
-                                            message: "Selling Price is Required",
-                                        },
-                                    ]}
-                                >
-                                    <Input size={"large"} type='number' />
-                                </Form.Item>
-                            </Col>
-                            <Col span={8}>
-                                <Form.Item
-                                    name="cost_price"
-                                    label="Cost Price"
-                                    rules={[
-                                        {
-                                            required: true,
-                                            message: "Cost Price is Required",
-                                        },
-                                    ]}
-                                >
-                                    <Input size={"large"} type='number' />
-                                </Form.Item>
-                            </Col>
-                            <Col span={8}>
-                                <Form.Item
-                                    name="quantity"
-                                    label="Quantity"
-                                    rules={[
-                                        {
-                                            required: true,
-                                            message: "Quantity is Required",
-                                        },
-                                    ]}
-                                >
-                                    <Input size={"large"} type='number' />
-                                </Form.Item>
-                            </Col>
-                            <Col span={12}>
-                                <Form.Item
-                                    name="item_brand"
-                                    label="Item Brand"
-                                    rules={[
-                                        {
-                                            required: true,
-                                            message: "Item Brand is Required",
-                                        },
-                                    ]}
-                                >
-                                    <Input size={"large"} />
-                                </Form.Item>
-                            </Col>
-                            <Col span={12}>
-                                <Form.Item
-                                    name="supplier_id"
-                                    label="Supplier ID"
-                                    rules={[
-                                        {
-                                            required: true,
-                                            message: "Supplier ID is Required",
-                                        },
-                                    ]}
-                                >
-                                    <Select size={"large"}>
-                                        <Select.Option value={"1"}>
-                                            1
-                                        </Select.Option>
-                                        <Select.Option value={"2"}>
-                                            2
-                                        </Select.Option>
-                                        <Select.Option value={"3"}>
-                                            3
-                                        </Select.Option>
-                                    </Select>
-                                </Form.Item>
-                            </Col>
+                    <Col span={24}>
+                        <Form.Item
+                            name="name"
+                            label="Item Name"
+                            rules={[
+                                {
+                                    required: true,
+                                    message: "Item Name is Required",
+                                },
+                            ]}
+                        >
+                            <Input size={'large'} />
+                        </Form.Item>
+                    </Col>
+                    <Col span={8}>
+                        <Form.Item
+                            name="selling_price"
+                            label="Selling Price"
+                            rules={[
+                                {
+                                    required: true,
+                                    message: "Selling Price is Required",
+                                },
+                            ]}
+                        >
+                            <Input size={"large"} type='number' />
+                        </Form.Item>
+                    </Col>
+                    <Col span={8}>
+                        <Form.Item
+                            name="cost_price"
+                            label="Cost Price"
+                            rules={[
+                                {
+                                    required: true,
+                                    message: "Cost Price is Required",
+                                },
+                            ]}
+                        >
+                            <Input size={"large"} type='number' />
+                        </Form.Item>
+                    </Col>
+                    <Col span={8}>
+                        <Form.Item
+                            name="quantity"
+                            label="Quantity"
+                            rules={[
+                                {
+                                    required: true,
+                                    message: "Quantity is Required",
+                                },
+                            ]}
+                        >
+                            <Input size={"large"} type='number' />
+                        </Form.Item>
+                    </Col>
+                    <Col span={12}>
+                        <Form.Item
+                            name="brand"
+                            label="Brand"
+                            rules={[
+                                {
+                                    required: true,
+                                    message: "Item Brand is Required",
+                                },
+                            ]}
+                        >
+                            <Input size={"large"} />
+                        </Form.Item>
+                    </Col>
+                    <Col span={12}>
+                        <Suppliers/>
+                    </Col>
+                    <Col>
+                        <Form.Item hidden name="id" label="ID"
+                                   rules={[
+                                       {
+                                           required: true,
+                                           message: 'Required'
+                                       }
+                                   ]}>
+                            <Input size={'large'}/>
+                        </Form.Item>
+                    </Col>
                 </Row>
                 <Form.Item>
                     <div align={"right"}>
@@ -183,13 +152,13 @@ function ProductsForm (props) {
     );
 }
 ProductsForm.propTypes = {
-    addEmployee: PropTypes.func.isRequired,
-    updateEmployee: PropTypes.func.isRequired,
+    addProduct: PropTypes.func.isRequired,
+    updateProduct: PropTypes.func.isRequired,
 }
 
 const mapDispatchToProps = (dispatch) => ({
-    addEmployee: (payload) => dispatch(handleAddEmployee(payload)),
-    updateEmployee: (payload) => dispatch(handleUpdateEmployee(payload))
+    addProduct: (payload) => dispatch(handleAddProduct(payload)),
+    updateProduct: (payload) => dispatch(handleUpdateProduct(payload))
 })
 
 export default connect(null, mapDispatchToProps)(ProductsForm)

@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\HelperFunctions;
 use App\Http\Requests\StoreExpenseRequest;
 use App\Http\Requests\UpdateExpenseRequest;
 use App\Http\Resources\ExpensesResource;
+use App\Http\Resources\SupplierResource;
 use App\Models\Expense;
 use Exception;
 use Illuminate\Http\JsonResponse;
@@ -53,11 +55,21 @@ class ExpenseController extends Controller
      *
      * @param UpdateExpenseRequest $request
      * @param Expense $expense
-     * @return Response
+     * @return ExpensesResource|JsonResponse|Response
      */
-    public function update(UpdateExpenseRequest $request, Expense $expense)
+    public function update(UpdateExpenseRequest $request, Expense $expense): Response|ExpensesResource|JsonResponse
     {
-        //
+        DB::beginTransaction();
+        try {
+            $expense->update($request->all());
+            DB::commit();
+            return new ExpensesResource($expense);
+        }catch (Exception $exception){
+            DB::rollBack();
+            return response()->json([
+                'message' => $exception->getMessage()
+            ], 400);
+        }
     }
 
     /**

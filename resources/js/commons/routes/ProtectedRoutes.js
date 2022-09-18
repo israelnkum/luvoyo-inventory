@@ -12,6 +12,7 @@ import AllSuppliers from "../../components/suppliers/all-suppliers";
 import AllTrucks from "../../components/trucks/all-trucks";
 import AllCashUps from "../../components/cash-ups/all-cash-ups";
 import AllDispatchOrders from "../../components/dispatch-orders/all-dispatch-orders";
+import AllProducts from "../../components/products/all-products";
 
 const ProtectedRoutes = (props) => {
     const {activeRoles} = props
@@ -30,9 +31,7 @@ const ProtectedRoutes = (props) => {
                    <Route path='trucks' element={<AllTrucks/>}/>
                    <Route path='cash-ups' element={<AllCashUps/>}/>
                    <Route path='dispatch-orders' element={<AllDispatchOrders/>}/>
-                </Route>
-                <Route exact path='trucks' element={ <AllTrucks /> }>
-
+                   <Route path='products' element={<AllProducts/>}/>
                 </Route>
                 <Route exact>
                     <>not found</>
