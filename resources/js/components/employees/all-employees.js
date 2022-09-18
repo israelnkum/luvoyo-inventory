@@ -25,14 +25,14 @@ function AllEmployees (props) {
     return (
         <ViewAllWrapper loading={loading} noData={data.length === 0}>
             <TlaTableWrapper callbackFunction={getEmployees} data={data} meta={meta}>
-                <Column title="Photo" render={({name}) => (
-                    <TlaImage size={40} src={'Avatar'} name={name}/>
+                <Column title="Photo" render={({name, photo}) => (
+                    <TlaImage size={40} src={photo} name={name}/>
                 )}/>
                 <Column title="Name" dataIndex={'name'}/>
                 <Column title="Name" dataIndex={'name'}/>
                 <Column title="D.o.B" dataIndex={'dob'}/>
                 <Column title="Phone" dataIndex={'telephone'}/>
-                <Column title="Phone" render={(record) => (
+                <Column title="Actions" render={(record) => (
                     <TlaEdit data={record} icon link={'edit'}/>
                 )}/>
             </TlaTableWrapper>

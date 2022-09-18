@@ -49,7 +49,7 @@ export const handleGetSingleEmployee = (id) => (dispatch) => {
  */
 export const handleUpdateEmployee = (data) => (dispatch) => {
     return new Promise((resolve, reject) => {
-        api().put(`/employees/${data.get('id')}`, data, {
+        api().post(`/employees/${data.get('id')}`, data, {
             headers: { 'Content-type': 'multipart/employee-data' }
         }).then((res) => {
             dispatch(updateEmployee(res.data))

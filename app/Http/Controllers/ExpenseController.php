@@ -35,11 +35,13 @@ class ExpenseController extends Controller
     {
         DB::beginTransaction();
         try {
-            DB::commit();
+
             $request['user_id'] = Auth::user()->id;
             $expenses = Expense::create($request->all());
+            DB::commit();
             return new ExpensesResource($expenses);
         }catch (Exception $exception){
+            DB::rollBack();
             return response()->json([
                 'message' => $exception->getMessage()
             ], 400);
