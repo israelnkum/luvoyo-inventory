@@ -1,13 +1,16 @@
 import api from '../../utils/api'
 import {addTrucks, allTrucks, deleteTrucks, updateTrucks} from "./ActionCreators";
 
-export const handleGetAllTrucks = () => async (dispatch) => {
-    await api().get('/trucks')
-        .then((res) => {
+export const handleGetAllTrucks = (pageNumber = 1) => async (dispatch) => {
+    return new Promise((resolve, reject) => {
+        api().get(`/trucks?page=${pageNumber}`).then((res) => {
             dispatch(allTrucks(res.data))
+            resolve(res)
+        }).catch((err) => {
+            reject(err)
         })
+    })
 }
-
 
 export const handleAddNewTrucks = (values) => (dispatch) => {
     return new Promise((resolve, reject) => {

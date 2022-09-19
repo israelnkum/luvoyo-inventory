@@ -179,6 +179,17 @@ function EmployeeForm (props) {
                     </Col>
 
                     <Col span={12}>
+                        <Form.Item name="home_address" label="Home Address">
+                            <Input.TextArea size={'large'}/>
+                        </Form.Item>
+                    </Col>
+                    <Col span={12}>
+                        <Form.Item name="remarks" label="Remarks">
+                            <Input.TextArea size={'large'}/>
+                        </Form.Item>
+                    </Col>
+
+                    <Col span={12}>
                         <Form.Item hidden name="id" label="ID"
                                    rules={[
                                        {
@@ -187,16 +198,6 @@ function EmployeeForm (props) {
                                        }
                                    ]}>
                             <Input size={'large'}/>
-                        </Form.Item>
-                    </Col>
-                    <Col span={12}>
-                        <Form.Item name="home_address" label="Home Address">
-                            <Input.TextArea size={'large'}/>
-                        </Form.Item>
-                    </Col>
-                    <Col span={12}>
-                        <Form.Item name="remarks" label="Remarks">
-                            <Input.TextArea size={'large'}/>
                         </Form.Item>
                     </Col>
                 </Row>

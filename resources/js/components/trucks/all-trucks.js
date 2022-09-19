@@ -48,7 +48,7 @@ const mapStateToProps = (state) => ({
 })
 
 const mapDispatchToProps = (dispatch) => ({
-    getTrucks: (payload) => dispatch(handleGetAllTrucks(payload))
+    getTrucks: (pageNumber) => dispatch(handleGetAllTrucks(pageNumber))
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(AllTrucks)
