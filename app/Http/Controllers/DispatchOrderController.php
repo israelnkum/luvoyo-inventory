@@ -120,4 +120,11 @@ class DispatchOrderController extends Controller
             return response()->json('Something went wrong', 422);
         }
     }
+
+    public function searchDispatchOrders($query): AnonymousResourceCollection
+    {
+        $products = DispatchOrder::query()
+            ->where('order_no', 'like', '%' . $query . '%')->get();
+        return DispatchOrderResource::collection($products);
+    }
 }

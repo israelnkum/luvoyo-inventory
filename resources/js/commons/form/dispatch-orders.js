@@ -2,43 +2,43 @@ import React from 'react'
 import {connect} from 'react-redux'
 import {Form} from 'antd'
 import PropTypes from 'prop-types'
-import {handleGetCommonEmployees} from "../../actions/commons/CommonAction";
+import {handleGetCommonDispatchOrder} from "../../actions/commons/CommonAction";
 import SearchItems from "./search";
 
-function Employees(props) {
-    const {getEmployees, form} = props
+function DispatchOrder(props) {
+    const {getDispatchOrder, form} = props
     return (
         <Form.Item
-            name="employee_id"
-            label="Employee"
+            name="dispatch_order_id"
+            label="Dispatch Order"
             rules={[
                 {
                     required: true,
-                    message: "Employee is Required",
+                    message: "Dispatch Order is Required",
                 },
             ]}
         >
-            <SearchItems search={getEmployees} displayField={'name'}
-                         text={'Search by surname or firstname or email'}
+            <SearchItems search={getDispatchOrder} displayField={'order_no'}
+                         text={'Search by order number'}
                          onChangeCallback={({ id }) => {
-                             getEmployees()
+                             getDispatchOrder()
                              form.setFieldsValue({
-                                 employee_id: id
+                                 dispatch_order_id: id
                              })
                          }}/>
         </Form.Item>
     )
 }
 
-Employees.propTypes = {
-    getEmployees: PropTypes.func.isRequired,
+DispatchOrder.propTypes = {
+    getDispatchOrder: PropTypes.func.isRequired,
     form: PropTypes.any.isRequired,
 }
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        getEmployees: (query) => dispatch(handleGetCommonEmployees(query))
+        getDispatchOrder: (query) => dispatch(handleGetCommonDispatchOrder(query))
     }
 }
 
-export default connect(null, mapDispatchToProps)(Employees)
+export default connect(null, mapDispatchToProps)(DispatchOrder)

@@ -1,5 +1,5 @@
 import api from '../../utils/api'
-import {commonEmployees, commonProducts, commonSuppliers} from "./ActionCreators";
+import {commonDispatchOrders, commonEmployees, commonProducts, commonSuppliers} from "./ActionCreators";
 
 export const handleGetCommonSuppliers = () => async (dispatch) => {
     return new Promise((resolve, reject) => {
@@ -38,6 +38,17 @@ export const handleGetCommonTrucks = (query) => async (dispatch) => {
     return new Promise((resolve, reject) => {
         api().get(`/trucks/search/${query}`).then((res) => {
             dispatch(commonEmployees(res.data))
+            resolve(res)
+        }).catch((err) => {
+            reject(err)
+        })
+    })
+}
+
+export const handleGetCommonDispatchOrder = (query) => async (dispatch) => {
+    return new Promise((resolve, reject) => {
+        api().get(`/dispatch-orders/search/${query}`).then((res) => {
+            dispatch(commonDispatchOrders(res.data))
             resolve(res)
         }).catch((err) => {
             reject(err)

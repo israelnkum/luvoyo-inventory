@@ -25,6 +25,14 @@ export const commonEmployees = (payload) => {
 }
 
 
+export const commonDispatchOrders = (payload) => {
+  return {
+    type: Types.COMMON_DISPATCH_ORDERS,
+      payload: payload
+  }
+}
+
+
 export const commonTrucks = (payload) => {
   return {
     type: Types.COMMON_TRUCKS,
