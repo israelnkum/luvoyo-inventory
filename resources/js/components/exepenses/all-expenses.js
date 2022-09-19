@@ -12,7 +12,7 @@ function AllExpenses (props) {
     const { getExpenses, expenses } = props
     const { data, meta }= expenses
     const [loading, setLoading] = useState(true)
-    const { setPageInfo, setExtra } = useOutletContext();
+    const { setPageInfo } = useOutletContext();
     useEffect(() => {
         setPageInfo({ title: 'Expenses', addLink: 'expenses/add', buttonText: 'Expenses' })
         getExpenses().then(() => {
@@ -44,7 +44,7 @@ const mapStateToProps = (state) => ({
 })
 
 const mapDispatchToProps = (dispatch) => ({
-    getExpenses: (payload) => dispatch(handleGetAllExpenses(payload))
+    getExpenses: (pageNumber) => dispatch(handleGetAllExpenses(pageNumber))
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(AllExpenses)

@@ -1,0 +1,6 @@
+export const Types = {
+    ALL_TRUCKS: 'ALL_TRUCKS',
+    ADD_TRUCKS: 'ADD_TRUCKS',
+    UPDATE_TRUCKS: 'UPDATE_TRUCKS',
+    DELETE_TRUCKS: 'DELETE_TRUCKS',
+}

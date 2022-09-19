@@ -27,6 +27,7 @@ return new class extends Migration
             $table->string('received_amount');
             $table->string('balance');
             $table->dateTime('date_time');
+            $table->softDeletes();
             $table->foreignIdFor(User::class)->constrained();
             $table->timestamps();
         });

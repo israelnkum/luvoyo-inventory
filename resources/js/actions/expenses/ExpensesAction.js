@@ -1,10 +1,14 @@
 import api from '../../utils/api'
 import {addExpenses, allExpenses, deleteExpenses, updateExpenses} from "./ActionCreators";
 
-export const handleGetAllExpenses = () => async (dispatch) => {
-  await api().get('/expenses')
-    .then((res) => {
-      dispatch(allExpenses(res.data))
+export const handleGetAllExpenses = (pageNumber = 1) => async (dispatch) => {
+    return new Promise((resolve, reject) => {
+        api().get(`/expenses?page=${pageNumber}`).then((res) => {
+            dispatch(allExpenses(res.data))
+            resolve(res)
+        }).catch((err) => {
+            reject(err)
+        })
     })
 }
 

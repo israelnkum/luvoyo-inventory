@@ -116,13 +116,13 @@ export const SidebarMenus = [
                 permission: '',
                 modal: true,
                 title: 'Add Cash-up',
-                link: '/cash-up/add',
+                link: '/cash-ups/add',
             },
             {
                 permission: '',
                 modal: false,
                 title: 'All Cash-ups',
-                link: '/cash-up',
+                link: '/cash-ups',
             }
         ],
         permissions: ['Admin'],
@@ -155,13 +155,13 @@ export const SidebarMenus = [
             {
                 permission: '',
                 modal: true,
-                title: 'Add Order',
+                title: 'Add Dispatch Order',
                 link: '/dispatch-orders/add',
             },
             {
                 permission: '',
                 modal: false,
-                title: 'All Orders',
+                title: 'All Dispatch Orders',
                 link: '/dispatch-orders',
             }
         ],
@@ -270,4 +270,11 @@ export const getInitials = (name) => {
 
     const initials = [...name.matchAll(rgx)] || []
     return ((initials.shift()?.[1] || '') + (initials.pop()?.[1] || '')).toUpperCase()
+}
+
+export const addOrRemoveItem = (items, newItem) => {
+    const i = items.findIndex(itm => itm.id === newItem.id)
+    if (i > -1) items[i] = newItem
+    else items.push(newItem)
+    return items
 }

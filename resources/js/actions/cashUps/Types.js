@@ -1,0 +1,6 @@
+export const Types = {
+    ALL_CASH_UPS: 'ALL_CASH_UPS',
+    ADD_CASH_UPS: 'ADD_CASH_UPS',
+    UPDATE_CASH_UPS: 'UPDATE_CASH_UPS',
+    DELETE_CASH_UPS: 'DELETE_CASH_UPS',
+}

@@ -4,6 +4,12 @@ import sessionStorage from 'redux-persist/lib/storage/session'
 import employeeReducer from './employee-reducer'
 import userReducer from './UserReducer'
 import expensesReducer from "./expenses-reducer";
+import suppliersReducer from "./suppliers-reducer";
+import trucksReducer from "./trucks-reducer";
+import cashUpsReducer from "./cashup-reducer";
+import dispatchOrderReducer from "./dispatch-order-reducer";
+import productReducer from "./product-reducer";
+import commonReducer from "./common-reducer";
 
 const persistConfig = {
     key: 'root',
@@ -12,6 +18,12 @@ const persistConfig = {
         'employeeReducer',
         'userReducer',
         'expensesReducer',
+        'suppliersReducer',
+        'trucksReducer',
+        'cashUpsReducer',
+        'dispatchOrderReducer',
+        'productReducer',
+        'commonReducer',
     ]
 }
 
@@ -19,6 +31,12 @@ const rootReducer = combineReducers({
     employeeReducer,
     userReducer,
     expensesReducer,
+    suppliersReducer,
+    trucksReducer,
+    cashUpsReducer,
+    dispatchOrderReducer,
+    productReducer,
+    commonReducer
 })
 
 export default persistReducer(persistConfig, rootReducer)
