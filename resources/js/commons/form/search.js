@@ -9,7 +9,7 @@ let timeout
 let currentValue
 
 const SearchItems = (props) => {
-    const { search, onChangeCallback, text } = props
+    const { search, onChangeCallback, text, displayField } = props
 
     const fetch = (value, callback) => {
         if (timeout) {
@@ -24,10 +24,7 @@ const SearchItems = (props) => {
                     if (currentValue === value) {
                         const data = []
                         res.data.forEach(item => {
-                            data.push({
-                                id: item.id,
-                                name: item.name,
-                            })
+                            data.push(item)
                         })
                         callback(data)
                     }
@@ -52,7 +49,7 @@ const SearchItems = (props) => {
         onChangeCallback(data.find((itm) => itm.id === value))
     }
 
-    const options = data.map(d => <Option key={d.id} value={d.id}>{d.name}</Option>)
+    const options = data.map(d => <Option key={d.id} value={d.id}>{d[displayField]}</Option>)
     return (
         <>
             <Select
@@ -76,10 +73,12 @@ const SearchItems = (props) => {
 }
 
 SearchItems.defaultProps = {
-    text: "Type to search..."
+    text: "Type to search...",
+    displayField: 'name'
 }
 SearchItems.propTypes = {
     text: PropTypes.string,
+    displayField: PropTypes.string,
     search: PropTypes.func.isRequired,
     onChangeCallback: PropTypes.func,
 }

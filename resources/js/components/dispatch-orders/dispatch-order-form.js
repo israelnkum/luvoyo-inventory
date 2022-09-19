@@ -10,55 +10,44 @@ import {
     InputNumber,
     notification,
     Row,
-    Select,
-    Space,
     TimePicker
 } from 'antd'
 import {connect} from 'react-redux'
 import {TlaModal} from "../../commons/tla-modal";
-import {useLocation, useNavigate} from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 import CloseModal from "../../commons/close-modal";
 import {handleAddDispatchOrder, handleUpdateDispatchOrder} from "../../actions/dispatch-orders/DisptachOrderAction";
-import moment from "moment";
 import Products from "../../commons/form/products";
-import {MinusCircleOutlined, PlusOutlined} from "@ant-design/icons";
-import {addOrRemoveItem} from "../../utils";
+import Trucks from "../../commons/form/trucks";
+import Employees from "../../commons/form/employees";
 
 
 function DispatchOrderForm (props) {
     const navigate = useNavigate()
     const { addDispatchOrder, updateDispatchOrder } = props
     const [form] = Form.useForm()
-    const nameValue = Form.useWatch('products', form);
-    const { state } = useLocation()
     const formValues = {
         id: 0,
         products: JSON.parse(localStorage.getItem('items')) || []
     }
 
     const submit = (values) => {
-        console.log(values)
-        /*  const formData = new FormData()
-          values.id !== 0 && formData.append('_method', 'PUT')
-
-          for (const key in values) {
-              if (Object.prototype.hasOwnProperty.call(values, key)) {
-                  formData.append(key, values[key])
-              }
-          }
-          (values.id === 0 ? addDispatchOrder(formData) : updateDispatchOrder(formData)).then(() => {
-              notification.success({
-                  message: 'Success',
-                  description: 'Dispatch Order ' + (values.id === 0 ? 'Created' : 'Updated')
-              })
-              form.resetFields()
-              navigate(-1)
-          }).catch((error) => {
-              notification.warning({
-                  message: 'Warning',
-                  description: error.response.data.message
-              })
-          })*/
+        if (values.id !== 0){
+            values._method = 'PUT'
+        }
+        (values.id === 0 ? addDispatchOrder(values) : updateDispatchOrder(values)).then(() => {
+            notification.success({
+                message: 'Success',
+                description: 'Dispatch Order ' + (values.id === 0 ? 'Created' : 'Updated')
+            })
+            form.resetFields()
+            navigate(-1)
+        }).catch((error) => {
+            notification.warning({
+                message: 'Warning',
+                description: error.response.data.message
+            })
+        })
     }
 
     return (
@@ -74,30 +63,10 @@ function DispatchOrderForm (props) {
                         <Card>
                             <Row gutter={10}>
                                 <Col span={24}>
-                                    <Form.Item name="truck_id" label="Truck"  rules={[
-                                        {
-                                            required: true,
-                                            message: 'Truck is Required'
-                                        }
-                                    ]}>
-                                        <Select size={'large'}>
-                                            <Select.Option value={'Male'}>Male</Select.Option>
-                                            <Select.Option value={'Female'}>Female</Select.Option>
-                                        </Select>
-                                    </Form.Item>
+                                    <Trucks form={form}/>
                                 </Col>
                                 <Col span={24}>
-                                    <Form.Item name="employee_id" label="Employee"  rules={[
-                                        {
-                                            required: true,
-                                            message: 'Employee is Required'
-                                        }
-                                    ]}>
-                                        <Select size={'large'}>
-                                            <Select.Option value={'Male'}>Male</Select.Option>
-                                            <Select.Option value={'Female'}>Female</Select.Option>
-                                        </Select>
-                                    </Form.Item>
+                                    <Employees form={form}/>
                                 </Col>
                                 <Col span={24}>
                                     <Form.Item name="dispatch_date" label="Dispatch Date"
@@ -185,14 +154,24 @@ function DispatchOrderForm (props) {
                                                             <Form.Item
                                                                 {...restField}
                                                                 name={[name, 'qty']}
+                                                                rules={[{
+                                                                    required: true,
+                                                                    message: 'Qty',
+                                                                },]}>
+                                                                <InputNumber style={{ width: '100%' }} min={1} placeholder="Qty" />
+                                                            </Form.Item>
+                                                            <Form.Item
+                                                                {...restField}
+                                                                hidden
+                                                                name={[name, 'cost_price']}
                                                                 rules={[
                                                                     {
                                                                         required: true,
-                                                                        message: 'Qty',
+                                                                        message: 'Cost Price',
                                                                     },
                                                                 ]}
                                                             >
-                                                                <InputNumber style={{ width: '100%' }} min={1} placeholder="Qty" />
+                                                                <InputNumber style={{ width: '100%' }} min={1} placeholder="Cost Price" />
                                                             </Form.Item>
                                                         </Col>
                                                         <Col span={4} xs={12} sm={4} md={4} lg={4}>

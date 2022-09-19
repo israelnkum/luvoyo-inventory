@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react'
-import {Table} from 'antd'
+import {Space, Table, Typography} from 'antd'
 import PropTypes from 'prop-types'
 import {connect} from "react-redux";
 import TlaTableWrapper from "../../commons/table/tla-table-wrapper";
@@ -25,13 +25,20 @@ function AllDispatchOrders (props) {
     return (
         <ViewAllWrapper loading={loading} noData={data.length === 0}>
             <TlaTableWrapper callbackFunction={getDispatchOrders} data={data} meta={meta}>
-                <Column title="Photo" render={({name, photo}) => (
-                    <TlaImage size={40} src={photo} name={name}/>
+                <Column title="Order No." dataIndex={'order_no'}/>
+                <Column title="Truck" render={({truck}) => (
+                    <Typography.Text>{truck.truck_code}</Typography.Text>
                 )}/>
-                <Column title="Name" dataIndex={'name'}/>
-                <Column title="Name" dataIndex={'name'}/>
-                <Column title="D.o.B" dataIndex={'dob'}/>
-                <Column title="Phone" dataIndex={'telephone'}/>
+                <Column title="Total" dataIndex={'total'}/>
+                <Column title="Qty" dataIndex={'qty'}/>
+                <Column title="Dispatch Date" dataIndex={'date_time'}/>
+                <Column title="Return time" dataIndex={'return_time'}/>
+                <Column title="Staff" render={({employee}) => (
+                   <Space wrap>
+                       <TlaImage size={30} preview={true} src={employee.photo} name={employee.name}/>
+                       <Typography.Text>{employee.name}</Typography.Text>
+                   </Space>
+                )}/>
                 <Column title="Actions" render={(record) => (
                     <TlaEdit data={record} icon link={'edit'}/>
                 )}/>

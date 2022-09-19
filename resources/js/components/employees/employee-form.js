@@ -120,6 +120,8 @@ function EmployeeForm (props) {
                         <Form.Item name="telephone" label="Mobile No."
                                    rules={[
                                        {
+                                           max: 10,
+                                           min: 10,
                                            required: true,
                                            message: 'Mobile No. is Required'
                                        }

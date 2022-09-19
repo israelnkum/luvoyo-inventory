@@ -100,10 +100,27 @@ class EmployeeController extends Controller
      * Remove the specified resource from storage.
      *
      * @param Employee $employee
-     * @return Response
+     * @return JsonResponse
      */
-    public function destroy(Employee $employee)
+    public function destroy(Employee $employee): JsonResponse
     {
-        //
+        DB::beginTransaction();
+        try {
+            $employee->delete();
+            DB::commit();
+            return \response()->json('Employee Deleted');
+        } catch (\Exception $exception) {
+            DB::rollBack();
+            return response()->json('Something went wrong', 422);
+        }
+    }
+
+    public function searchEmployees($query): AnonymousResourceCollection
+    {
+        $products = Employee::query()
+            ->where('surname', 'like', '%' . $query . '%')
+            ->orWhere('other_names', 'like', '%' . $query . '%')
+            ->orWhere('email', 'like', '%' . $query . '%')->get();
+        return EmployeeResource::collection($products);
     }
 }

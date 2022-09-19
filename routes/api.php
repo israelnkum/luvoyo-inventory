@@ -36,6 +36,9 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
     Route::apiResource('/users', UserController::class);
 
+    Route::prefix('employees')->group(function () {
+        Route::get('/search/{query}', [EmployeeController::class, 'searchEmployees']);
+    });
     Route::apiResource('/employees', EmployeeController::class);
 
     Route::apiResource('/expenses', ExpenseController::class);

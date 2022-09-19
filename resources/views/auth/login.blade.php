@@ -6,7 +6,7 @@
                 <div class="card login-body shadow-sm border-0 d-flex justify-content-center">
                     <div>
                         <div class="">
-                            <h3 class="title">INVENTORY</h3>
+                            <h3 class="title">LOXION Management</h3>
                         </div>
                         <div class="card-body">
                             @if(session()->has('registerError'))
