@@ -14,7 +14,7 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('suppliers', function (Blueprint $table) {
+        Schema::create('trucks', function (Blueprint $table) {
             $table->id();
             $table->string('truck_code');
             $table->string('vehicle_type')->nullable();

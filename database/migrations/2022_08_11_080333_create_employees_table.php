@@ -27,6 +27,7 @@ return new class extends Migration
             $table->string('id_type')->nullable();
             $table->string('id_number')->nullable();
             $table->text('remarks')->nullable();
+            $table->string('email')->unique();
             $table->foreignIdFor(User::class)->constrained();
             $table->softDeletes();
             $table->timestamps();

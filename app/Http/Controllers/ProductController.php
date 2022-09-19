@@ -103,4 +103,10 @@ class ProductController extends Controller
             return response()->json('Something went wrong', 422);
         }
     }
+
+    public function searchProducts($query): AnonymousResourceCollection
+    {
+        $products = Product::query()->where('name', 'like', '%' . $query . '%')->get();
+        return ProductsResource::collection($products);
+    }
 }

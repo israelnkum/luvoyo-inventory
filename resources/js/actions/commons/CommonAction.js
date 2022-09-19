@@ -1,5 +1,5 @@
 import api from '../../utils/api'
-import {commonProducts, commonSuppliers} from "./ActionCreators";
+import {commonEmployees, commonProducts, commonSuppliers} from "./ActionCreators";
 
 export const handleGetCommonSuppliers = () => async (dispatch) => {
     return new Promise((resolve, reject) => {
@@ -12,10 +12,32 @@ export const handleGetCommonSuppliers = () => async (dispatch) => {
     })
 }
 
-export const handleGetCommonProducts = () => async (dispatch) => {
+export const handleGetCommonProducts = (query) => async (dispatch) => {
     return new Promise((resolve, reject) => {
-        api().get(`/products?page=0`).then((res) => {
+        api().get(`/products/search/${query}`).then((res) => {
             dispatch(commonProducts(res.data))
+            resolve(res)
+        }).catch((err) => {
+            reject(err)
+        })
+    })
+}
+
+export const handleGetCommonEmployees = () => async (dispatch) => {
+    return new Promise((resolve, reject) => {
+        api().get(`/employees?page=0`).then((res) => {
+            dispatch(commonEmployees(res.data))
+            resolve(res)
+        }).catch((err) => {
+            reject(err)
+        })
+    })
+}
+
+export const handleGetCommonTrucks = (query) => async (dispatch) => {
+    return new Promise((resolve, reject) => {
+        api().get(`/trucks/search/${query}`).then((res) => {
+            dispatch(commonEmployees(res.data))
             resolve(res)
         }).catch((err) => {
             reject(err)

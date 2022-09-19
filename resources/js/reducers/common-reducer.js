@@ -2,6 +2,8 @@ import { Types } from '../actions/commons/Types'
 const initialState = {
     suppliers: [],
     products: [],
+    trucks: [],
+    employees: [],
 }
 
 export default function commonReducer (state = initialState, action) {

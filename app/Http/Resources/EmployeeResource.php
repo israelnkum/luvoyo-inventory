@@ -23,13 +23,15 @@ class EmployeeResource extends JsonResource
             'name' => $this->name,
             'dob' => $this->dob,
             'gender' => $this->gender,
+            'email' => $this->email,
             'telephone' => $this->telephone,
-            'photo' => '/storage/images/employees/' . $this->photo->file_name,
+            'photo' => $this->photo ? '/storage/images/employees/' . $this->photo->file_name : null,
             'home_address' => $this->home_address,
             'id_type' => $this->id_type,
             'id_number' => $this->id_number,
             'remarks' => $this->remarks,
-            'user_id' => $this->user_id
+            'user_id' => $this->user_id,
+            'user_account' =>  new UserResource($this->user),
         ];
     }
 }

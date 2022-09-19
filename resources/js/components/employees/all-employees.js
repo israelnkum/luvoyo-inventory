@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react'
-import {Table} from 'antd'
+import {Space, Table, Tag} from 'antd'
 import PropTypes from 'prop-types'
 import {connect} from "react-redux";
 import TlaTableWrapper from "../../commons/table/tla-table-wrapper";
@@ -29,9 +29,25 @@ function AllEmployees (props) {
                     <TlaImage size={40} src={photo} name={name}/>
                 )}/>
                 <Column title="Name" dataIndex={'name'}/>
-                <Column title="Name" dataIndex={'name'}/>
+                <Column title="Email" dataIndex={'email'}/>
                 <Column title="D.o.B" dataIndex={'dob'}/>
                 <Column title="Phone" dataIndex={'telephone'}/>
+                <Column title="Account Details" render={({user_account}) => (
+                    <Space>
+                        {
+                            user_account ?
+                                <>
+                                    {
+                                        user_account.default_password !== null &&
+                                        <Space direction={'vertical'}>
+                                            <Tag color={'red'}>Not Logged In</Tag>
+                                            <h6>Password: {user_account.default_password}</h6>
+                                        </Space>
+                                    }
+                                </> : 'No User Account'
+                        }
+                    </Space>
+                )}/>
                 <Column title="Actions" render={(record) => (
                     <TlaEdit data={record} icon link={'edit'}/>
                 )}/>

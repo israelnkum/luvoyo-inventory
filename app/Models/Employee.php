@@ -17,6 +17,7 @@ class Employee extends Model
 
     protected $fillable = [
         'surname',
+        'email',
         'other_names',
         'dob',
         'gender',
@@ -35,9 +36,7 @@ class Employee extends Model
 
     public function photo(): MorphOne
     {
-        return $this->morphOne(Photo::class,'photoable')->withDefault([
-            'file_name' => null
-        ]);
+        return $this->morphOne(Photo::class,'photoable');
     }
 
     public function user(): MorphOne

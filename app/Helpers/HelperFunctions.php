@@ -4,6 +4,7 @@ namespace App\Helpers;
 
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 
 class HelperFunctions
 {
@@ -30,18 +31,19 @@ class HelperFunctions
     static function createUserAccount($model, $data, $userName = null): void
     {
 
-        $actual = $userName == null
-            ? self::createUserName($data['first_name'], $data['last_name'])
-            : $userName;
-
+//        $actual = $userName == null
+//            ? self::createUserName($data['first_name'], $data['last_name'])
+//            : $userName;
+        $password = strtoupper(Str::random(10));
         $model::find($data['id'])->user()->updateOrCreate(
-            ['username' => $actual],
+            ['username' => $data['email']],
             [
-                'username' => $actual,
+                'username' => $data['email'],
                 'first_name' => $data['first_name'],
                 'last_name' => $data['last_name'],
                 'email' => $data['email'],
-                'password' => Hash::make($actual),
+                'password' => Hash::make($password),
+                'default_password' => $password,
             ]
         );
     }
