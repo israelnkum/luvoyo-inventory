@@ -7,6 +7,7 @@ import {useLocation, useNavigate} from "react-router-dom";
 import CloseModal from "../../commons/close-modal";
 import {handleAddNewExpenses, handleUpdateExpenses} from "../../actions/expenses/ExpensesAction";
 import {expensesCategories} from "../../utils";
+import moment from "moment";
 
 
 function ExpensesForm (props) {
@@ -15,7 +16,7 @@ function ExpensesForm (props) {
     const [form] = Form.useForm()
     const { state } = useLocation()
     const formValues = {
-        id: 0, description: '', ...state.data
+        id: 0, description: '', date_time: moment(), ...state.data
     }
 
     const submit = (values) => {
@@ -51,18 +52,7 @@ function ExpensesForm (props) {
                 name="createExpensesForm"
                 initialValues={formValues}>
                 <Row gutter={10}>
-                    <Col span={12}>
-                        <Form.Item name="transaction_no" label="Transaction No."
-                                   rules={[
-                                       {
-                                           required: true,
-                                           message: 'Transaction No. is Required'
-                                       }
-                                   ]}>
-                            <Input size={'large'}/>
-                        </Form.Item>
-                    </Col>
-                    <Col span={12}>
+                    <Col span={24}>
                         <Form.Item name="date_time" label="Date Time"
                                    rules={[
                                        {

@@ -10,11 +10,11 @@ use App\Models\Employee;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 
 class EmployeeController extends Controller
 {
@@ -23,10 +23,13 @@ class EmployeeController extends Controller
      *
      * @return AnonymousResourceCollection
      */
-    public function index(): AnonymousResourceCollection
+    public function index(Request $request): AnonymousResourceCollection
     {
-        $employees = Employee::paginate(10);
-
+        if ($request->query('page') == 0){
+            $employees = Employee::all();
+        }else{
+            $employees = Employee::paginate(10);
+        }
         return EmployeeResource::collection($employees);
     }
 

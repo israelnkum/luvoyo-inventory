@@ -9,6 +9,7 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\SuppliersController;
 use App\Http\Controllers\TruckController;
 use App\Http\Controllers\UserController;
+use App\Models\Truck;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -39,6 +40,9 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
     Route::apiResource('/expenses', ExpenseController::class);
 
+    Route::prefix('trucks')->group(function () {
+        Route::get('/search/{query}', [TruckController::class, 'searchTrucks']);
+    });
     Route::apiResource('/trucks', TruckController::class);
 
     Route::apiResource('/suppliers', SuppliersController::class);
@@ -47,6 +51,9 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
     Route::apiResource('/dispatch-orders', DispatchOrderController::class);
 
+    Route::prefix('products')->group(function () {
+        Route::get('/search/{query}', [ProductController::class, 'searchProducts']);
+    });
     Route::apiResource('/products', ProductController::class);
 });
 

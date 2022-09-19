@@ -135,7 +135,12 @@ function EmployeeForm (props) {
                                            message: 'ID Type is Required'
                                        }
                                    ]}>
-                            <Input size={'large'}/>
+                            <Select size={'large'}>
+                                <Select.Option value={'ID Number'}>ID Number</Select.Option>
+                                <Select.Option value={'Passport'}>Passport</Select.Option>
+                                <Select.Option value={'Drivers License'}>Drivers License</Select.Option>
+                                <Select.Option value={'Other'}>Other</Select.Option>
+                            </Select>
                         </Form.Item>
                     </Col>
                     <Col span={8}>
@@ -158,6 +163,18 @@ function EmployeeForm (props) {
                                        }
                                    ]}>
                             <DatePicker size={'large'}/>
+                        </Form.Item>
+                    </Col>
+                    <Col span={12}>
+                        <Form.Item name="email" label="Email"
+                                   rules={[
+                                       {
+                                           type: 'email',
+                                           required: true,
+                                           message: 'Email is Required'
+                                       }
+                                   ]}>
+                            <Input size={'large'}/>
                         </Form.Item>
                     </Col>
 

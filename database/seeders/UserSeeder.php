@@ -19,8 +19,8 @@ class UserSeeder extends Seeder
     public function run()
     {
        $user = User::updateOrcreate([ 'username' => 'techlineafrica'],[
-            'first_name' => 'Techline',
-            'last_name' => 'Africa',
+            'first_name' => 'LOXION',
+            'last_name' => 'BUSINESS',
             'username' => 'techlineafrica',
             'email' => 'info@techlineafrica.com',
             'password' => Hash::make('techlineafrica'),

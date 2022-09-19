@@ -1,6 +1,19 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import {Button, Card, Col, DatePicker, Form, Input, notification, Row, Select, Space, TimePicker} from 'antd'
+import {
+    Button,
+    Card,
+    Col,
+    DatePicker,
+    Form,
+    Input,
+    InputNumber,
+    notification,
+    Row,
+    Select,
+    Space,
+    TimePicker
+} from 'antd'
 import {connect} from 'react-redux'
 import {TlaModal} from "../../commons/tla-modal";
 import {useLocation, useNavigate} from "react-router-dom";
@@ -9,42 +22,43 @@ import {handleAddDispatchOrder, handleUpdateDispatchOrder} from "../../actions/d
 import moment from "moment";
 import Products from "../../commons/form/products";
 import {MinusCircleOutlined, PlusOutlined} from "@ant-design/icons";
+import {addOrRemoveItem} from "../../utils";
 
 
 function DispatchOrderForm (props) {
     const navigate = useNavigate()
     const { addDispatchOrder, updateDispatchOrder } = props
     const [form] = Form.useForm()
+    const nameValue = Form.useWatch('products', form);
     const { state } = useLocation()
     const formValues = {
         id: 0,
-        staff_id: null,
-        ...{...state.data, dob: state?.data ? moment(state?.data.dob) : ''}
+        products: JSON.parse(localStorage.getItem('items')) || []
     }
 
     const submit = (values) => {
         console.log(values)
-      /*  const formData = new FormData()
-        values.id !== 0 && formData.append('_method', 'PUT')
+        /*  const formData = new FormData()
+          values.id !== 0 && formData.append('_method', 'PUT')
 
-        for (const key in values) {
-            if (Object.prototype.hasOwnProperty.call(values, key)) {
-                formData.append(key, values[key])
-            }
-        }
-        (values.id === 0 ? addDispatchOrder(formData) : updateDispatchOrder(formData)).then(() => {
-            notification.success({
-                message: 'Success',
-                description: 'Dispatch Order ' + (values.id === 0 ? 'Created' : 'Updated')
-            })
-            form.resetFields()
-            navigate(-1)
-        }).catch((error) => {
-            notification.warning({
-                message: 'Warning',
-                description: error.response.data.message
-            })
-        })*/
+          for (const key in values) {
+              if (Object.prototype.hasOwnProperty.call(values, key)) {
+                  formData.append(key, values[key])
+              }
+          }
+          (values.id === 0 ? addDispatchOrder(formData) : updateDispatchOrder(formData)).then(() => {
+              notification.success({
+                  message: 'Success',
+                  description: 'Dispatch Order ' + (values.id === 0 ? 'Created' : 'Updated')
+              })
+              form.resetFields()
+              navigate(-1)
+          }).catch((error) => {
+              notification.warning({
+                  message: 'Warning',
+                  description: error.response.data.message
+              })
+          })*/
     }
 
     return (
@@ -96,7 +110,7 @@ function DispatchOrderForm (props) {
                                         <DatePicker size={'large'}  style={{ width: '100%' }}/>
                                     </Form.Item>
                                 </Col>
-                                <Col span={12}>
+                                <Col span={12} xs={24} sm={24} md={12} lg={12}>
                                     <Form.Item name="dispatch_time" label="Dispatch Time"
                                                rules={[
                                                    {
@@ -107,7 +121,7 @@ function DispatchOrderForm (props) {
                                         <TimePicker format={'hh:mm'} size={'large'}  style={{ width: '100%' }}/>
                                     </Form.Item>
                                 </Col>
-                                <Col span={12}>
+                                <Col span={12} xs={24} sm={24} md={12} lg={12}>
                                     <Form.Item name="return_time" label="Return Time"
                                                rules={[
                                                    {
@@ -133,47 +147,73 @@ function DispatchOrderForm (props) {
                         </Card>
                     </Col>
                     <Col span={16} xs={24} sm={16} md={16}>
-                        <Card>
+                        <Card title={'Products'}>
                             <Form.List name="products">
                                 {(fields, { add, remove }) => (
                                     <>
-                                        {fields.map(({ key, name, ...restField }) => (
-                                            <Space
-                                                key={key}
-                                                style={{
-                                                    display: 'flex',
-                                                    marginBottom: 8,
-                                                }}
-                                                align="baseline"
-                                            >
-                                                <Form.Item
-                                                    {...restField}
-                                                    name={[name, 'name']}
-                                                    rules={[
-                                                        {
-                                                            required: true,
-                                                            message: 'Product Name',
-                                                        },
-                                                    ]}
-                                                >
-                                                    <Input placeholder="Product Name" />
-                                                </Form.Item>
-                                                <Form.Item
-                                                    {...restField}
-                                                    name={[name, 'qty']}
-                                                    rules={[
-                                                        {
-                                                            required: true,
-                                                            message: 'Qty',
-                                                        },
-                                                    ]}
-                                                >
-                                                    <Input placeholder="Qty" />
-                                                </Form.Item>
-                                                <MinusCircleOutlined onClick={() => remove(name)} />
-                                            </Space>
-                                        ))}
-                                        <Products onChange={(value) => add(value)}/>
+                                        <Row gutter={10}>
+                                            {
+                                                fields.map(({ key, name, ...restField }) => (
+                                                    <React.Fragment key={key}>
+                                                        <Col span={16} xs={24} sm={16} md={16} lg={16}>
+                                                            <Form.Item hidden
+                                                                       {...restField}
+                                                                       name={[name, 'id']}
+                                                                       rules={[
+                                                                           {
+                                                                               required: true,
+                                                                               message: 'Product ID',
+                                                                           },
+                                                                       ]}
+                                                            >
+                                                                <Input disabled placeholder="Product ID" />
+                                                            </Form.Item>
+                                                            <Form.Item
+                                                                {...restField}
+                                                                name={[name, 'name']}
+                                                                rules={[
+                                                                    {
+                                                                        required: true,
+                                                                        message: 'Product Name',
+                                                                    },
+                                                                ]}
+                                                            >
+                                                                <Input disabled placeholder="Product Name" />
+                                                            </Form.Item>
+                                                        </Col>
+                                                        <Col span={4} xs={12} sm={4} md={4} lg={4}>
+                                                            <Form.Item
+                                                                {...restField}
+                                                                name={[name, 'qty']}
+                                                                rules={[
+                                                                    {
+                                                                        required: true,
+                                                                        message: 'Qty',
+                                                                    },
+                                                                ]}
+                                                            >
+                                                                <InputNumber style={{ width: '100%' }} min={1} placeholder="Qty" />
+                                                            </Form.Item>
+                                                        </Col>
+                                                        <Col span={4} xs={12} sm={4} md={4} lg={4}>
+                                                            <Button danger onClick={() => {
+                                                                remove(name)
+                                                                const items = JSON.parse(localStorage.getItem('items')) || []
+                                                                localStorage.setItem('items', JSON.stringify(items.filter((itm, index) => index !== name)))
+                                                            }}>
+                                                                Remove
+                                                            </Button>
+                                                        </Col>
+                                                    </React.Fragment>
+                                                ))
+                                            }
+                                        </Row>
+                                        <Products onChange={(value) =>{
+                                            form.setFieldsValue({
+                                                products: JSON.parse(localStorage.getItem('items')) || []
+                                            })
+                                            !value && add()
+                                        }}/>
                                     </>
                                 )}
                             </Form.List>

@@ -271,3 +271,10 @@ export const getInitials = (name) => {
     const initials = [...name.matchAll(rgx)] || []
     return ((initials.shift()?.[1] || '') + (initials.pop()?.[1] || '')).toUpperCase()
 }
+
+export const addOrRemoveItem = (items, newItem) => {
+    const i = items.findIndex(itm => itm.id === newItem.id)
+    if (i > -1) items[i] = newItem
+    else items.push(newItem)
+    return items
+}

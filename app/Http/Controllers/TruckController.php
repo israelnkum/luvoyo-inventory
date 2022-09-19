@@ -5,10 +5,10 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreTruckRequest;
 use App\Http\Requests\UpdateTruckRequest;
-use App\Http\Requests\UpdateTrucksRequest;
 use App\Http\Resources\TrucksResource;
 use App\Models\Truck;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
@@ -21,9 +21,14 @@ class TruckController extends Controller
      *
      * @return AnonymousResourceCollection
      */
-    public function index(): AnonymousResourceCollection
+    public function index(Request $request): AnonymousResourceCollection
     {
-        return TrucksResource::collection(Truck::paginate(10));
+        if ($request->query('page') == 0){
+            $trucks = Truck::all();
+        }else{
+            $trucks = Truck::paginate(10);
+        }
+        return TrucksResource::collection($trucks);
     }
     /**
      * Store a newly created resource in storage.
@@ -87,5 +92,11 @@ class TruckController extends Controller
             DB::rollBack();
             return response()->json('Something went wrong', 422);
         }
+    }
+
+    public function searchTrucks($query): AnonymousResourceCollection
+    {
+        $products = Truck::query()->where('name', 'like', '%' . $query . '%')->get();
+        return TrucksResource::collection($products);
     }
 }
