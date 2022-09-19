@@ -23,7 +23,7 @@ return new class extends Migration
             $table->string('total');
             $table->string('qty');
             $table->dateTime('date_time');
-            $table->dateTime('return_time');
+            $table->time('return_time');
             $table->foreignIdFor(Employee::class);
             $table->foreignIdFor(User::class);
             $table->softDeletes();

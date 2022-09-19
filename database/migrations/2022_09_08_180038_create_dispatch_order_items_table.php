@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\DispatchOrder;
 use App\Models\Product;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
@@ -17,8 +18,10 @@ return new class extends Migration
         Schema::create('dispatch_order_items', function (Blueprint $table) {
             $table->id();
             $table->foreignIdFor(Product::class)->constrained();
+            $table->foreignIdFor(DispatchOrder::class)->constrained();
             $table->integer('qty');
             $table->string('sub_total');
+            $table->softDeletes();
             $table->timestamps();
         });
     }

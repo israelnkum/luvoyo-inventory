@@ -2,7 +2,7 @@ import React from 'react'
 export default function Logo () {
     return (
         <>
-            INVENTORY
+            LOXION&nbsp;Management
         </>
   )
 }

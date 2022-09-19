@@ -96,7 +96,10 @@ class TruckController extends Controller
 
     public function searchTrucks($query): AnonymousResourceCollection
     {
-        $products = Truck::query()->where('name', 'like', '%' . $query . '%')->get();
+        $products = Truck::query()
+            ->where('truck_code', 'like', '%' . $query . '%')
+            ->orWhere('vehicle_type', 'like', '%' . $query . '%')
+            ->orWhere('license_plate', 'like', '%' . $query . '%')->get();
         return TrucksResource::collection($products);
     }
 }

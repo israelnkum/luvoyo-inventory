@@ -13,7 +13,7 @@ function Products(props) {
             if (product !== undefined) {
                 const items = JSON.parse(localStorage.getItem('items')) || []
                 localStorage.setItem('items', JSON.stringify(addOrRemoveItem(items, {
-                    id: product.id, name: product.name
+                    id: product.id, name: product.name, cost_price: product.cost_price
                 })))
                 onChange(items.findIndex(itm => itm.id === product.id) > -1)
             }

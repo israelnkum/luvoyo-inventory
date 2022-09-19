@@ -1,18 +1,12 @@
-import React, {useEffect, useState} from 'react'
+import React from 'react'
 import {connect} from 'react-redux'
-import {Form, Select} from 'antd'
+import {Form} from 'antd'
 import PropTypes from 'prop-types'
 import {handleGetCommonEmployees} from "../../actions/commons/CommonAction";
+import SearchItems from "./search";
 
 function Employees(props) {
-    const [loading, setLoading] = useState(true)
-    const {getEmployees, employees} = props
-
-    useEffect(() => {
-        getEmployees().then(() => setLoading(false))
-    }, [])
-
-
+    const {getEmployees, form} = props
     return (
         <Form.Item
             name="employee_id"
@@ -24,32 +18,27 @@ function Employees(props) {
                 },
             ]}
         >
-            <Select size={'large'}
-                    filterOption={(input, option) => option.children.toLowerCase().includes(input.toLowerCase())}
-                    placeholder="Select Employee" allowClear showSearch>
-                {
-                    employees.map((employee) => (
-                        <Select.Option key={employee.id}
-                                       value={employee.id}>{employee.name}</Select.Option>
-                    ))
-                }
-            </Select>
+            <SearchItems search={getEmployees} displayField={'name'}
+                         text={'Search by truck code or vehicle type or license plate'}
+                         onChangeCallback={({ id }) => {
+                             getEmployees()
+                             form.setFieldsValue({
+                                 employee_id: id
+                             })
+                         }}/>
         </Form.Item>
     )
 }
 
 Employees.propTypes = {
     getEmployees: PropTypes.func.isRequired,
-    employees: PropTypes.array.isRequired,
+    form: PropTypes.any.isRequired,
 }
 
-const mapStateToProps = (state) => ({
-    employees: state.commonReducer.employees,
-})
 const mapDispatchToProps = (dispatch) => {
     return {
-        getEmployees: () => dispatch(handleGetCommonEmployees())
+        getEmployees: (query) => dispatch(handleGetCommonEmployees(query))
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Employees)
+export default connect(null, mapDispatchToProps)(Employees)

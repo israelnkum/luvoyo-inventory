@@ -23,9 +23,9 @@ export const handleGetCommonProducts = (query) => async (dispatch) => {
     })
 }
 
-export const handleGetCommonEmployees = () => async (dispatch) => {
+export const handleGetCommonEmployees = (query) => async (dispatch) => {
     return new Promise((resolve, reject) => {
-        api().get(`/employees?page=0`).then((res) => {
+        api().get(`/employees/search/${query}`).then((res) => {
             dispatch(commonEmployees(res.data))
             resolve(res)
         }).catch((err) => {

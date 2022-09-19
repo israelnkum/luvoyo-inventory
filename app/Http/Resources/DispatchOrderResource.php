@@ -14,6 +14,17 @@ class DispatchOrderResource extends JsonResource
      */
     public function toArray($request)
     {
-        return parent::toArray($request);
+        return  [
+            'id' => $this->id,
+            'order_no' =>$this->order_no,
+            'truck_id' =>$this->truck_id,
+            'truck' => new TrucksResource($this->truck),
+            'total' =>$this->total,
+            'qty' =>$this->qty,
+            'date_time' =>$this->date_time,
+            'return_time' =>$this->return_time,
+            'employee_id' =>$this->employee_id,
+            'employee' =>new EmployeeResource($this->employee),
+        ];
     }
 }
