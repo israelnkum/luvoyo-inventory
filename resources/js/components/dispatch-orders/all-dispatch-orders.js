@@ -1,13 +1,13 @@
 import React, {useEffect, useState} from 'react'
-import {Space, Table, Typography} from 'antd'
+import {Table, Typography} from 'antd'
 import PropTypes from 'prop-types'
 import {connect} from "react-redux";
 import TlaTableWrapper from "../../commons/table/tla-table-wrapper";
 import {useOutletContext} from 'react-router'
 import ViewAllWrapper from "../../commons/view-all-wrapper";
-import TlaImage from "../../commons/tla-image";
 import TlaEdit from "../../commons/tla-edit";
 import {handleGetAllDispatchOrders} from "../../actions/dispatch-orders/DisptachOrderAction";
+import StaffName from "../../commons/staff-name";
 
 const { Column } = Table
 function AllDispatchOrders (props) {
@@ -34,10 +34,7 @@ function AllDispatchOrders (props) {
                 <Column title="Dispatch Date" dataIndex={'date_time'}/>
                 <Column title="Return time" dataIndex={'return_time'}/>
                 <Column title="Staff" render={({employee}) => (
-                   <Space wrap>
-                       <TlaImage size={30} preview={true} src={employee.photo} name={employee.name}/>
-                       <Typography.Text>{employee.name}</Typography.Text>
-                   </Space>
+                    <StaffName name={employee.name} photo={employee.photo}/>
                 )}/>
                 <Column title="Actions" render={(record) => (
                     <TlaEdit data={record} icon link={'edit'}/>

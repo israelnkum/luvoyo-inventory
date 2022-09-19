@@ -52,6 +52,9 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
     Route::apiResource('/cash-ups', CashUpController::class);
 
+    Route::prefix('dispatch-orders')->group(function () {
+        Route::get('/search/{query}', [DispatchOrderController::class, 'searchDispatchOrders']);
+    });
     Route::apiResource('/dispatch-orders', DispatchOrderController::class);
 
     Route::prefix('products')->group(function () {

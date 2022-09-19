@@ -6,6 +6,8 @@ use App\Http\Requests\StoreCashUpRequest;
 use App\Http\Requests\UpdateCashUpRequest;
 use App\Http\Resources\CashUpResource;
 use App\Models\CashUp;
+use App\Models\DispatchOrder;
+use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
@@ -37,8 +39,19 @@ class CashUpController extends Controller
         DB::beginTransaction();
         try {
 
-            $request['user_id'] = Auth::user()->id;
-            $cashUp = CashUp::create($request->all());
+            $dispatchOrder = DispatchOrder::find($request->dispatch_order_id);
+            $cashUp = new CashUp();
+            $cashUp->ref_id = $cashUp->generateReferenceNumber('ref_id');
+            $cashUp->truck_id = $request->truck_id;
+            $cashUp->employee_id = $request->employee_id;
+            $cashUp->dispatch_order_id = $request->dispatch_order_id;
+            $cashUp->expected_amount = $dispatchOrder->total;
+            $cashUp->received_amount = $request->received_amount;
+            $cashUp->balance = $dispatchOrder->total - $request->received_amount;
+            $cashUp->date_time = Carbon::parse($request->date_time)->format('Y-m-d h:m');
+            $cashUp->user_id = Auth::user()->id;
+
+            $cashUp->save();
             DB::commit();
             return new CashUpResource($cashUp);
         }catch (Exception $exception){

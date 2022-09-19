@@ -19,7 +19,7 @@ function Employees(props) {
             ]}
         >
             <SearchItems search={getEmployees} displayField={'name'}
-                         text={'Search by truck code or vehicle type or license plate'}
+                         text={'Search by surname or firstname or email'}
                          onChangeCallback={({ id }) => {
                              getEmployees()
                              form.setFieldsValue({
