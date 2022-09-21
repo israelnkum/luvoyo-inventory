@@ -65,7 +65,7 @@ function CashUpForm (props) {
                                    rules={[
                                        {
                                            required: true,
-                                           message: 'Date of Birth is Required'
+                                           message: 'Date is Required'
                                        }
                                    ]}>
                             <DatePicker showTime={{

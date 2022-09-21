@@ -6,7 +6,7 @@ export const handleGetAllCashUps = () => async (dispatch) => {
         .then((res) => {
             dispatch(allCashUps(res.data))
         })
-}
+} 
 
 
 export const handleAddNewCashUps = (values) => (dispatch) => {
