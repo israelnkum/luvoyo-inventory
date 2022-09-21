@@ -55,10 +55,10 @@ function CashUpForm (props) {
                 initialValues={formValues}>
                 <Row gutter={10}>
                     <Col span={12}>
-                        <Trucks form={form}/>
+                        <Trucks form={form} editing={formValues.id === 0}/>
                     </Col>
                     <Col span={12}>
-                        <Employees form={form}/>
+                        <Employees form={form} editing={formValues.id === 0}/>
                     </Col>
                     <Col span={12}>
                         <Form.Item name="date_time" label="Dispatch Date"
@@ -85,7 +85,7 @@ function CashUpForm (props) {
                         </Form.Item>
                     </Col>
                     <Col span={12}>
-                        <DispatchOrders form={form}/>
+                        <DispatchOrders form={form} editing={formValues.id === 0}/>
                     </Col>
                     <Col>
                         <Form.Item hidden name="id" label="ID"
