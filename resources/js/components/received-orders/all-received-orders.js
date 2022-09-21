@@ -4,48 +4,40 @@ import PropTypes from 'prop-types'
 import {connect} from "react-redux";
 import TlaTableWrapper from "../../commons/table/tla-table-wrapper";
 import {useOutletContext} from 'react-router'
-import {handleGetAllEmployees} from "../../actions/employee/EmployeeAction";
 import ViewAllWrapper from "../../commons/view-all-wrapper";
 import TlaImage from "../../commons/tla-image";
 import TlaEdit from "../../commons/tla-edit"; 
 import TlaAddNew from '../../commons/tla-add-new';
 import TlaConfirm from '../../commons/TlaConfirm';
+import { handleGetAllReceivedOrders } from '../../actions/receivedOrders/ReceivedOrdersAction';
 
-//dummy table data
-const testData = [
-    {
-        id: 1,
-        date: '2022-21-11',
-        total: 154,
-        supplier_id: 2,
-    },
-];
+
 
 const { Column } = Table
 function AllReceivedOrders (props) {
-    const { getEmployees, employees } = props
-    const { data, meta }= employees
+    const { getRceivedOrders, receivedOrders } = props
+    const { data, meta }= receivedOrders
     const [loading, setLoading] = useState(true)
     const { setPageInfo } = useOutletContext();
     useEffect(() => {
-        setPageInfo({ title: 'Products', addLink: '/products/add', buttonText: 'Products' })
-        getEmployees().then(() => {
+        setPageInfo({ title: 'Received Orders', addLink: '/received-orders/add', buttonText: 'Received Orders' })
+        getRceivedOrders().then(() => {
             setLoading(false)
         })
     }, [])
 
     return (
-        <ViewAllWrapper loading={loading} noData={testData.length === 0}>
+        <ViewAllWrapper loading={loading} noData={data.length === 0}>
             <TlaTableWrapper 
-                callbackFunction={() => {}} 
-                data={testData} 
+                callbackFunction={getRceivedOrders} 
+                data={data} 
                 meta={meta}
             >
                 <Column 
                     title="Invoice No." 
-                    render={({id}) => (
+                    render={({invoice_no}) => (
                         <Space size={0} direction={'vertical'}>
-                        {id}
+                        {invoice_no}
                         </Space>
                     )}
                 />
@@ -70,7 +62,7 @@ function AllReceivedOrders (props) {
                     render={() => (
                         <Space size={0}>
                             <TlaEdit icon data={{}} link={'#'} type={'text'}/>
-                            <TlaConfirm title={'Dependant'} callBack={()=>{}}/>
+                            <TlaConfirm title={'Received Orders'} callBack={()=>{}}/>
                         </Space>
                     )}
                 />
@@ -81,16 +73,16 @@ function AllReceivedOrders (props) {
 
 AllReceivedOrders.propTypes = {
     pageInfo: PropTypes.object,
-    getEmployees: PropTypes.func,
-    employees: PropTypes.object,
+    getRceivedOrders: PropTypes.func,
+    receivedOrders: PropTypes.object,
 }
 
 const mapStateToProps = (state) => ({
-    employees: state.employeeReducer.employees
+    receivedOrders: state.receivedOrdersReducer.receivedOrders
 })
 
 const mapDispatchToProps = (dispatch) => ({
-    getEmployees: (payload) => dispatch(handleGetAllEmployees(payload))
+    getRceivedOrders: (payload) => dispatch(handleGetAllReceivedOrders(payload))
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(AllReceivedOrders)

@@ -1,6 +1,6 @@
 import React, {useState} from 'react'
 import PropTypes from 'prop-types'
-import {Button, Checkbox, Col, Form, Input, DatePicker, notification, Row, Select} from 'antd'
+import {Button, Col, Form, Input, DatePicker, notification, Row, InputNumber} from 'antd'
 import {connect} from 'react-redux'
 import {TlaModal} from "../../commons/tla-modal";
 import {useLocation, useNavigate} from "react-router-dom";
@@ -8,6 +8,7 @@ import CloseModal from "../../commons/close-modal";
 import ChangePicture from "../commons/change-picture";
 import {handleAddEmployee, handleUpdateEmployee} from "../../actions/employee/EmployeeAction";
 import {nationalities} from "../../utils/nationalities";
+import Suppliers from '../../commons/form/suppliers';
 
 
 function RecievedOrdersForm (props) {
@@ -85,7 +86,13 @@ function RecievedOrdersForm (props) {
                                 },
                             ]}
                         >
-                            <DatePicker size={'large'} style={{ width: '100%'}} />
+                            <DatePicker 
+                                size={'large'} 
+                                style={{ width: '100%'}}
+                                showTime={{
+                                    format: 'HH:mm',
+                                }} 
+                            />
                         </Form.Item>
                     </Col>
                     <Col span={12}>
@@ -99,13 +106,12 @@ function RecievedOrdersForm (props) {
                                 },
                             ]}
                         >
-                            <Input size={"large"} type='number' />
+                            <InputNumber style={{ width: '100%'}} size={'large'}/>
                         </Form.Item>
                     </Col>
                     <Col span={12}>
                         <Form.Item
                             name="supplier_id"
-                            label="Supplier ID"
                             rules={[
                                 {
                                     required: true,
@@ -113,17 +119,7 @@ function RecievedOrdersForm (props) {
                                 },
                             ]}
                         >
-                            <Select size={"large"}>
-                                <Select.Option value={"1"}>
-                                    1
-                                </Select.Option>
-                                <Select.Option value={"2"}>
-                                    2
-                                </Select.Option>
-                                <Select.Option value={"3"}>
-                                    3
-                                </Select.Option>
-                            </Select>
+                            <Suppliers form={form} />
                         </Form.Item>
                     </Col>
                 </Row>

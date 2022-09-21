@@ -26,7 +26,7 @@ function DispatchOrder(props) {
                                  dispatch_order_id: id
                              })
                          }}/>
-        </Form.Item>
+        </Form.Item> 
     )
 }
 

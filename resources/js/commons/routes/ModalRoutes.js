@@ -7,6 +7,7 @@ import TruckForm from "../../components/trucks/truck-form";
 import CashUpForm from "../../components/cash-ups/cash-up-form";
 import DispatchOrderForm from "../../components/dispatch-orders/dispatch-order-form";
 import ProductsForm from "../../components/products/products-form";
+import ReceivedOrdersForm from "../../components/received-orders/received-orders-form";
 
 export const ModalRoutes = () => {
   return (
@@ -36,8 +37,8 @@ export const ModalRoutes = () => {
                 <Route exact path="edit" element={<DispatchOrderForm/>}/>
             </Route>
             <Route exact path="received-orders">
-                <Route exact path="add" element={<EmployeeForm/>}/>
-                <Route exact path="edit" element={<EmployeeForm/>}/>
+                <Route exact path="add" element={<ReceivedOrdersForm/>}/>
+                <Route exact path="edit" element={<ReceivedOrdersForm/>}/>
             </Route>
             <Route exact path="products">
                 <Route exact path="add" element={<ProductsForm/>}/>
