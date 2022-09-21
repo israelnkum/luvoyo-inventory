@@ -6,20 +6,20 @@ import {handleGetCommonTrucks} from "../../actions/commons/CommonAction";
 import SearchItems from "./search";
 
 function Trucks(props) {
-    const {getTrucks, form} = props
+    const {getTrucks, form, editing} = props
     return (
         <Form.Item
             name="truck_id"
             label="Truck"
             rules={[
                 {
-                    required: true,
+                    required: editing,
                     message: "Truck is Required",
                 },
             ]}
         >
             <SearchItems search={getTrucks} displayField={'truck_code'}
-                         text={'Search by truck code or vehicle type or license plate'}
+                         text={'Search by truck code'}
                          onChangeCallback={({ id }) => {
                              getTrucks()
                              form.setFieldsValue({
@@ -30,9 +30,13 @@ function Trucks(props) {
     )
 }
 
+Trucks.defaultProps = {
+    editing: false
+}
 Trucks.propTypes = {
     getTrucks: PropTypes.func.isRequired,
     form: PropTypes.any.isRequired,
+    editing: PropTypes.bool,
 }
 
 const mapDispatchToProps = (dispatch) => {

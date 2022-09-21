@@ -72,8 +72,13 @@ class CashUpController extends Controller
      */
     public function update(UpdateCashUpRequest $request, CashUp $cashUp): JsonResponse|CashUpResource
     {
+        // TODO add multiple payments
         DB::beginTransaction();
         try {
+            $dispatchOrder = DispatchOrder::find($request->dispatch_order_id);
+            $cashUp['expected_amount'] = $dispatchOrder->total;
+            $cashUp['balance'] = $dispatchOrder->total - $request->received_amount;
+            $request['date_time'] = Carbon::parse($request->date_time)->format('Y-m-d h:m');
             $cashUp->update($request->all());
             DB::commit();
             return new CashUpResource($cashUp);
