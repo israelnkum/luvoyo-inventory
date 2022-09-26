@@ -7,6 +7,7 @@ import {useLocation, useNavigate} from "react-router-dom";
 import CloseModal from "../../commons/close-modal";
 import {handleAddNewSuppliers, handleUpdateSuppliers} from "../../actions/suppliers/SuppliersAction";
 import ChangePicture from "../commons/change-picture";
+import AllowEditing from "../../commons/allow-editing";
 
 
 function SupplierForm (props) {
@@ -18,7 +19,7 @@ function SupplierForm (props) {
     const formValues = {
         id: 0, description: '', ...state.data
     }
-
+    const [editing, setEditing] = useState(formValues.id !== 0)
     const submit = (values) => {
         const formData = new FormData()
         formData.append('file', selectedFile);
@@ -43,30 +44,19 @@ function SupplierForm (props) {
         })
     }
 
-    const uploadProps = {
-        beforeUpload: (file) => {
-            setSelectedFile(file)
-            return true
-        },
-        listType: 'picture-card',
-        maxCount: 1,
-        onRemove: () => {
-            setSelectedFile(null)
-        },
-        accept: 'image/*',
-        method: 'get'
-    }
     return (
-        <TlaModal title={(formValues.id === 0 ? 'New' : 'Edit') + ' Supplier'}>
+        <TlaModal title={(formValues.id === 0 ? 'New' : 'Edit') + ' Supplier'}
+                  extra={ formValues.id !== 0  && <AllowEditing editing={editing} setEditing={setEditing}/>}>
             <Form
                 form={form}
+                disabled={editing}
                 onFinish={submit}
                 layout="vertical"
                 name="createSupplierForm"
                 initialValues={formValues}>
                 <Row gutter={10}>
                     <Col span={24}>
-                        <ChangePicture uploadProps={uploadProps} selectedFile={selectedFile}/>
+                        <ChangePicture editing={editing} setSelectedFile={setSelectedFile} selectedFile={selectedFile}/>
                     </Col>
                     <Col span={24}>
                         <Form.Item name="name" label="Business Name"
@@ -105,6 +95,8 @@ function SupplierForm (props) {
                         <Form.Item name="phone" label="Phone"
                                    rules={[
                                        {
+                                           max: 10,
+                                           min: 10,
                                            required: true,
                                            message: 'Phone is Required'
                                        }

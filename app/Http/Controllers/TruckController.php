@@ -42,6 +42,7 @@ class TruckController extends Controller
         try {
 
             $request['user_id'] = Auth::user()->id;
+            $request['truck_code'] = strtoupper($request->truck_code);
             $truck = Truck::create($request->all());
             DB::commit();
             return new TrucksResource($truck);

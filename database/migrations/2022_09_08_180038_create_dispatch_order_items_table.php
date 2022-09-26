@@ -20,7 +20,8 @@ return new class extends Migration
             $table->foreignIdFor(Product::class)->constrained();
             $table->foreignIdFor(DispatchOrder::class)->constrained();
             $table->integer('qty');
-            $table->string('sub_total');
+            $table->decimal('selling_price')->default(0);
+            $table->decimal('sub_total')->default(0);
             $table->softDeletes();
             $table->timestamps();
         });

@@ -109,22 +109,9 @@ export const SidebarMenus = [
         icon: 'expenses'
     },
     {
-        title: 'Cash-up',
-        link: '#',
-        children: [
-            {
-                permission: '',
-                modal: true,
-                title: 'Add Cash-up',
-                link: '/cash-ups/add',
-            },
-            {
-                permission: '',
-                modal: false,
-                title: 'All Cash-ups',
-                link: '/cash-ups',
-            }
-        ],
+        title: 'Cash-ups',
+        link: '/cash-ups',
+        children: [],
         permissions: ['Admin'],
         icon: 'cash-up'
     },
@@ -149,7 +136,7 @@ export const SidebarMenus = [
         icon: 'dispatch-order'
     },
     {
-        title: 'Orders',
+        title: 'Dispatch Orders',
         link: '#',
         children: [
             {

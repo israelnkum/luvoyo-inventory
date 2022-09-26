@@ -15,7 +15,7 @@ function AllTrucks (props) {
     const [loading, setLoading] = useState(true)
     const { setPageInfo } = useOutletContext();
     useEffect(() => {
-        setPageInfo({ title: 'Trucks', addLink: 'trucks/add', buttonText: 'Trucks' })
+        setPageInfo({ title: 'Trucks', addLink: 'trucks/add', buttonText: 'Truck' })
         getTrucks().then(() => {
             setLoading(false)
         })

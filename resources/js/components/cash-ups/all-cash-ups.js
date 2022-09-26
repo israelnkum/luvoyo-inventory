@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react'
-import { Table } from 'antd'
+import {Button, Space, Table, Typography} from 'antd'
 import PropTypes from 'prop-types'
 import {connect} from "react-redux";
 import TlaTableWrapper from "../../commons/table/tla-table-wrapper";
@@ -8,6 +8,8 @@ import ViewAllWrapper from "../../commons/view-all-wrapper";
 import {handleGetAllCashUps} from "../../actions/cashUps/CashUpsAction";
 import TlaEdit from "../../commons/tla-edit";
 import StaffName from "../../commons/staff-name";
+import DispatchOrderDetail from "../dispatch-orders/dispatch-order-detail";
+import TlaAddNew from "../../commons/tla-add-new";
 
 const { Column } = Table
 function AllCashUps (props) {
@@ -16,7 +18,7 @@ function AllCashUps (props) {
     const [loading, setLoading] = useState(true)
     const { setPageInfo } = useOutletContext();
     useEffect(() => {
-        setPageInfo({ title: 'CashUps', addLink: 'cash-ups/add', buttonText: 'CashUps' })
+        setPageInfo({ title: 'Cash Ups', addLink: 'cash-ups/add', buttonText: 'Cash Up' })
         getCashUps().then(() => {
             setLoading(false)
         })
@@ -25,15 +27,20 @@ function AllCashUps (props) {
     return (
         <ViewAllWrapper loading={loading} noData={data.length === 0}>
             <TlaTableWrapper callbackFunction={getCashUps} data={data} meta={meta}>
-                <Column title="Ref ID" dataIndex={'ref_id'}/>
-                <Column title="truck code" dataIndex={['truck','truck_code']}/>
-                <Column title="Employee" render={({employee}) => (
-                   <StaffName name={employee.name} photo={employee.photo}/>
+                <Column title="Ref ID" render={({ref_id, dispatch_order}) => (
+                    <Space direction={'vertical'}>
+                        <Typography.Text>{ref_id}</Typography.Text>
+                        <TlaAddNew data={dispatch_order} link={'dispatch-order'}>
+                            <Button type={'primary'} size={'small'}>View Order</Button>
+                        </TlaAddNew>
+                    </Space>
+                )}/>
+                <Column title="Employee" render={({dispatch_order}) => (
+                    <StaffName name={dispatch_order.employee.name} photo={dispatch_order.employee.photo}/>
                 )}/>
                 <Column title="expected amount" dataIndex={'expected_amount'}/>
                 <Column title="received amount" dataIndex={'received_amount'}/>
                 <Column title="balance" dataIndex={'balance'}/>
-                <Column title="Description" dataIndex={'description'}/>
                 <Column title="Actions" render={(record) => (
                     <TlaEdit data={record} icon link={'edit'}/>
                 )}/>

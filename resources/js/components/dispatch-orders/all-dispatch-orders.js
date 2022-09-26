@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react'
-import {Table, Typography} from 'antd'
+import {Table} from 'antd'
 import PropTypes from 'prop-types'
 import {connect} from "react-redux";
 import TlaTableWrapper from "../../commons/table/tla-table-wrapper";
@@ -8,6 +8,7 @@ import ViewAllWrapper from "../../commons/view-all-wrapper";
 import TlaEdit from "../../commons/tla-edit";
 import {handleGetAllDispatchOrders} from "../../actions/dispatch-orders/DisptachOrderAction";
 import StaffName from "../../commons/staff-name";
+import CashUpStatus from "../commons/cash-up-status";
 
 const { Column } = Table
 function AllDispatchOrders (props) {
@@ -26,8 +27,9 @@ function AllDispatchOrders (props) {
         <ViewAllWrapper loading={loading} noData={data.length === 0}>
             <TlaTableWrapper callbackFunction={getDispatchOrders} data={data} meta={meta}>
                 <Column title="Order No." dataIndex={'order_no'}/>
-                <Column title="Truck" render={({truck}) => (
-                    <Typography.Text>{truck.truck_code}</Typography.Text>
+                <Column title="Truck" dataIndex={['truck', 'truck_code']}/>
+                <Column title="Cash Up" render={({cash_up}) => (
+                    <CashUpStatus cash_up={cash_up}/>
                 )}/>
                 <Column title="Total" dataIndex={'total'}/>
                 <Column title="Qty" dataIndex={'qty'}/>

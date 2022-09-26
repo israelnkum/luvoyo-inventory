@@ -11,6 +11,11 @@ let currentValue
 const SearchItems = (props) => {
     const { search, onChangeCallback, text, displayField } = props
 
+    const [data, setData] = useState([])
+    const [value, setValue] = useState(undefined)
+    const [hasData, setHasData] = useState(true)
+
+
     const fetch = (value, callback) => {
         if (timeout) {
             clearTimeout(timeout)
@@ -26,6 +31,7 @@ const SearchItems = (props) => {
                         res.data.forEach(item => {
                             data.push(item)
                         })
+                        setHasData(data.length > 0)
                         callback(data)
                     }
                 })
@@ -33,14 +39,13 @@ const SearchItems = (props) => {
 
         timeout = setTimeout(fake, 300)
     }
-    const [data, setData] = useState([])
-    const [value, setValue] = useState(undefined)
 
     const handleSearch = value => {
         if (value) {
             fetch(value, data => setData(data))
         } else {
             setData([])
+            setHasData(true)
         }
     }
 
@@ -68,6 +73,9 @@ const SearchItems = (props) => {
                 notFoundContent={null}>
                 {options}
             </Select>
+            {
+                !hasData && <small style={{ color: 'red' }}>No data found the search</small>
+            }
         </>
     )
 }

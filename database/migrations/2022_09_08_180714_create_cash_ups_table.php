@@ -20,8 +20,6 @@ return new class extends Migration
         Schema::create('cash_ups', function (Blueprint $table) {
             $table->id();
             $table->string('ref_id');
-            $table->foreignIdFor(Truck::class)->constrained();
-            $table->foreignIdFor(Employee::class)->constrained();
             $table->foreignIdFor(DispatchOrder::class)->constrained();
             $table->string('expected_amount');
             $table->string('received_amount');

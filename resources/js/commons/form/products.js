@@ -6,14 +6,14 @@ import SearchItems from "./search";
 import {addOrRemoveItem} from "../../utils";
 
 function Products(props) {
-    const {getProducts, onChange} = props
+    const {getProducts, onChange, localKey} = props
     return (
         <SearchItems
             search={getProducts} onChangeCallback={(product) => {
             if (product !== undefined) {
-                const items = JSON.parse(localStorage.getItem('items')) || []
-                localStorage.setItem('items', JSON.stringify(addOrRemoveItem(items, {
-                    id: product.id, name: product.name, cost_price: product.cost_price
+                const items = JSON.parse(localStorage.getItem(localKey)) || []
+                localStorage.setItem(localKey, JSON.stringify(addOrRemoveItem(items, {
+                    id: product.id, name: product.name, selling_price: product.selling_price
                 })))
                 onChange(items.findIndex(itm => itm.id === product.id) > -1)
             }
@@ -24,6 +24,7 @@ function Products(props) {
 Products.propTypes = {
     getProducts: PropTypes.func.isRequired,
     onChange: PropTypes.func,
+    localKey: PropTypes.string.isRequired,
 }
 
 const mapDispatchToProps = (dispatch) => {

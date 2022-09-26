@@ -12,6 +12,7 @@ use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\Response;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
@@ -42,7 +43,7 @@ class ExpenseController extends Controller
             $expenses = new Expense();
             $expenses->transaction_no = $expenses->generateReferenceNumber('transaction_no');
             $expenses->category = $request->category;
-            $expenses->date_time = $request->date_time;
+            $expenses->date_time = Carbon::now()->format('Y-m-d h:m:s');
             $expenses->amount = $request->amount;
             $expenses->description = $request->description;
             $expenses->user_id = $request->user_id;

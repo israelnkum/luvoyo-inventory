@@ -40,10 +40,14 @@ class CashUpController extends Controller
         try {
 
             $dispatchOrder = DispatchOrder::find($request->dispatch_order_id);
+            $dispatchOrder->update([
+                'return_time' => Carbon::now()->format('h:m:s')
+            ]);
+
             $cashUp = new CashUp();
             $cashUp->ref_id = $cashUp->generateReferenceNumber('ref_id');
-            $cashUp->truck_id = $request->truck_id;
-            $cashUp->employee_id = $request->employee_id;
+//            $cashUp->truck_id = $request->truck_id;
+//            $cashUp->employee_id = $request->employee_id;
             $cashUp->dispatch_order_id = $request->dispatch_order_id;
             $cashUp->expected_amount = $dispatchOrder->total;
             $cashUp->received_amount = $request->received_amount;
@@ -72,7 +76,6 @@ class CashUpController extends Controller
      */
     public function update(UpdateCashUpRequest $request, CashUp $cashUp): JsonResponse|CashUpResource
     {
-        // TODO add multiple payments
         DB::beginTransaction();
         try {
             $dispatchOrder = DispatchOrder::find($request->dispatch_order_id);

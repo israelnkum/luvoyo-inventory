@@ -11,6 +11,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Product extends Model
 {
     use HasFactory, SoftDeletes, HasReferenceNumber;
+
+    public string $prefix = 'PRO';
+
     protected $fillable = [
         'name',
         'code',

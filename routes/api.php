@@ -6,6 +6,7 @@ use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\ExpenseController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\ReceivedOrderController;
 use App\Http\Controllers\SuppliersController;
 use App\Http\Controllers\TruckController;
 use App\Http\Controllers\UserController;
@@ -56,6 +57,8 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
         Route::get('/search/{query}', [DispatchOrderController::class, 'searchDispatchOrders']);
     });
     Route::apiResource('/dispatch-orders', DispatchOrderController::class);
+
+    Route::apiResource('/received-orders', ReceivedOrderController::class);
 
     Route::prefix('products')->group(function () {
         Route::get('/search/{query}', [ProductController::class, 'searchProducts']);

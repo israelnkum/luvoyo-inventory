@@ -11,6 +11,7 @@ class Expense extends Model
 {
     use HasFactory, SoftDeletes, HasReferenceNumber;
 
+    public string $prefix = 'EXP';
     protected $fillable = [
         'transaction_no',
         'category',
