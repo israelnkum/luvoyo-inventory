@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 import { Types } from '../actions/receivedOrders/Types'
+=======
+import { Types } from '../actions/received-orders/Types'
+>>>>>>> 1bf0667050ecd40a247c02e9b063d13644cc79ec
 const initialState = {
     receivedOrders: {
         data: [],

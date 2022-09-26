@@ -1,17 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import {
-    Button,
-    Card,
-    Col,
-    DatePicker,
-    Form,
-    Input,
-    InputNumber,
-    notification,
-    Row,
-    TimePicker
-} from 'antd'
+import {Button, Card, Col, DatePicker, Form, Input, InputNumber, notification, Row} from 'antd'
 import {connect} from 'react-redux'
 import {TlaModal} from "../../commons/tla-modal";
 import {useNavigate} from "react-router-dom";
@@ -20,6 +9,7 @@ import {handleAddDispatchOrder, handleUpdateDispatchOrder} from "../../actions/d
 import Products from "../../commons/form/products";
 import Trucks from "../../commons/form/trucks";
 import Employees from "../../commons/form/employees";
+import moment from "moment/moment";
 
 
 function DispatchOrderForm (props) {
@@ -28,6 +18,7 @@ function DispatchOrderForm (props) {
     const [form] = Form.useForm()
     const formValues = {
         id: 0,
+        dispatch_date: moment(),
         products: JSON.parse(localStorage.getItem('items')) || []
     }
 
@@ -36,6 +27,7 @@ function DispatchOrderForm (props) {
             values._method = 'PUT'
         }
         (values.id === 0 ? addDispatchOrder(values) : updateDispatchOrder(values)).then(() => {
+            localStorage.removeItem('items')
             notification.success({
                 message: 'Success',
                 description: 'Dispatch Order ' + (values.id === 0 ? 'Created' : 'Updated')
@@ -76,10 +68,10 @@ function DispatchOrderForm (props) {
                                                        message: 'Date of Birth is Required'
                                                    }
                                                ]}>
-                                        <DatePicker size={'large'}  style={{ width: '100%' }}/>
+                                        <DatePicker disabled size={'large'}  style={{ width: '100%' }}/>
                                     </Form.Item>
                                 </Col>
-                                <Col span={12} xs={24} sm={24} md={12} lg={12}>
+                                {/*<Col span={12} xs={24} sm={24} md={12} lg={12}>
                                     <Form.Item name="dispatch_time" label="Dispatch Time"
                                                rules={[
                                                    {
@@ -100,7 +92,7 @@ function DispatchOrderForm (props) {
                                                ]}>
                                         <TimePicker format={'hh:mm'} size={'large'} style={{ width: '100%' }}/>
                                     </Form.Item>
-                                </Col>
+                                </Col>*/}
                                 <Col span={24}>
                                     <Form.Item hidden name="id" label="ID"
                                                rules={[
@@ -163,7 +155,7 @@ function DispatchOrderForm (props) {
                                                             <Form.Item
                                                                 {...restField}
                                                                 hidden
-                                                                name={[name, 'cost_price']}
+                                                                name={[name, 'selling_price']}
                                                                 rules={[
                                                                     {
                                                                         required: true,
@@ -187,7 +179,7 @@ function DispatchOrderForm (props) {
                                                 ))
                                             }
                                         </Row>
-                                        <Products onChange={(value) =>{
+                                        <Products localKey={'items'} onChange={(value) =>{
                                             form.setFieldsValue({
                                                 products: JSON.parse(localStorage.getItem('items')) || []
                                             })

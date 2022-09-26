@@ -7,6 +7,7 @@ use App\Http\Requests\StoreDispatchOrderRequest;
 use App\Http\Requests\UpdateDispatchOrderRequest;
 use App\Http\Resources\DispatchOrderResource;
 use App\Models\DispatchOrder;
+use App\Models\Product;
 use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
@@ -37,26 +38,31 @@ class DispatchOrderController extends Controller
         DB::beginTransaction();
         try {
 
-            $dateTime =  Carbon::parse($request->dispatch_date)->format('Y-m-d'). ' '.Carbon::parse($request->dispatch_time)->format('h:m');
+            $dateTime =  Carbon::parse($request->dispatch_date)->format('Y-m-d'). ' '.Carbon::now()->format('h:m');
             $order = new DispatchOrder();
             $order->order_no = $order->generateReferenceNumber('order_no');
             $order->truck_id = $request->truck_id;
             $order->total = 0;
             $order->qty = 0;
             $order->date_time = $dateTime;
-            $order->return_time = Carbon::parse($request->return_time)->format('h:m');
             $order->employee_id = $request->employee_id;
             $order->user_id = Auth::user()->id;
             $order->save();
 
             $total = 0;
             $qty = 0;
-            foreach ($request->products as $product){
-                $subTotal = $product['qty'] * $product['cost_price'];
-                $total = $total + $subTotal;
-                $qty = $qty + $product['qty'];
+            foreach ($request['products'] as $product){
+                $findProduct = Product::find($product['id']);
+                $findProduct->update([
+                    'quantity' => $findProduct->quantity - $product['qty']
+                ]);
+
+                $subTotal = $product['qty'] * $product['selling_price'];
+                $total += $subTotal;
+                $qty += $product['qty'];
                 $order->orderItems()->create([
-                   'product_id' => $product['id'],
+                   'product_id' => $findProduct->id,
+                   'selling_price' => $product['selling_price'],
                    'qty' => $product['qty'],
                    'sub_total' => $subTotal,
                 ]);

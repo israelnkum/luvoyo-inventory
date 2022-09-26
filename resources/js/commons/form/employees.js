@@ -6,20 +6,20 @@ import {handleGetCommonEmployees} from "../../actions/commons/CommonAction";
 import SearchItems from "./search";
 
 function Employees(props) {
-    const {getEmployees, form} = props
+    const { getEmployees, form, editing } = props
     return (
         <Form.Item
             name="employee_id"
             label="Employee"
             rules={[
                 {
-                    required: true,
+                    required: editing,
                     message: "Employee is Required",
                 },
             ]}
         >
             <SearchItems search={getEmployees} displayField={'name'}
-                         text={'Search by surname or firstname or email'}
+                         text={'Search by surname'}
                          onChangeCallback={({ id }) => {
                              getEmployees()
                              form.setFieldsValue({
@@ -30,9 +30,15 @@ function Employees(props) {
     )
 }
 
+Employees.defaultProps = {
+    editing: false
+}
+
 Employees.propTypes = {
     getEmployees: PropTypes.func.isRequired,
     form: PropTypes.any.isRequired,
+    editing: PropTypes.bool,
+
 }
 
 const mapDispatchToProps = (dispatch) => {

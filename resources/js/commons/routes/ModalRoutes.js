@@ -8,6 +8,11 @@ import CashUpForm from "../../components/cash-ups/cash-up-form";
 import DispatchOrderForm from "../../components/dispatch-orders/dispatch-order-form";
 import ProductsForm from "../../components/products/products-form";
 import ReceivedOrdersForm from "../../components/received-orders/received-orders-form";
+<<<<<<< HEAD
+=======
+import OrderReturnsForm from "../../components/order-returns/order-returns-form";
+import OrderDetailModal from "../../components/dispatch-orders/order-detail-modal";
+>>>>>>> 1bf0667050ecd40a247c02e9b063d13644cc79ec
 
 export const ModalRoutes = () => {
   return (
@@ -27,10 +32,11 @@ export const ModalRoutes = () => {
             <Route exact path="cash-ups">
                 <Route exact path="add" element={<CashUpForm/>}/>
                 <Route exact path="edit" element={<CashUpForm/>}/>
+                <Route exact path="dispatch-order" element={<OrderDetailModal/>}/>
             </Route>
             <Route exact path="dispatch-order-returns">
-                <Route exact path="add" element={<EmployeeForm/>}/>
-                <Route exact path="edit" element={<EmployeeForm/>}/>
+                <Route exact path="add" element={<OrderReturnsForm/>}/>
+                <Route exact path="edit" element={<OrderReturnsForm/>}/>
             </Route>
             <Route exact path="dispatch-orders">
                 <Route exact path="add" element={<DispatchOrderForm/>}/>

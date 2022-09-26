@@ -19,7 +19,7 @@ return new class extends Migration
             $table->id();
             $table->string('invoice_no');
             $table->dateTime('date');
-            $table->string('total');
+            $table->decimal('total')->default(0);
             $table->foreignIdFor(Supplier::class)->constrained();
             $table->foreignIdFor(User::class)->constrained();
             $table->softDeletes();

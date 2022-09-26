@@ -11,9 +11,9 @@ class StoreReceivedOrderRequest extends FormRequest
      *
      * @return bool
      */
-    public function authorize()
+    public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -21,10 +21,22 @@ class StoreReceivedOrderRequest extends FormRequest
      *
      * @return array<string, mixed>
      */
-    public function rules()
+    public function rules(): array
     {
         return [
-            //
+            'invoice_no' => 'required|unique:received_orders',
+            'date' => 'required',
+            'supplier_id' => 'required',
+        ];
+    }
+
+
+    public function messages(): array
+    {
+        return [
+            'invoice.required' => 'Enter Invoice number',
+            'date' => 'Date is required',
+            'supplier_id' => 'Select a supplier',
         ];
     }
 }

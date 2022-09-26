@@ -24,7 +24,8 @@ class DispatchOrderResource extends JsonResource
             'date_time' =>$this->date_time,
             'return_time' =>$this->return_time,
             'employee_id' =>$this->employee_id,
-            'employee' =>new EmployeeResource($this->employee),
+            'cash_up' =>$this->cashUp,
+            'employee' => new EmployeeResource($this->employee),
         ];
     }
 }

@@ -1,16 +1,13 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import {Button, Col, DatePicker, Form, Input, InputNumber, notification, Row} from 'antd'
+import {Button, Col, Form, Input, InputNumber, notification, Row} from 'antd'
 import {connect} from 'react-redux'
 import {TlaModal} from "../../commons/tla-modal";
 import {useLocation, useNavigate} from "react-router-dom";
 import CloseModal from "../../commons/close-modal";
 import {handleAddNewCashUps, handleUpdateCashUps} from "../../actions/cashUps/CashUpsAction";
-import Trucks from "../../commons/form/trucks";
-import Employees from "../../commons/form/employees";
 import DispatchOrders from "../../commons/form/dispatch-orders";
 import moment from "moment/moment";
-
 
 function CashUpForm (props) {
     const navigate = useNavigate()
@@ -54,6 +51,7 @@ function CashUpForm (props) {
                 name="createCashUpForm"
                 initialValues={formValues}>
                 <Row gutter={10}>
+<<<<<<< HEAD
                     <Col span={12}>
                         <Trucks form={form}/>
                     </Col>
@@ -74,6 +72,12 @@ function CashUpForm (props) {
                         </Form.Item>
                     </Col>
                     <Col span={12}>
+=======
+                    <Col span={24}>
+                        <DispatchOrders displayContent={true} form={form} editing={formValues.id === 0}/>
+                    </Col> <br/>
+                    <Col span={24}>
+>>>>>>> 1bf0667050ecd40a247c02e9b063d13644cc79ec
                         <Form.Item name="received_amount" label="Received Amount"
                                    rules={[
                                        {
@@ -83,9 +87,6 @@ function CashUpForm (props) {
                                    ]}>
                             <InputNumber style={{ width: '100%'}} size={'large'}/>
                         </Form.Item>
-                    </Col>
-                    <Col span={12}>
-                        <DispatchOrders form={form}/>
                     </Col>
                     <Col>
                         <Form.Item hidden name="id" label="ID"
@@ -98,6 +99,29 @@ function CashUpForm (props) {
                             <Input size={'large'}/>
                         </Form.Item>
                     </Col>
+                    {/*<Col span={12}>
+                        <Row gutter={10}>
+                           <Col span={12}>
+                                <Trucks form={form} editing={formValues.id === 0}/>
+                            </Col>
+                            <Col span={12}>
+                                <Employees form={form} editing={formValues.id === 0}/>
+                            </Col>
+                            <Col span={12}>
+                                <Form.Item name="date_time" label="Dispatch Date"
+                                           rules={[
+                                               {
+                                                   required: true,
+                                                   message: 'Date is Required'
+                                               }
+                                           ]}>
+                                    <DatePicker showTime={{
+                                        format: 'HH:mm',
+                                    }} size={'large'}  style={{ width: '100%' }}/>
+                                </Form.Item>
+                            </Col>
+                        </Row>
+                    </Col>*/}
                 </Row>
                 <Form.Item>
                     <div align={'right'}>

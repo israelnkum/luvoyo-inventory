@@ -12,6 +12,7 @@ class DispatchOrderItem extends Model
 
     protected $fillable = [
         'product_id',
+        'selling_price',
         'dispatch_order_id',
         'qty',
         'sub_total',

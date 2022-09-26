@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useState} from 'react'
 import PropTypes from 'prop-types'
 import {Button, Col, DatePicker, Form, Input, InputNumber, notification, Row, Select} from 'antd'
 import {connect} from 'react-redux'
@@ -8,6 +8,7 @@ import CloseModal from "../../commons/close-modal";
 import {handleAddNewExpenses, handleUpdateExpenses} from "../../actions/expenses/ExpensesAction";
 import {expensesCategories} from "../../utils";
 import moment from "moment";
+import AllowEditing from "../../commons/allow-editing";
 
 
 function ExpensesForm (props) {
@@ -15,9 +16,11 @@ function ExpensesForm (props) {
     const { addExpenses, updateExpenses } = props
     const [form] = Form.useForm()
     const { state } = useLocation()
+
     const formValues = {
         id: 0, description: '', date_time: moment(), ...state.data
     }
+    const [editing, setEditing] = useState(formValues.id !== 0)
 
     const submit = (values) => {
         const formData = new FormData()
@@ -44,8 +47,11 @@ function ExpensesForm (props) {
     }
 
     return (
-        <TlaModal title={(formValues.id === 0 ? 'New' : 'Edit') + ' Expenses'}>
+        <TlaModal title={(formValues.id === 0 ? 'New' : 'Edit') + ' Expenses'}
+                  extra={ formValues.id !== 0  && <AllowEditing editing={editing} setEditing={setEditing}/>}
+        >
             <Form
+                disabled={editing}
                 form={form}
                 onFinish={submit}
                 layout="vertical"
@@ -60,7 +66,7 @@ function ExpensesForm (props) {
                                            message: 'Date Time is Required'
                                        }
                                    ]}>
-                            <DatePicker size={'large'} showTime={{
+                            <DatePicker disabled size={'large'} showTime={{
                                 format: 'HH:mm',
                             }}/>
                         </Form.Item>
