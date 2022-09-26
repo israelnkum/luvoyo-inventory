@@ -14,8 +14,6 @@ class CashUp extends Model
 
     protected $fillable = [
         'ref_id',
-        'truck_id',
-        'employee_id',
         'dispatch_order_id',
         'expected_amount',
         'received_amount',

@@ -8,6 +8,7 @@ import CloseModal from "../../commons/close-modal";
 import ChangePicture from "../commons/change-picture";
 import {handleAddEmployee, handleUpdateEmployee} from "../../actions/employee/EmployeeAction";
 import moment from "moment";
+import AllowEditing from "../../commons/allow-editing";
 
 
 function EmployeeForm (props) {
@@ -22,6 +23,7 @@ function EmployeeForm (props) {
         staff_id: null,
         ...{...state.data, dob: state?.data ? moment(state?.data.dob) : ''}
     }
+    const [editing, setEditing] = useState(formValues.id !== 0)
 
     const submit = (values) => {
 
@@ -47,23 +49,13 @@ function EmployeeForm (props) {
             })
         })
     }
-    const uploadProps = {
-        beforeUpload: (file) => {
-            setSelectedFile(file)
-            return true
-        },
-        listType: 'picture-card',
-        maxCount: 1,
-        onRemove: () => {
-            setSelectedFile(null)
-        },
-        accept: 'image/*',
-        method: 'get'
-    }
 
     return (
-        <TlaModal title={(formValues.id === 0 ? 'New' : 'Edit') + ' Staff'}>
-            <Form
+        <TlaModal
+            title={(formValues.id === 0 ? 'New' : 'Edit') + ' Staff'}
+            extra={ formValues.id !== 0  && <AllowEditing editing={editing} setEditing={setEditing}/>}
+        >
+            <Form disabled={editing}
                 form={form}
                 onFinish={submit}
                 layout="vertical"
@@ -71,7 +63,7 @@ function EmployeeForm (props) {
                 initialValues={formValues}>
                 <Row gutter={10}>
                     <Col span={24}>
-                        <ChangePicture uploadProps={uploadProps} selectedFile={selectedFile}/>
+                        <ChangePicture editing={editing} setSelectedFile={setSelectedFile} selectedFile={selectedFile}/>
                     </Col>
                     {
                         formValues.id === 0 &&

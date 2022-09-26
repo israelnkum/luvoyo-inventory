@@ -4,29 +4,34 @@ namespace App\Traits;
 
 trait HasReferenceNumber
 {
-    function generateReferenceNumber($referenceColumn): string
+
+    public function generateReferenceNumber($referenceColumn): string
     {
-        $countLogs = $this->withTrashed()->get()->count();
+        $countLogs = self::withTrashed()->get()->count();
         $current_year = substr(date('Y'),2);
+        $current_month = date('m');
+        $currentYearAndMonth = $current_year.$current_month;
         $nextValue = str_pad(1, 3, '0', STR_PAD_LEFT);
         if ($countLogs == 0){
-            $referenceNumber = $current_year.$nextValue;
+            $referenceNumber = $currentYearAndMonth.$nextValue;
         }else{
 
-            $lastReferenceNumber = $this->withTrashed()->max($referenceColumn);
+            $lastReferenceNumber = self::withTrashed()->max($referenceColumn);
 
             if ($lastReferenceNumber == '' ){
-                $referenceNumber= $current_year.$nextValue;
+                $referenceNumber = $this->prefix.$currentYearAndMonth.$nextValue;
             } else {
 
-                $account_year = substr($lastReferenceNumber,0, 2);
+                $account_year = substr($lastReferenceNumber,3, 2);
+
                 if ($account_year == $current_year){
-                    $referenceNumber = $lastReferenceNumber + 1;
+                    $ref = substr($lastReferenceNumber, 3);
+                    $referenceNumber = (int) $ref + 1;
                 }else{
-                    $referenceNumber = $current_year.$nextValue;
+                    $referenceNumber = $currentYearAndMonth.$nextValue;
                 }
             }
         }
-        return  $referenceNumber;
+        return  $this->prefix.$referenceNumber;
     }
 }

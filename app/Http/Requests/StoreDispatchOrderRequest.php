@@ -6,6 +6,8 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class StoreDispatchOrderRequest extends FormRequest
 {
+    public mixed $products;
+
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -21,10 +23,27 @@ class StoreDispatchOrderRequest extends FormRequest
      *
      * @return array<string, mixed>
      */
-    public function rules()
+    public function rules(): array
     {
         return [
-            //
+            'truck_id' => 'required',
+            'employee_id' => 'required',
+            'products' => 'required|array',
         ];
     }
+
+    /**
+     * Get the error messages for the defined validation rules.
+     *
+     * @return array
+     */
+    public function messages(): array
+    {
+        return [
+            'truck_id.required' => 'Select a truck',
+            'employee_id.required' => 'Select an employee',
+            'products.required' => 'Select at least one product',
+        ];
+    }
+
 }

@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react'
-import {Space, Table} from 'antd'
+import {Space, Table, Tag, Typography} from 'antd'
 import PropTypes from 'prop-types'
 import {connect} from "react-redux";
 import TlaTableWrapper from "../../commons/table/tla-table-wrapper";
@@ -7,7 +7,6 @@ import {useOutletContext} from 'react-router'
 import {handleGetAllProducts} from "../../actions/products/ProductAction";
 import ViewAllWrapper from "../../commons/view-all-wrapper";
 import TlaEdit from "../../commons/tla-edit";
-import TlaConfirm from '../../commons/TlaConfirm';
 
 const { Column } = Table
 function AllTrucks (props) {
@@ -25,7 +24,14 @@ function AllTrucks (props) {
     return (
         <ViewAllWrapper loading={loading} noData={data.length === 0}>
             <TlaTableWrapper callbackFunction={getProducts} data={data} meta={meta}>
-                <Column title="Item Name" dataIndex={'name'} />
+                <Column title="Item Name"
+                        render={({name, code}) => (
+                            <Space direction={'vertical'}>
+                               <Typography.Text>{name}</Typography.Text>
+                               <Tag>{code}</Tag>
+                            </Space>
+                        )}
+                />
                 <Column title="Selling Price" dataIndex={'selling_price'}/>
                 <Column title="Cost Price" dataIndex={'cost_price'}/>
                 <Column title="Profit" dataIndex={'profit'}/>

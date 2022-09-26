@@ -17,10 +17,6 @@ class CashUpResource extends JsonResource
         return [
             'id' => $this->id,
             'ref_id' => $this->ref_id,
-            'truck_id' => $this->truck_id,
-            'truck' => new TrucksResource($this->truck),
-            'employee_id' => $this->employee_id,
-            'employee' => new EmployeeResource($this->employee),
             'dispatch_order_id' => $this->dispatch_order_id,
             'dispatch_order' => new DispatchOrderResource($this->dispatchOrder),
             'expected_amount' => $this->expected_amount,

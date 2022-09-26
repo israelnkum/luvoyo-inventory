@@ -188,7 +188,20 @@ html, body {
         height: 4px;
         display: block;
     }
+
+    html, body {
+        height: initial !important;
+        overflow: initial !important;
+        -webkit-print-color-adjust: exact;
+    }
+
+    @page {
+        size: auto;
+        margin: 10mm;
+    }
 }
+
+
 
 .txt-upper{
     text-transform: uppercase !important;
@@ -257,4 +270,13 @@ table.print-friendly tr td, table.print-friendly tr th {
 tr td{
     page-break-inside: avoid;
     white-space: nowrap;
+}
+.tla-print-header {
+    display: flex;
+    justify-content: space-around;
+    font-size: 13px;
+}
+
+.print-company-name {
+    font-size: 16px;
 }

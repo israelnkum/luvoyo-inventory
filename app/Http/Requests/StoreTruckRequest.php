@@ -29,4 +29,15 @@ class StoreTruckRequest extends FormRequest
             'license_plate' => 'required|unique:trucks|max:255',
         ];
     }
+    /**
+     * Get the validation rules that apply to the request.
+     *
+     * @return array<string, mixed>
+     */
+    public function messages(): array
+    {
+        return [
+            'truck_code.unique' => 'Truck Code already exist'
+        ];
+    }
 }
