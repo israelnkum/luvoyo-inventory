@@ -8,6 +8,7 @@ import CloseModal from "../../commons/close-modal";
 import {handleAddNewCashUps, handleUpdateCashUps} from "../../actions/cashUps/CashUpsAction";
 import DispatchOrders from "../../commons/form/dispatch-orders";
 import moment from "moment/moment";
+import Trucks from '../../commons/form/trucks'
 
 function CashUpForm (props) {
     const navigate = useNavigate()
@@ -51,11 +52,10 @@ function CashUpForm (props) {
                 name="createCashUpForm"
                 initialValues={formValues}>
                 <Row gutter={10}>
-<<<<<<< HEAD
                     <Col span={12}>
                         <Trucks form={form}/>
                     </Col>
-                    <Col span={12}>
+                    {/* <Col span={12}>
                         <Employees form={form}/>
                     </Col>
                     <Col span={12}>
@@ -72,12 +72,6 @@ function CashUpForm (props) {
                         </Form.Item>
                     </Col>
                     <Col span={12}>
-=======
-                    <Col span={24}>
-                        <DispatchOrders displayContent={true} form={form} editing={formValues.id === 0}/>
-                    </Col> <br/>
-                    <Col span={24}>
->>>>>>> 1bf0667050ecd40a247c02e9b063d13644cc79ec
                         <Form.Item name="received_amount" label="Received Amount"
                                    rules={[
                                        {
@@ -98,7 +92,7 @@ function CashUpForm (props) {
                                    ]}>
                             <Input size={'large'}/>
                         </Form.Item>
-                    </Col>
+                    </Col> */}
                     {/*<Col span={12}>
                         <Row gutter={10}>
                            <Col span={12}>
