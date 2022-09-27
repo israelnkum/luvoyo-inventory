@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useState} from 'react'
 import PropTypes from 'prop-types'
 import {Button, Col, Form, Input, InputNumber, notification, Row} from 'antd'
 import {connect} from 'react-redux'
@@ -8,7 +8,7 @@ import CloseModal from "../../commons/close-modal";
 import {handleAddNewCashUps, handleUpdateCashUps} from "../../actions/cashUps/CashUpsAction";
 import DispatchOrders from "../../commons/form/dispatch-orders";
 import moment from "moment/moment";
-import Trucks from '../../commons/form/trucks'
+import AllowEditing from "../../commons/allow-editing";
 
 function CashUpForm (props) {
     const navigate = useNavigate()
@@ -19,7 +19,7 @@ function CashUpForm (props) {
         id: 0, description: '',
         ...{...state.data, date_time: state?.data ? moment(state?.data.date_time) : ''}
     }
-
+    const [editing, setEditing] = useState(formValues.id !== 0)
     const submit = (values) => {
         const formData = new FormData()
         values.id !== 0 && formData.append('_method', 'PUT')
@@ -44,34 +44,21 @@ function CashUpForm (props) {
     }
 
     return (
-        <TlaModal title={(formValues.id === 0 ? 'New' : 'Edit') + ' Cash Up'}>
+        <TlaModal title={(formValues.id === 0 ? 'New' : 'Edit') + ' Cash Up'}
+                  extra={ formValues.id !== 0  && <AllowEditing editing={editing} setEditing={setEditing}/>}
+        >
             <Form
+                disabled={editing}
                 form={form}
                 onFinish={submit}
                 layout="vertical"
                 name="createCashUpForm"
                 initialValues={formValues}>
                 <Row gutter={10}>
-                    <Col span={12}>
-                        <Trucks form={form}/>
-                    </Col>
-                    {/* <Col span={12}>
-                        <Employees form={form}/>
-                    </Col>
-                    <Col span={12}>
-                        <Form.Item name="date_time" label="Dispatch Date"
-                                   rules={[
-                                       {
-                                           required: true,
-                                           message: 'Date is Required'
-                                       }
-                                   ]}>
-                            <DatePicker showTime={{
-                                format: 'HH:mm',
-                            }} size={'large'}  style={{ width: '100%' }}/>
-                        </Form.Item>
-                    </Col>
-                    <Col span={12}>
+                    <Col span={24}>
+                        <DispatchOrders displayContent={true} form={form} editing={formValues.id === 0}/>
+                    </Col> <br/>
+                    <Col span={24}>
                         <Form.Item name="received_amount" label="Received Amount"
                                    rules={[
                                        {
@@ -92,7 +79,7 @@ function CashUpForm (props) {
                                    ]}>
                             <Input size={'large'}/>
                         </Form.Item>
-                    </Col> */}
+                    </Col>
                     {/*<Col span={12}>
                         <Row gutter={10}>
                            <Col span={12}>

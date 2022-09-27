@@ -1,105 +1,58 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import {Image, Space, Table, Typography, Button} from "antd";
-import {PrinterOutlined } from '@ant-design/icons'
-import Logo from '../../assets/img/defalut-logo.png'
+import {Table} from "antd";
 import '../../assets/css/print-invoice.css'
+import PrintHeader from "../commons/printing/print-header";
+import PrintFooter from "../commons/printing/print-footer";
 
 function PrintReceivedOrder (props) {
     const { data } = props
-
-    const Columns = [
-        { title: 'ITEMS', dataIndex: {} },
-        { title: 'DESCRIPTION', dataIndex: {} },
-        { title: 'QUANTITY', dataIndex: {} },
-        { title: 'PRICE', dataIndex: {} },
-        { title: 'SUBTOTAL', dataIndex: {} },
-    ]
 
     return (
         <>
          {/* begin::New PrintPreview */}
         <div className={'print-wrapper'}>
             {/* Header Section */}
-            <div className={'print-header'}>
-                <div>
-                    <Image src={Logo} width={150} preview={false} alt={'Logo'}></Image>
-                    <h2>Invoice</h2>
-                </div>
+           <PrintHeader/>
 
-                <div className='company-info'>
-                    <Space direction='vertical'>
-                        <h3 style={{color: '#fff'}}>TechLineAfrica</h3>
+            <div className={'print-content'}>
+                {/* Billing Address Section */}
+                <div className='billing-info'>
+                    <div className={'bill-to'}>
+                        <h5>INVOICE TO</h5>
+                        <p><b>Supplier:</b> {data.supplier.name}</p>
+                        <p><b>Phone:</b> {data.supplier.phone}</p>
+                    </div>
 
-                        <p><b>Phone:</b> 0544513074</p>
-                        <p><b>Website:</b> techlineafrica.com</p>
-                        <p><b>Email:</b> info@techlineafri.com</p>
-                        <p><b>Address:</b> 6 Araba Hinson, Takoradi Ghana</p>
-                    </Space>
-                </div>
-            </div>
-
-            {/* Billing Address Section */}
-            <div className='billing-info'>
-                <div className={'bill-to'}>
-                    <Space direction='vertical'>
-                        <h5>BILL TO</h5>
-
-                        <Typography.Text><b>Company Name:</b> </Typography.Text>
-                        <Typography.Text><b>City:</b> </Typography.Text>
-                        <Typography.Text><b>Address:</b> </Typography.Text>
-                        <Typography.Text><b>Postal:</b> </Typography.Text>
-                    </Space>
-                </div>
-
-                <div className={'invoice-info'}>
-                    <Space direction='vertical'>
-                        <h6><b>INVOICE #</b> </h6>
-                        <p>22001</p>
-
-                        <h6><b>DATE</b> </h6>
-                        <p>2022-09-26</p>
-
-                        <h6><b>INVOICE DUE DATE</b> </h6>
-                        <p>2022-09-26</p>
-                    </Space>
-                </div>
-            </div>
-
-            {/* Invoice Details Table */}
-            <Table columns={Columns}>
-                
-            </Table>
-
-            {/* Total Amount Section */}
-            <div className='summary'>
-                <div className={'note'}>
-                    <h5>NOTE</h5>
-                    <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Totam laboriosam quo error vero nihil adipisci at delectus odio cupiditate deleniti. Quasi laudantium assumenda accusantium aliquam?</p>
-                </div>
-                <div className='total-amount'>
-                    <div>
-                        <h5>TOTAL</h5>
-                        <h3>GH&#8373; 0000.00</h3>
+                    <div className={'invoice-info'}>
+                        <div>
+                            <p><b>INVOICE #:</b> {data.invoice_no}</p>
+                            <p><b>DATE:</b> {data.date}</p>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </div>
-         {/* end::New PrintPreview */}
 
-        {/* Print Button */}
-        <div className="print-btn">
-        <Button 
-            icon={<PrinterOutlined />}
-            size={'large'}
-        >Print</Button>
+                {/* Invoice Details Table */}
+                <Table dataSource={data.order_items} pagination={false} rowKey={'id'}>
+                    <Table.Column title={'#'} dataIndex={'id'}/>
+                    <Table.Column title={'Item'} dataIndex={'item'}/>
+                    <Table.Column title={'qty'} dataIndex={'qty'}/>
+                    <Table.Column title={'price'} dataIndex={'price'}/>
+                    <Table.Column title={'sub Total'} dataIndex={'sub_total'}/>
+                </Table>
+            </div>
+            <PrintFooter total={data.total}/>
         </div>
         </>
     )
 }
 
 PrintReceivedOrder.defaultProps = {
-    data: {}
+    data: {
+        supplier: {},
+        order_items: [],
+        total: 0
+    }
 }
 PrintReceivedOrder.propTypes = {
     data: PropTypes.object

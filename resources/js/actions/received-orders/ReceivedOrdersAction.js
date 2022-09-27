@@ -13,7 +13,7 @@ export const handleAddNewReceivedOrders = (values) => (dispatch) => {
     return new Promise((resolve, reject) => {
         api().post('/received-orders', values).then((res) => {
             dispatch(addReceivedOrders(res.data))
-            resolve()
+            resolve(res)
         }).catch((err) => {
             reject(err)
         })

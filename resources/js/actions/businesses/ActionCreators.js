@@ -29,3 +29,10 @@ export const updateBusiness = (payload) => {
       payload: payload
   }
 }
+
+export const getBusinessDetail = (payload) => {
+  return {
+    type: Types.GET_BUSINESS_DETAIL,
+      payload: payload
+  }
+}

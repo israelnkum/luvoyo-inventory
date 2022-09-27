@@ -13,9 +13,7 @@ function TlaEdit ({ link, data, text, icon, type, activeRoles }) {
             background: location,
             data: data
         }}>
-            <Button type={type} icon={icon && <FiEdit2/>}>
-                &nbsp;{text}
-            </Button>
+            <Button type={type} icon={icon && <FiEdit2/>}/>
         </Link>
     )
 }

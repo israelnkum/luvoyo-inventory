@@ -1,13 +1,11 @@
 import { Types } from './Types'
 
-
 export const allReceivedOrders = (payload) => {
   return {
     type: Types.ALL_RECEIVED_ORDERS,
       payload: payload
   }
 }
-
 
 export const addReceivedOrders = (payload) => {
     return {

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Company;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
@@ -28,5 +29,10 @@ class HomeController extends Controller
             'portfolios' => [],
             'businesses' => [],
         ]);
+    }
+
+    public function getBusinessDetail()
+    {
+        return Company::first();
     }
 }

@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react'
-import { Table } from 'antd'
+import {Button, Space, Table, Typography} from 'antd'
 import PropTypes from 'prop-types'
 import {connect} from "react-redux";
 import TlaTableWrapper from "../../commons/table/tla-table-wrapper";
@@ -8,7 +8,6 @@ import ViewAllWrapper from "../../commons/view-all-wrapper";
 import {handleGetAllCashUps} from "../../actions/cashUps/CashUpsAction";
 import TlaEdit from "../../commons/tla-edit";
 import StaffName from "../../commons/staff-name";
-import DispatchOrderDetail from "../dispatch-orders/dispatch-order-detail";
 import TlaAddNew from "../../commons/tla-add-new";
 
 const { Column } = Table

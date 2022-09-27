@@ -2,7 +2,7 @@ import React, {useState} from 'react'
 import {connect} from 'react-redux'
 import {Outlet} from 'react-router'
 import {Button, Card, Col, Row, Space} from 'antd'
-import {FiArrowLeft, FiPlus} from 'react-icons/fi'
+import {FiPlus} from 'react-icons/fi'
 import {createGlobalStyle} from 'styled-components'
 import TlaAddNew from '../../commons/tla-add-new'
 import {Link} from 'react-router-dom'
@@ -42,10 +42,10 @@ function PageWrapper () {
                         {
                             !pageInfo.modalLink ?
                                 <TlaAddNew link={pageInfo.addLink} data={pageInfo?.extraInfo}>
-                                    <Button size={'large'} className={'btn tla-btn-primary'} icon={<FiPlus/>}>&nbsp;Add {pageInfo.buttonText ?? pageInfo.title}</Button>
+                                    <Button size={'large'} type={'primary'} icon={<FiPlus/>}>&nbsp;Add {pageInfo.buttonText ?? pageInfo.title}</Button>
                                 </TlaAddNew> :
                                 <Link to={pageInfo.addLink}>
-                                    <Button size={'large'} className={'btn tla-btn-primary'} icon={<FiPlus/>}>&nbsp;Add {pageInfo.buttonText ?? pageInfo.title}</Button>
+                                    <Button size={'large'} type={'primary'} icon={<FiPlus/>}>&nbsp;Add {pageInfo.buttonText ?? pageInfo.title}</Button>
                                 </Link>
                         }
 

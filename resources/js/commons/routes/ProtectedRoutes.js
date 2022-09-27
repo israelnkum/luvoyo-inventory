@@ -15,9 +15,9 @@ import AllDispatchOrders from "../../components/dispatch-orders/all-dispatch-ord
 import AllProducts from "../../components/products/all-products";
 import AllReceivedOrders from "../../components/received-orders/all-received-orders";
 import PrintReceivedOrder from '../../components/received-orders/print-received-order';
+import AllOrderReturns from "../../components/order-returns/all-order-returns";
 
-const ProtectedRoutes = (props) => {
-    const {activeRoles} = props
+const ProtectedRoutes = () => {
     const location = useLocation()
     const background = location.state && location.state.background
 
@@ -33,6 +33,7 @@ const ProtectedRoutes = (props) => {
                    <Route path='trucks' element={<AllTrucks/>}/>
                    <Route path='cash-ups' element={<AllCashUps/>}/>
                    <Route path='dispatch-orders' element={<AllDispatchOrders/>}/>
+                   <Route path='dispatch-order-returns' element={<AllOrderReturns/>}/>
                    <Route path='received-orders' element={<AllReceivedOrders />} />
                    <Route path='print-invoice' element={<PrintReceivedOrder />} />
                    <Route path='products' element={<AllProducts/>}/>
