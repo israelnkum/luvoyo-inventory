@@ -5,38 +5,41 @@ import {connect} from "react-redux";
 import TlaTableWrapper from "../../commons/table/tla-table-wrapper";
 import {useOutletContext} from 'react-router'
 import ViewAllWrapper from "../../commons/view-all-wrapper";
-import {handleGetAllReceivedOrders} from '../../actions/received-orders/ReceivedOrdersAction';
-import TlaPrint from "../../commons/tla-print";
-import PrintReceivedOrder from "./print-received-order";
+import TlaImage from "../../commons/tla-image";
+import TlaEdit from "../../commons/tla-edit"; 
+import TlaAddNew from '../../commons/tla-add-new';
+import TlaConfirm from '../../commons/TlaConfirm';
+import { handleGetAllReceivedOrders } from '../../actions/receivedOrders/ReceivedOrdersAction';
+
 
 
 const { Column } = Table
 function AllReceivedOrders (props) {
-    const { getReceivedOrders, receivedOrders } = props
+    const { getRceivedOrders, receivedOrders } = props
     const { data, meta }= receivedOrders
     const [loading, setLoading] = useState(true)
     const { setPageInfo } = useOutletContext();
     useEffect(() => {
         setPageInfo({ title: 'Received Orders', addLink: '/received-orders/add', buttonText: 'Received Orders' })
-        getReceivedOrders().then(() => {
+        getRceivedOrders().then(() => {
             setLoading(false)
         })
     }, [])
 
     return (
         <ViewAllWrapper loading={loading} noData={data.length === 0}>
-            <PrintReceivedOrder/>
-            <TlaTableWrapper callbackFunction={getReceivedOrders} data={data} meta={meta}>
-                <Column title="Invoice No." dataIndex={'invoice_no'}/>
-                <Column title="Date" dataIndex={'date'}/>
-                <Column title="Total" dataIndex={'total'}/>
-                <Column title="damaged total" dataIndex={'damaged_total'}/>
-                <Column title="Items count"
-                        render={({order_items}) => (
-                            <Space>
-                                <Typography.Text>{order_items.length}</Typography.Text>
-                            </Space>
-                        )}
+            <TlaTableWrapper 
+                callbackFunction={getRceivedOrders} 
+                data={data} 
+                meta={meta}
+            >
+                <Column 
+                    title="Invoice No." 
+                    render={({invoice_no}) => (
+                        <Space size={0} direction={'vertical'}>
+                        {invoice_no}
+                        </Space>
+                    )}
                 />
                 <Column title="Supplier"
                         render={({supplier}) => (
@@ -45,13 +48,22 @@ function AllReceivedOrders (props) {
                             </Space>
                         )}
                 />
-                <Column title="Action"
-                        render={(record) => (
-                            <Space>
-                                <Button type={'primary'}>Details</Button>
-                                <TlaPrint content={<PrintReceivedOrder data={record}/>}/>
-                            </Space>
-                        )}
+                <Column 
+                    title="Total" 
+                    dataIndex={'total'}
+                />
+                <Column 
+                    title="Supplier ID" 
+                    dataIndex={'supplier_id'}
+                />
+                <Column  
+                    title="Action" 
+                    render={() => (
+                        <Space size={0}>
+                            <TlaEdit icon data={{}} link={'#'} type={'text'}/>
+                            <TlaConfirm title={'Received Orders'} callBack={()=>{}}/>
+                        </Space>
+                    )}
                 />
             </TlaTableWrapper>
         </ViewAllWrapper>
@@ -60,7 +72,7 @@ function AllReceivedOrders (props) {
 
 AllReceivedOrders.propTypes = {
     pageInfo: PropTypes.object,
-    getReceivedOrders: PropTypes.func,
+    getRceivedOrders: PropTypes.func,
     receivedOrders: PropTypes.object,
 }
 
@@ -69,7 +81,7 @@ const mapStateToProps = (state) => ({
 })
 
 const mapDispatchToProps = (dispatch) => ({
-    getReceivedOrders: (payload) => dispatch(handleGetAllReceivedOrders(payload))
+    getRceivedOrders: (payload) => dispatch(handleGetAllReceivedOrders(payload))
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(AllReceivedOrders)

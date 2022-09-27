@@ -1,4 +1,4 @@
-import { Types } from '../actions/received-orders/Types'
+import { Types } from '../actions/receivedOrders/Types'
 const initialState = {
     receivedOrders: {
         data: [],

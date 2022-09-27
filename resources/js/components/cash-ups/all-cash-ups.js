@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react'
-import {Button, Space, Table, Typography} from 'antd'
+import { Table } from 'antd'
 import PropTypes from 'prop-types'
 import {connect} from "react-redux";
 import TlaTableWrapper from "../../commons/table/tla-table-wrapper";

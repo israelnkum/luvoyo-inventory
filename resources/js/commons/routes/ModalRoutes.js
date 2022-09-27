@@ -6,9 +6,9 @@ import SupplierForm from "../../components/suppliers/supplier-form";
 import TruckForm from "../../components/trucks/truck-form";
 import CashUpForm from "../../components/cash-ups/cash-up-form";
 import DispatchOrderForm from "../../components/dispatch-orders/dispatch-order-form";
+import OrderReturnsForm from "../../components/order-returns/order-returns-form";
 import ProductsForm from "../../components/products/products-form";
 import ReceivedOrdersForm from "../../components/received-orders/received-orders-form";
-import OrderReturnsForm from "../../components/order-returns/order-returns-form";
 import OrderDetailModal from "../../components/dispatch-orders/order-detail-modal";
 
 export const ModalRoutes = () => {

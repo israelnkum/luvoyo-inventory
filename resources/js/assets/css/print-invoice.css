@@ -1,0 +1,68 @@
+.print-wrapper {
+    background: #fff;
+    width: 1020px; 
+    border: 2px solid #a3a4e5;
+}
+
+.print-header {
+    background: rgb(50, 50, 255);
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 1.3rem
+}
+.print-header div h2 {
+    color: #fff;
+    font-family: 'Poppins';
+}
+
+.company-info h4 {
+    color: #fff;
+}
+.company-info p {
+    color: #fff;
+    font-size: 12px;
+    margin: 0;
+}
+
+.billing-info {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 1.3rem;
+}
+.billing-info h6, .billing-info p {
+    margin: 0;
+    line-height: 12px;
+    font-size: 12px;
+}
+
+.summary {
+    display: flex;
+    align-items: center;
+}
+.summary .note {
+    padding: 1rem;
+    background-color: lightblue;
+    height: 150px;
+}
+.summary .total-amount {
+    background-color: rgb(50, 50, 255);
+    padding: 1rem;
+    width: 45%;
+    height: 150px;
+    display: flex;
+    justify-content: right;
+    align-items: center;
+}
+.total-amount h5, .total-amount h3 {
+    color: #fff;
+    font-weight: 700;
+    text-align: right;
+}
+
+.print-btn {
+    margin: 1rem 0;
+}

@@ -8,6 +8,7 @@ import CloseModal from "../../commons/close-modal";
 import {handleAddNewCashUps, handleUpdateCashUps} from "../../actions/cashUps/CashUpsAction";
 import DispatchOrders from "../../commons/form/dispatch-orders";
 import moment from "moment/moment";
+import Trucks from '../../commons/form/trucks'
 
 function CashUpForm (props) {
     const navigate = useNavigate()
@@ -51,10 +52,26 @@ function CashUpForm (props) {
                 name="createCashUpForm"
                 initialValues={formValues}>
                 <Row gutter={10}>
-                    <Col span={24}>
-                        <DispatchOrders displayContent={true} form={form} editing={formValues.id === 0}/>
-                    </Col> <br/>
-                    <Col span={24}>
+                    <Col span={12}>
+                        <Trucks form={form}/>
+                    </Col>
+                    {/* <Col span={12}>
+                        <Employees form={form}/>
+                    </Col>
+                    <Col span={12}>
+                        <Form.Item name="date_time" label="Dispatch Date"
+                                   rules={[
+                                       {
+                                           required: true,
+                                           message: 'Date is Required'
+                                       }
+                                   ]}>
+                            <DatePicker showTime={{
+                                format: 'HH:mm',
+                            }} size={'large'}  style={{ width: '100%' }}/>
+                        </Form.Item>
+                    </Col>
+                    <Col span={12}>
                         <Form.Item name="received_amount" label="Received Amount"
                                    rules={[
                                        {
@@ -75,7 +92,7 @@ function CashUpForm (props) {
                                    ]}>
                             <Input size={'large'}/>
                         </Form.Item>
-                    </Col>
+                    </Col> */}
                     {/*<Col span={12}>
                         <Row gutter={10}>
                            <Col span={12}>
