@@ -14,6 +14,16 @@ class ReceivedOrderItemResource extends JsonResource
      */
     public function toArray($request)
     {
-        return parent::toArray($request);
+        return  [
+            'id' => $this->id,
+            'product_id' => $this->product_id,
+            'qty' => $this->qty,
+            'price' => $this->price,
+            'sub_total' => $this->sub_total,
+            'damaged' => $this->damaged,
+            'qty_damaged' => $this->qty_damaged,
+            'damaged_sub_total' => $this->damaged_sub_total,
+            'item' => $this->product->name,
+        ];
     }
 }

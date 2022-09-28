@@ -2,7 +2,7 @@
 
 namespace App\Policies;
 
-use App\Models\DispatchOrderReturnItem;
+use App\Models\OrderReturnItem;
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
@@ -25,10 +25,10 @@ class DispatchOrderReturnItemPolicy
      * Determine whether the user can view the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\DispatchOrderReturnItem  $dispatchOrderReturnItem
+     * @param  \App\Models\OrderReturnItem  $dispatchOrderReturnItem
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function view(User $user, DispatchOrderReturnItem $dispatchOrderReturnItem)
+    public function view(User $user, OrderReturnItem $dispatchOrderReturnItem)
     {
         //
     }
@@ -48,10 +48,10 @@ class DispatchOrderReturnItemPolicy
      * Determine whether the user can update the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\DispatchOrderReturnItem  $dispatchOrderReturnItem
+     * @param  \App\Models\OrderReturnItem  $dispatchOrderReturnItem
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function update(User $user, DispatchOrderReturnItem $dispatchOrderReturnItem)
+    public function update(User $user, OrderReturnItem $dispatchOrderReturnItem)
     {
         //
     }
@@ -60,10 +60,10 @@ class DispatchOrderReturnItemPolicy
      * Determine whether the user can delete the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\DispatchOrderReturnItem  $dispatchOrderReturnItem
+     * @param  \App\Models\OrderReturnItem  $dispatchOrderReturnItem
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function delete(User $user, DispatchOrderReturnItem $dispatchOrderReturnItem)
+    public function delete(User $user, OrderReturnItem $dispatchOrderReturnItem)
     {
         //
     }
@@ -72,10 +72,10 @@ class DispatchOrderReturnItemPolicy
      * Determine whether the user can restore the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\DispatchOrderReturnItem  $dispatchOrderReturnItem
+     * @param  \App\Models\OrderReturnItem  $dispatchOrderReturnItem
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function restore(User $user, DispatchOrderReturnItem $dispatchOrderReturnItem)
+    public function restore(User $user, OrderReturnItem $dispatchOrderReturnItem)
     {
         //
     }
@@ -84,10 +84,10 @@ class DispatchOrderReturnItemPolicy
      * Determine whether the user can permanently delete the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\DispatchOrderReturnItem  $dispatchOrderReturnItem
+     * @param  \App\Models\OrderReturnItem  $dispatchOrderReturnItem
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function forceDelete(User $user, DispatchOrderReturnItem $dispatchOrderReturnItem)
+    public function forceDelete(User $user, OrderReturnItem $dispatchOrderReturnItem)
     {
         //
     }

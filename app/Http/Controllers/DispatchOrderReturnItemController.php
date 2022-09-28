@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreDispatchOrderReturnItemRequest;
 use App\Http\Requests\UpdateDispatchOrderReturnItemRequest;
-use App\Models\DispatchOrderReturnItem;
+use App\Models\OrderReturnItem;
 
 class DispatchOrderReturnItemController extends Controller
 {
@@ -42,10 +42,10 @@ class DispatchOrderReturnItemController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\DispatchOrderReturnItem  $dispatchOrderReturnItem
+     * @param  \App\Models\OrderReturnItem  $dispatchOrderReturnItem
      * @return \Illuminate\Http\Response
      */
-    public function show(DispatchOrderReturnItem $dispatchOrderReturnItem)
+    public function show(OrderReturnItem $dispatchOrderReturnItem)
     {
         //
     }
@@ -53,10 +53,10 @@ class DispatchOrderReturnItemController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\DispatchOrderReturnItem  $dispatchOrderReturnItem
+     * @param  \App\Models\OrderReturnItem  $dispatchOrderReturnItem
      * @return \Illuminate\Http\Response
      */
-    public function edit(DispatchOrderReturnItem $dispatchOrderReturnItem)
+    public function edit(OrderReturnItem $dispatchOrderReturnItem)
     {
         //
     }
@@ -65,10 +65,10 @@ class DispatchOrderReturnItemController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \App\Http\Requests\UpdateDispatchOrderReturnItemRequest  $request
-     * @param  \App\Models\DispatchOrderReturnItem  $dispatchOrderReturnItem
+     * @param  \App\Models\OrderReturnItem  $dispatchOrderReturnItem
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateDispatchOrderReturnItemRequest $request, DispatchOrderReturnItem $dispatchOrderReturnItem)
+    public function update(UpdateDispatchOrderReturnItemRequest $request, OrderReturnItem $dispatchOrderReturnItem)
     {
         //
     }
@@ -76,10 +76,10 @@ class DispatchOrderReturnItemController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\DispatchOrderReturnItem  $dispatchOrderReturnItem
+     * @param  \App\Models\OrderReturnItem  $dispatchOrderReturnItem
      * @return \Illuminate\Http\Response
      */
-    public function destroy(DispatchOrderReturnItem $dispatchOrderReturnItem)
+    public function destroy(OrderReturnItem $dispatchOrderReturnItem)
     {
         //
     }

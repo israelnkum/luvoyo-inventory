@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react'
-import {Table} from 'antd'
+import {Button, Space, Table} from 'antd'
 import PropTypes from 'prop-types'
 import {connect} from "react-redux";
 import TlaTableWrapper from "../../commons/table/tla-table-wrapper";
@@ -9,6 +9,9 @@ import TlaEdit from "../../commons/tla-edit";
 import {handleGetAllDispatchOrders} from "../../actions/dispatch-orders/DisptachOrderAction";
 import StaffName from "../../commons/staff-name";
 import CashUpStatus from "../commons/cash-up-status";
+import TlaPrint from "../../commons/tla-print";
+import PrintDispatchOrder from "./print-dispatch-order";
+import {FiInfo} from "react-icons/fi";
 
 const { Column } = Table
 function AllDispatchOrders (props) {
@@ -33,13 +36,24 @@ function AllDispatchOrders (props) {
                 )}/>
                 <Column title="Total" dataIndex={'total'}/>
                 <Column title="Qty" dataIndex={'qty'}/>
-                <Column title="Dispatch Date" dataIndex={'date_time'}/>
-                <Column title="Return time" dataIndex={'return_time'}/>
+
+                <Column title="Date" render={({date_time, return_time}) => (
+                    <Space direction={'vertical'}>
+                        <span>{date_time}</span>
+                        <span><b>Return:</b> {return_time}</span>
+                    </Space>
+                )}/>
                 <Column title="Staff" render={({employee}) => (
                     <StaffName name={employee.name} photo={employee.photo}/>
                 )}/>
                 <Column title="Actions" render={(record) => (
-                    <TlaEdit data={record} icon link={'edit'}/>
+                    <Space>
+                        <Button title={'Details'} icon={<FiInfo/>}/>
+                        {/*<TlaEdit type={'default'} data={record} icon link={'edit'}/>*/}
+                        <TlaPrint>
+                            <PrintDispatchOrder data={record}/>
+                        </TlaPrint>
+                    </Space>
                 )}/>
             </TlaTableWrapper>
         </ViewAllWrapper>

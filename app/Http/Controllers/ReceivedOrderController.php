@@ -58,7 +58,7 @@ class ReceivedOrderController extends Controller
                 ]);
 
                 $subTotal = $product['qty'] * $findProduct->selling_price;
-                $total += $subTotal;
+                $total  = $total + $subTotal;
 
                 $order->orderItems()->create([
                     'product_id' => $findProduct->id,

@@ -5,6 +5,7 @@ use App\Http\Controllers\DispatchOrderController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\ExpenseController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\OrderReturnController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ReceivedOrderController;
 use App\Http\Controllers\SuppliersController;
@@ -25,7 +26,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::group(['middleware' => ['auth:sanctum']], function () {
+Route::group(['middleware' => ['auth:sanctum']], static function () {
     Route::get('dashboard', [HomeController::class, 'getDashboardData']);
     Route::prefix('user')->group(function () {
         Route::get('/{id}/roles/active', [UserController::class, 'getActiveRoles']);
@@ -53,16 +54,23 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
     Route::apiResource('/cash-ups', CashUpController::class);
 
+    Route::get('business/detail', [HomeController::class, 'getBusinessDetail']);
+
     Route::prefix('dispatch-orders')->group(function () {
         Route::get('/search/{query}', [DispatchOrderController::class, 'searchDispatchOrders']);
     });
+
     Route::apiResource('/dispatch-orders', DispatchOrderController::class);
 
     Route::apiResource('/received-orders', ReceivedOrderController::class);
 
+
+    Route::apiResource('/order-returns', OrderReturnController::class);
+
     Route::prefix('products')->group(function () {
         Route::get('/search/{query}', [ProductController::class, 'searchProducts']);
     });
+
     Route::apiResource('/products', ProductController::class);
 });
 

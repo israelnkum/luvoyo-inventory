@@ -10,25 +10,32 @@ function DispatchOrder(props) {
     const { getDispatchOrder, form, editing, displayContent } = props
     const [data, setData] = useState({})
     return (
-        <Form.Item
-            name="dispatch_order_id"
-            label="Dispatch Order"
-            rules={[
-                {
-                    required: true,
-                    message: "Dispatch Order is Required",
-                },
-            ]}
-        >
-            <SearchItems search={getDispatchOrder} displayField={'order_no'}
-                         text={'Search by order number'}
-                         onChangeCallback={({ id }) => {
-                             getDispatchOrder()
-                             form.setFieldsValue({
-                                 dispatch_order_id: id
-                             })
-                         }}/>
-        </Form.Item> 
+        <>
+            <Form.Item
+                name="dispatch_order_id"
+                label="Dispatch Order"
+                rules={[
+                    {
+                        required: editing,
+                        message: "Dispatch Order is Required",
+                    },
+                ]}
+            >
+                <SearchItems search={getDispatchOrder} displayField={'order_no'}
+                             text={'Eg: DSP2202001'}
+                             onChangeCallback={({ id, ...rest }) => {
+                                 setData(rest)
+                                 getDispatchOrder()
+                                 form.setFieldsValue({
+                                     dispatch_order_id: id
+                                 })
+                             }}/>
+            </Form.Item>
+            {
+                (displayContent && Object.keys(data).length > 0) &&
+                <DispatchOrderDetail data={data}/>
+            }
+        </>
     )
 }
 

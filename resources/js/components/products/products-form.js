@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useState} from 'react'
 import PropTypes from 'prop-types'
 import {Button, Col, Form, Input, notification, Row} from 'antd'
 import {connect} from 'react-redux'
@@ -7,6 +7,7 @@ import {useLocation, useNavigate} from "react-router-dom";
 import CloseModal from "../../commons/close-modal";
 import {handleAddProduct, handleUpdateProduct} from "../../actions/products/ProductAction";
 import Suppliers from "../../commons/form/suppliers";
+import AllowEditing from "../../commons/allow-editing";
 
 
 function ProductsForm (props) {
@@ -17,6 +18,7 @@ function ProductsForm (props) {
     const formValues = {
         id: 0, create_account: false, staff_id: null, ...state.data
     }
+    const [editing, setEditing] = useState(formValues.id !== 0)
 
     const submit = (values) => {
 
@@ -44,8 +46,10 @@ function ProductsForm (props) {
     return (
         <TlaModal
             title={(formValues.id === 0 ? "New" : "Edit") + " Product"}
+            extra={ formValues.id !== 0  && <AllowEditing editing={editing} setEditing={setEditing}/>}
         >
             <Form
+                disabled={editing}
                 form={form}
                 onFinish={submit}
                 layout="vertical"

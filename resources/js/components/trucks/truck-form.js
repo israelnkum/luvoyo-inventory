@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useState} from 'react'
 import PropTypes from 'prop-types'
 import {Button, Col, Form, Input, notification, Row} from 'antd'
 import {connect} from 'react-redux'
@@ -6,17 +6,19 @@ import {TlaModal} from "../../commons/tla-modal";
 import {useLocation, useNavigate} from "react-router-dom";
 import CloseModal from "../../commons/close-modal";
 import {handleAddNewTrucks, handleUpdateTrucks} from "../../actions/trucks/TrucksAction";
+import AllowEditing from "../../commons/allow-editing";
 
 
 function TruckForm (props) {
     const navigate = useNavigate()
     const { addTrucks, updateTrucks } = props
+
     const [form] = Form.useForm()
     const { state } = useLocation()
     const formValues = {
         id: 0, description: '', ...state.data
     }
-
+    const [editing, setEditing] = useState(formValues.id !== 0)
     const submit = (values) => {
         const formData = new FormData()
         values.id !== 0 && formData.append('_method', 'PUT')
@@ -41,9 +43,12 @@ function TruckForm (props) {
     }
 
     return (
-        <TlaModal title={(formValues.id === 0 ? 'New' : 'Edit') + ' Truck'}>
+        <TlaModal title={(formValues.id === 0 ? 'New' : 'Edit') + ' Truck'}
+                  extra={ formValues.id !== 0  && <AllowEditing editing={editing} setEditing={setEditing}/>}
+        >
             <Form
                 form={form}
+                disabled={editing}
                 onFinish={submit}
                 layout="vertical"
                 name="createTruckForm"
