@@ -13,6 +13,7 @@ import commonReducer from "./common-reducer";
 import receivedOrdersReducer from "./received-orders-reducer";
 import businessReducer from "./company-reducer";
 import returnOrdersReducer from "./order-returns-reducer";
+import dashboardReducer from "./dashboard-reducer";
 
 const persistConfig = {
     key: 'root',
@@ -30,6 +31,7 @@ const persistConfig = {
         'receivedOrdersReducer',
         'businessReducer',
         'returnOrdersReducer',
+        'dashboardReducer',
     ]
 }
 
@@ -46,6 +48,7 @@ const rootReducer = combineReducers({
     receivedOrdersReducer,
     businessReducer,
     returnOrdersReducer,
+    dashboardReducer,
 })
 
 export default persistReducer(persistConfig, rootReducer)
