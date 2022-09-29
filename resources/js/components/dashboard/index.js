@@ -2,7 +2,8 @@ import React, {useEffect, useState} from 'react'
 import {connect} from "react-redux";
 import PropTypes from "prop-types";
 import {handleGetBusinessDetail} from "../../actions/businesses/BusinessAction";
-import {Spin} from "antd";
+import ViewAllWrapper from "../../commons/view-all-wrapper";
+import Statistics from "./statistics";
 
 function Dashboard (props) {
     const { getBusinessDetail } = props
@@ -11,9 +12,11 @@ function Dashboard (props) {
         getBusinessDetail().then(() => setLoading(false))
     })
     return (
-        <Spin spinning={loading}>
-           Dashboard
-        </Spin>
+        <ViewAllWrapper loading={loading} noData={false}>
+            <div style={{ padding: 20 }}>
+                <Statistics/>
+            </div>
+        </ViewAllWrapper>
     )
 }
 

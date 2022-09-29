@@ -72,10 +72,11 @@ Route::group(['middleware' => ['auth:sanctum']], static function () {
     });
 
     Route::apiResource('/products', ProductController::class);
+
 });
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-
+Route::get('/test', [HomeController::class, 'getDashboardData']);
