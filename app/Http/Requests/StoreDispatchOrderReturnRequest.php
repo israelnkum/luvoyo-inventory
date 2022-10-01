@@ -13,7 +13,7 @@ class StoreDispatchOrderReturnRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -21,10 +21,10 @@ class StoreDispatchOrderReturnRequest extends FormRequest
      *
      * @return array<string, mixed>
      */
-    public function rules()
+    public function rules(): array
     {
         return [
-            //
+            'products' => 'required|array'
         ];
     }
 }

@@ -5,13 +5,13 @@ import {connect} from "react-redux";
 import TlaTableWrapper from "../../commons/table/tla-table-wrapper";
 import {useOutletContext} from 'react-router'
 import ViewAllWrapper from "../../commons/view-all-wrapper";
-import TlaEdit from "../../commons/tla-edit";
 import {handleGetAllDispatchOrders} from "../../actions/dispatch-orders/DisptachOrderAction";
 import StaffName from "../../commons/staff-name";
 import CashUpStatus from "../commons/cash-up-status";
 import TlaPrint from "../../commons/tla-print";
 import PrintDispatchOrder from "./print-dispatch-order";
 import {FiInfo} from "react-icons/fi";
+import {Link} from "react-router-dom";
 
 const { Column } = Table
 function AllDispatchOrders (props) {
@@ -48,8 +48,9 @@ function AllDispatchOrders (props) {
                 )}/>
                 <Column title="Actions" render={(record) => (
                     <Space>
-                        <Button title={'Details'} icon={<FiInfo/>}/>
-                        {/*<TlaEdit type={'default'} data={record} icon link={'edit'}/>*/}
+                        <Link state={{ data: record }} to={`${record.order_no}`}>
+                            <Button title={'Details'} icon={<FiInfo/>}/>
+                        </Link>
                         <TlaPrint>
                             <PrintDispatchOrder data={record}/>
                         </TlaPrint>

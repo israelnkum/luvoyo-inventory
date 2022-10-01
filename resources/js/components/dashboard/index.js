@@ -11,23 +11,26 @@ function Dashboard (props) {
     useEffect(() => {
         getBusinessDetail().then(() => setLoading(false))
     })
+
     return (
-        <ViewAllWrapper loading={loading} noData={false}>
-            <div style={{ padding: 20 }}>
-                <Statistics/>
-            </div>
-        </ViewAllWrapper>
+            <ViewAllWrapper loading={loading} noData={false}>
+                <div style={{ padding: 10 }}>
+                    <Statistics/>
+                </div>
+            </ViewAllWrapper>
     )
 }
 
 Dashboard.propTypes = {
     activeRoles: PropTypes.array.isRequired,
     getBusinessDetail: PropTypes.func.isRequired,
+    authUser: PropTypes.object.isRequired
 }
 
 const mapStateToProps = (state) => {
     return {
-        activeRoles : state.userReducer.activeRoles
+        activeRoles : state.userReducer.activeRoles,
+        authUser: state.userReducer.loggedInUser
     }
 }
 

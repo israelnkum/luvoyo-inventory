@@ -10,6 +10,7 @@ import OrderReturnsForm from "../../components/order-returns/order-returns-form"
 import ProductsForm from "../../components/products/products-form";
 import ReceivedOrdersForm from "../../components/received-orders/received-orders-form";
 import OrderDetailModal from "../../components/dispatch-orders/order-detail-modal";
+import OrderReturnItems from "../../components/order-returns/order-return-items";
 
 export const ModalRoutes = () => {
   return (
@@ -38,6 +39,8 @@ export const ModalRoutes = () => {
             <Route exact path="dispatch-orders">
                 <Route exact path="add" element={<DispatchOrderForm/>}/>
                 <Route exact path="edit" element={<DispatchOrderForm/>}/>
+                <Route exact path=":orderId/return" element={<OrderReturnsForm/>}/>
+                <Route exact path=":orderId/returns/items" element={<OrderReturnItems/>}/>
             </Route>
             <Route exact path="received-orders">
                 <Route exact path="add" element={<ReceivedOrdersForm/>}/>

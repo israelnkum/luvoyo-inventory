@@ -26,13 +26,18 @@ class DispatchOrderController extends Controller
     {
         return DispatchOrderResource::collection(DispatchOrder::paginate(10));
     }
+
+    public function show(DispatchOrder $dispatchOrder): DispatchOrderResource
+    {
+        return new DispatchOrderResource($dispatchOrder);
+    }
     /**
      * Store a newly created resource in storage.
      *
      * @param StoreDispatchOrderRequest $request
      * @return JsonResponse|DispatchOrderResource
      */
-    public function store(StoreDispatchOrderRequest $request)
+    public function store(StoreDispatchOrderRequest $request): JsonResponse|DispatchOrderResource
     {
 
         DB::beginTransaction();
@@ -111,14 +116,14 @@ class DispatchOrderController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param DispatchOrder $suppliers
+     * @param DispatchOrder $dispatchOrder
      * @return JsonResponse|Response
      */
-    public function destroy(DispatchOrder $suppliers): Response|JsonResponse
+    public function destroy(DispatchOrder $dispatchOrder): Response|JsonResponse
     {
         DB::beginTransaction();
         try {
-            $suppliers->delete();
+            $dispatchOrder->delete();
             DB::commit();
             return \response()->json('Dispatch Order Deleted');
         } catch (\Exception $exception) {

@@ -39,12 +39,6 @@ export const setUserData = (values) => (dispatch) => {
   })
 }
 
-export const getUserDetail = (payload) => {
-  return {
-    type: Types.GET_USER_DETAIL,
-    payload: payload
-  }
-}
 
 export const deleteUser = (id) => (dispatch) => {
   return new Promise((resolve, reject) => {
@@ -114,19 +108,6 @@ export const getDashboardData = () => (dispatch) => {
   })
 }
 
-export const getTime = () => (dispatch) => {
-  return new Promise((resolve, reject) => {
-    api().get('/time/').then((res) => {
-      dispatch({
-        type: Types.GET_TIME,
-        payload: res.data
-      })
-      resolve(res)
-    }).catch((err) => {
-      reject(err)
-    })
-  })
-}
 
 export const roleActions = (data) => (dispatch) => {
   return new Promise((resolve, reject) => {
@@ -140,4 +121,18 @@ export const roleActions = (data) => (dispatch) => {
       reject(err)
     })
   })
+}
+
+export const handleChangePassword = (data) => (dispatch) => {
+    return new Promise((resolve, reject) => {
+        api().post('/user/change-password', data).then((res) => {
+            dispatch({
+                type: Types.GET_ACTIVE_USER_ROLES,
+                payload: res.data
+            })
+            resolve(res)
+        }).catch((err) => {
+            reject(err)
+        })
+    })
 }

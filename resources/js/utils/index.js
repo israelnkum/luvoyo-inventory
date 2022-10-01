@@ -115,7 +115,7 @@ export const SidebarMenus = [
         permissions: ['Admin'],
         icon: 'cash-up'
     },
-    {
+  /*  {
         title: 'Order - Returns',
         link: '#',
         children: [
@@ -134,7 +134,7 @@ export const SidebarMenus = [
         ],
         permissions: ['Admin'],
         icon: 'dispatch-order'
-    },
+    },*/
     {
         title: 'Dispatch Orders',
         link: '#',

@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\OrderReturn;
 use App\Models\Product;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
@@ -17,6 +18,7 @@ return new class extends Migration
         Schema::create('order_return_items', static function (Blueprint $table) {
             $table->id();
             $table->foreignIdFor(Product::class)->constrained();
+            $table->foreignIdFor(OrderReturn::class)->constrained();
             $table->integer('qty');
             $table->string('sub_total');
             $table->boolean('damaged')->default(0);

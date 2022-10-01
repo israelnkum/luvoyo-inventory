@@ -15,7 +15,7 @@ import {TbCash} from "react-icons/tb";
 import {SiExpensify} from "react-icons/si";
 
 function AppSidebar (props) {
-    const {name, collapsed, setCollapsed} = props
+    const {authUser, collapsed, setCollapsed} = props
 
     return (
         <Layout.Sider theme={'light'} className={'sideBar'}  collapsed={collapsed} onCollapse={setCollapsed}
@@ -23,9 +23,9 @@ function AppSidebar (props) {
                       style={isMobile ? { height: '100vh', zIndex: 1, position: 'fixed', left: 0 } : {height: '100vh', position: 'fixed', left: 8, top: 5 }}
         >
             <div align={'center'}>
-                <SideProfile name={name}/>
+                <SideProfile name={authUser.name}/>
             </div>
-            <MenuHelper icons={{
+            <MenuHelper disabled={authUser.default_password !== null} icons={{
                 home: <FiHome/>,
                 pim: <FiUser/>,
                 config: <FiSettings/>,
@@ -45,12 +45,12 @@ AppSidebar.defaultProps = {
     setCollapsed: ()=>{},
 }
 AppSidebar.propTypes = {
-    name: PropTypes.string.isRequired,
+    authUser: PropTypes.object.isRequired,
     collapsed: PropTypes.bool,
     setCollapsed: PropTypes.func,
 }
 const mapStateToProps = (state) => ({
-    name : state.userReducer.loggedInUser.name,
+    authUser : state.userReducer.loggedInUser,
 })
 
 export default connect(mapStateToProps)(AppSidebar)

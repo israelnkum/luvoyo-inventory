@@ -16,6 +16,8 @@ import AllProducts from "../../components/products/all-products";
 import AllReceivedOrders from "../../components/received-orders/all-received-orders";
 import PrintReceivedOrder from '../../components/received-orders/print-received-order';
 import AllOrderReturns from "../../components/order-returns/all-order-returns";
+import DispatchOrderDetail from "../../components/dispatch-orders/dispatch-order-detail";
+import ReceivedOrderDetail from "../../components/received-orders/received-order-detail";
 
 const ProtectedRoutes = () => {
     const location = useLocation()
@@ -24,19 +26,24 @@ const ProtectedRoutes = () => {
     return (
         <>
             <Routes location={background || location}>
-                <Route exact element={<Dashboard/>} path='/'/>
-                <Route exact element={<Dashboard/>} path='/js/*'/>
+                <Route exact element={<Dashboard/>} path='/'>
+                    <Route exact path='js/*'  element={<Dashboard/>}/>
+                    <Route exact path='home'  element={<Dashboard/>}/>
+                </Route>
+
                 <Route path='*' element={<PageWrapper/>}>
-                   <Route path='staff' element={<AllEmployees/>}/>
-                   <Route path='expenses' element={<AllExpenses/>}/>
-                   <Route path='suppliers' element={<AllSuppliers/>}/>
-                   <Route path='trucks' element={<AllTrucks/>}/>
-                   <Route path='cash-ups' element={<AllCashUps/>}/>
-                   <Route path='dispatch-orders' element={<AllDispatchOrders/>}/>
-                   <Route path='dispatch-order-returns' element={<AllOrderReturns/>}/>
-                   <Route path='received-orders' element={<AllReceivedOrders />} />
-                   <Route path='print-invoice' element={<PrintReceivedOrder />} />
-                   <Route path='products' element={<AllProducts/>}/>
+                    <Route path='staff' element={<AllEmployees/>}/>
+                    <Route path='expenses' element={<AllExpenses/>}/>
+                    <Route path='suppliers' element={<AllSuppliers/>}/>
+                    <Route path='trucks' element={<AllTrucks/>}/>
+                    <Route path='cash-ups' element={<AllCashUps/>}/>
+                    <Route path='dispatch-orders' element={<AllDispatchOrders/>}/>
+                    <Route path='dispatch-orders/:orderNumber' element={<DispatchOrderDetail/>}/>
+                    <Route path='dispatch-orders/:orderNumber/returns' element={<AllOrderReturns/>}/>
+                    <Route path='received-orders' element={<AllReceivedOrders />} />
+                    <Route path='received-orders/:invoiceNumber' element={<ReceivedOrderDetail />} />
+                    <Route path='print-invoice' element={<PrintReceivedOrder />} />
+                    <Route path='products' element={<AllProducts/>}/>
                 </Route>
                 <Route exact>
                     <>not found</>
