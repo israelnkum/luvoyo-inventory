@@ -40,13 +40,13 @@ function PageWrapper () {
                     pageInfo.addLink &&
                     <div align={'right'}>
                         {
-                            !pageInfo.modalLink ?
+                            pageInfo.modalLink ?
+                                <Link to={pageInfo.addLink}>
+                                    <Button size={'large'} type={'default'}>{pageInfo.buttonText ?? pageInfo.title}</Button>
+                                </Link> :
                                 <TlaAddNew link={pageInfo.addLink} data={pageInfo?.extraInfo}>
                                     <Button size={'large'} type={'primary'} icon={<FiPlus/>}>&nbsp;Add {pageInfo.buttonText ?? pageInfo.title}</Button>
-                                </TlaAddNew> :
-                                <Link to={pageInfo.addLink}>
-                                    <Button size={'large'} type={'primary'} icon={<FiPlus/>}>&nbsp;Add {pageInfo.buttonText ?? pageInfo.title}</Button>
-                                </Link>
+                                </TlaAddNew>
                         }
 
                     </div>

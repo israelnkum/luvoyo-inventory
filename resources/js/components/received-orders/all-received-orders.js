@@ -9,6 +9,7 @@ import {handleGetAllReceivedOrders} from '../../actions/received-orders/Received
 import TlaPrint from "../../commons/tla-print";
 import PrintReceivedOrder from "./print-received-order";
 import {FiInfo} from "react-icons/fi";
+import {Link} from "react-router-dom";
 
 
 const { Column } = Table
@@ -48,7 +49,9 @@ function AllReceivedOrders (props) {
                 <Column title="Action"
                         render={(record) => (
                             <Space>
-                                <Button title={'Detail'} icon={<FiInfo/>}/>
+                                <Link to={`${record.invoice_no}`}>
+                                    <Button title={'Detail'} icon={<FiInfo/>}/>
+                                </Link>
                                 <TlaPrint>
                                     <PrintReceivedOrder data={record}/>
                                 </TlaPrint>

@@ -1,38 +1,29 @@
-import React, {useState} from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
-import {Button, Checkbox, Col, Form, Input, DatePicker, notification, Row, Select} from 'antd'
+import {Button, Card, Col, Form, Input, InputNumber, notification, Row} from 'antd'
 import {connect} from 'react-redux'
 import {TlaModal} from "../../commons/tla-modal";
-import {useLocation, useNavigate} from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 import CloseModal from "../../commons/close-modal";
-import ChangePicture from "../commons/change-picture";
-import {handleAddEmployee, handleUpdateEmployee} from "../../actions/employee/EmployeeAction";
-import {nationalities} from "../../utils/nationalities";
+import {FiTrash2} from "react-icons/fi";
+import {handleAddNewOrderReturns} from "../../actions/order-returns/OrderReturnsAction";
 
 
 function OrderReturnsForm (props) {
     const navigate = useNavigate()
-    const [selectedFile, setSelectedFile] = useState(null)
-    const { addEmployee, updateEmployee } = props
+    const { addOrderReturn } = props
     const [form] = Form.useForm()
-    const { state } = useLocation()
     const formValues = {
-        id: 0, create_account: false, staff_id: null, ...state.data
+        id: 0,
+        products: JSON.parse(localStorage.getItem('dispatched_order')) || []
     }
 
     const submit = (values) => {
-
-        const formData = new FormData()
-        values.id !== 0 && formData.append('_method', 'PUT')
-        for (const key in values) {
-            if (Object.prototype.hasOwnProperty.call(values, key)) {
-                formData.append(key, values[key])
-            }
-        }
-        (values.id === 0 ? addEmployee(formData) : updateEmployee(formData)).then(() => {
+        addOrderReturn(values) .then(() => {
+            localStorage.removeItem('dispatched_order')
             notification.success({
                 message: 'Success',
-                description: 'Product ' + (values.id === 0 ? 'Created' : 'Updated')
+                description: 'Return Created'
             })
             form.resetFields()
             navigate(-1)
@@ -43,137 +34,111 @@ function OrderReturnsForm (props) {
             })
         })
     }
-
-    const Render = ({ children, editing = true }) => (
-        (editing === false ? formValues.id !== 0 : formValues === 0) && children
-    )
     return (
-        <TlaModal
-            width={900}
-            title={(formValues.id === 0 ? "New" : "Edit") + " Received Order"}
-        >
-            <Form
-                form={form}
-                onFinish={submit}
-                layout="vertical"
-                name="createStaffForm"
-                initialValues={formValues}
+        <>
+            <TlaModal
+                width={'70%'}
+                title={(formValues.id === 0 ? "New" : "Edit") + " Return"}
             >
-                <Row gutter={10}>
-                    <Col span={8}>
-                        <Row>
-                            <Col span={24}>
-                                <Form.Item
-                                    name="dispatch_id"
-                                    label="Dispatch ID"
-                                    rules={[
+                <Form
+                    form={form}
+                    onFinish={submit}
+                    layout="vertical"
+                    name="createStaffForm"
+                    initialValues={formValues}
+                >
+                    <Card title={'Products'} size={'small'}>
+                        <Form.List name="products">
+                            {(fields, { add, remove }) => (
+                                <>
+                                    <Row gutter={10}>
                                         {
-                                            required: true,
-                                            message: "Dispatch ID is Required",
-                                        },
-                                    ]}
-                                >
-                                    <Select size={"large"}>
-                                        <Select.Option value={"1"}>
-                                            1
-                                        </Select.Option>
-                                        <Select.Option value={"2"}>
-                                            2
-                                        </Select.Option>
-                                        <Select.Option value={"3"}>
-                                            3
-                                        </Select.Option>
-                                    </Select>
-                                </Form.Item>
-                            </Col>
-                        </Row>
-                    </Col>
-                    <Col span={8}>
-                        <Row>
-                            <Col span={24}>
-                                <Form.Item
-                                    name="item_id"
-                                    label="Item ID"
-                                    rules={[
-                                        {
-                                            required: true,
-                                            message: "Item ID is Required",
-                                        },
-                                    ]}
-                                >
-                                    <Input size={"large"} />
-                                </Form.Item>
-                            </Col>
-                            <Col span={24}>
-                                <Form.Item
-                                    name="quantity"
-                                    label="Quantity"
-                                    rules={[
-                                        {
-                                            required: true,
-                                            message: "Quantity is Required",
-                                        },
-                                    ]}
-                                >
-                                    <Input size={"large"} type="number" />
-                                </Form.Item>
-                            </Col>
-                        </Row>
-                    </Col>
-                    <Col span={8}>
-                        <Row>
-                            <Col span={24}>
-                                <Form.Item
-                                    name="item_id"
-                                    label="Item ID"
-                                    rules={[
-                                        {
-                                            required: true,
-                                            message: "Item ID is Required",
-                                        },
-                                    ]}
-                                >
-                                    <Input size={"large"} />
-                                </Form.Item>
-                            </Col>
-                            <Col span={24}>
-                                <Form.Item
-                                    name="quantity"
-                                    label="Quantity"
-                                    rules={[
-                                        {
-                                            required: true,
-                                            message: "Quantity is Required",
-                                        },
-                                    ]}
-                                >
-                                    <Input size={"large"} type="number" />
-                                </Form.Item>
-                            </Col>
-                        </Row>
-                    </Col>
-                </Row>
-                <Form.Item>
-                    <div align={"right"}>
-                        <CloseModal />
-                        &nbsp;
-                        <Button size={"large"} type="primary" htmlType="submit">
-                            Submit
-                        </Button>
-                    </div>
-                </Form.Item>
-            </Form>
-        </TlaModal>
+                                            fields.map(({ key, name, ...restField }) => (
+                                                <React.Fragment key={key}>
+                                                    <Col span={13} xs={24} sm={13} md={13} lg={13}>
+                                                        <Form.Item hidden
+                                                                   {...restField}
+                                                                   name={[name, 'id']}
+                                                                   rules={[
+                                                                       {
+                                                                           required: true,
+                                                                           message: 'Product ID',
+                                                                       },
+                                                                   ]}
+                                                        >
+                                                            <Input disabled placeholder="Product ID" />
+                                                        </Form.Item>
+                                                        <Form.Item
+                                                            {...restField}
+                                                            name={[name, 'item']}
+                                                            rules={[
+                                                                {
+                                                                    required: true,
+                                                                    message: 'Product Name',
+                                                                },
+                                                            ]}
+                                                        >
+                                                            <Input disabled placeholder="Product Name" />
+                                                        </Form.Item>
+                                                    </Col>
+                                                    <Col span={3} xs={12} sm={3} md={3} lg={3}>
+                                                        <Form.Item
+                                                            help={<small style={{ color: 'red'}}>Qty Returned</small>}
+                                                            {...restField}
+                                                            initialValue={1}
+                                                            name={[name, 'qty_returned']}
+                                                            rules={[{
+                                                                required: true,
+                                                                message: 'Qty',
+                                                            },]}>
+                                                            <InputNumber style={{ width: '100%' }} min={1} placeholder="Qty" />
+                                                        </Form.Item>
+                                                    </Col>
+                                                    <Col span={3} xs={12} sm={3} md={3} lg={3}>
+                                                        <Form.Item help={<small style={{ color: 'red'}}>Qty Damaged</small>} initialValue={0}
+                                                                   {...restField}
+                                                                   name={[name, 'qty_damaged']}>
+                                                            <InputNumber style={{ width: '100%' }} min={0} placeholder="Qty Damaged" />
+                                                        </Form.Item>
+                                                    </Col>
+
+                                                    <Col span={2} xs={12} sm={2} md={2} lg={2}>
+                                                        <Button danger onClick={() => {
+                                                            remove(name)
+                                                            const items = JSON.parse(localStorage.getItem('dispatched_order')) || []
+                                                            localStorage.setItem('dispatched_order', JSON.stringify(items.filter((itm, index) => index !== name)))
+                                                        }}>
+                                                            <FiTrash2/>
+                                                        </Button>
+                                                    </Col>
+                                                </React.Fragment>
+                                            ))
+                                        }
+                                    </Row>
+                                </>
+                            )}
+                        </Form.List>
+                    </Card>
+                    <Form.Item>
+                        <div align={"right"}>
+                            <CloseModal />
+                            &nbsp;
+                            <Button size={"large"} type="primary" htmlType="submit">
+                                Submit
+                            </Button>
+                        </div>
+                    </Form.Item>
+                </Form>
+            </TlaModal>
+        </>
     );
 }
 OrderReturnsForm.propTypes = {
-    addEmployee: PropTypes.func.isRequired,
-    updateEmployee: PropTypes.func.isRequired,
+    addOrderReturn: PropTypes.func.isRequired,
 }
 
 const mapDispatchToProps = (dispatch) => ({
-    addEmployee: (payload) => dispatch(handleAddEmployee(payload)),
-    updateEmployee: (payload) => dispatch(handleUpdateEmployee(payload))
+    addOrderReturn: (payload) => dispatch(handleAddNewOrderReturns(payload)),
 })
 
 export default connect(null, mapDispatchToProps)(OrderReturnsForm)

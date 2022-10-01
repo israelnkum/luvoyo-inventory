@@ -4,7 +4,7 @@ import {Form} from 'antd'
 import PropTypes from 'prop-types'
 import {handleGetCommonDispatchOrder} from "../../actions/commons/CommonAction";
 import SearchItems from "./search";
-import DispatchOrderDetail from "../../components/dispatch-orders/dispatch-order-detail";
+import OrderDetailContent from "../../components/dispatch-orders/order-detail-content";
 
 function DispatchOrder(props) {
     const { getDispatchOrder, form, editing, displayContent } = props
@@ -33,7 +33,7 @@ function DispatchOrder(props) {
             </Form.Item>
             {
                 (displayContent && Object.keys(data).length > 0) &&
-                <DispatchOrderDetail data={data}/>
+                <OrderDetailContent data={data}/>
             }
         </>
     )

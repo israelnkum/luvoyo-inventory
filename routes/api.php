@@ -34,6 +34,7 @@ Route::group(['middleware' => ['auth:sanctum']], static function () {
         Route::post('/{id}/delete', [UserController::class, 'deleteUser']);
         Route::post('/roles/add', [UserController::class, 'addUserRoles']);
         Route::post('/roles/actions', [UserController::class, 'enableOrDisableRole']);
+        Route::post('/change-password',[UserController::class, 'changePassword']);
     });
 
     Route::apiResource('/users', UserController::class);
@@ -66,6 +67,7 @@ Route::group(['middleware' => ['auth:sanctum']], static function () {
 
 
     Route::apiResource('/order-returns', OrderReturnController::class);
+
 
     Route::prefix('products')->group(function () {
         Route::get('/search/{query}', [ProductController::class, 'searchProducts']);

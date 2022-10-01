@@ -1,10 +1,10 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import {Table} from "antd";
 import '../../assets/css/print-invoice.css'
 import PrintHeader from "../commons/printing/print-header";
 import PrintFooter from "../commons/printing/print-footer";
 import CashUpStatus from "../commons/cash-up-status";
+import OrderItems from "./dispatch-order-detail/order-items";
 
 function PrintDispatchOrder (props) {
     const { data } = props
@@ -35,13 +35,7 @@ function PrintDispatchOrder (props) {
                 </div>
 
                 {/* Invoice Details Table */}
-                <Table dataSource={data.order_items} pagination={false} rowKey={'id'}>
-                    <Table.Column title={'#'} dataIndex={'id'}/>
-                    <Table.Column title={'Item'} dataIndex={'item'}/>
-                    <Table.Column title={'qty'} dataIndex={'qty'}/>
-                    <Table.Column title={'price'} dataIndex={'selling_price'}/>
-                    <Table.Column title={'sub Total'} dataIndex={'sub_total'}/>
-                </Table>
+                <OrderItems data={data.order_items}/>
             </div>
             <PrintFooter total={data.total}/>
         </div>
