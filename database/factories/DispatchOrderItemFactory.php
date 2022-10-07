@@ -17,7 +17,11 @@ class DispatchOrderItemFactory extends Factory
     public function definition()
     {
         return [
-            //
+            'product_id',
+            'selling_price',
+            'dispatch_order_id',
+            'qty',
+            'sub_total',
         ];
     }
 }
