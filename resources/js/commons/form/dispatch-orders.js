@@ -7,7 +7,7 @@ import SearchItems from "./search";
 import OrderDetailContent from "../../components/dispatch-orders/order-detail-content";
 
 function DispatchOrder(props) {
-    const { getDispatchOrder, form, editing, displayContent } = props
+    const { getDispatchOrder, form, editing, displayContent, setSearchResults } = props
     const [data, setData] = useState({})
     return (
         <>
@@ -25,6 +25,7 @@ function DispatchOrder(props) {
                              text={'Eg: DSP2202001'}
                              onChangeCallback={({ id, ...rest }) => {
                                  setData(rest)
+                                 setSearchResults(rest)
                                  getDispatchOrder()
                                  form.setFieldsValue({
                                      dispatch_order_id: id
@@ -50,6 +51,7 @@ DispatchOrder.propTypes = {
     form: PropTypes.any.isRequired,
     editing: PropTypes.bool,
     displayContent: PropTypes.bool,
+    setSearchResults: PropTypes.func,
 }
 
 const mapDispatchToProps = (dispatch) => {

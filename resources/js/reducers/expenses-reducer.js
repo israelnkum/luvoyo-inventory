@@ -1,8 +1,13 @@
 import { Types } from '../actions/expenses/Types'
+import moment from "moment";
 const initialState = {
     expenses: {
         data: [],
         meta: {}
+    },
+    filter: {
+        date: '',
+        category: 'all'
     }
 }
 
@@ -11,6 +16,8 @@ export default function expensesReducer (state = initialState, action) {
         case Types.ALL_EXPENSES:
             return { ...state, expenses: action.payload }
 
+        case Types.ADD_EXPENSES_FILTER:
+            return { ...state, filter: action.payload}
 
         case Types.ADD_EXPENSES:
             return {

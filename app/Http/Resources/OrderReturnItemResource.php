@@ -19,10 +19,10 @@ class OrderReturnItemResource extends JsonResource
             'product_id' => $this->product_id,
             'item' => $this->product->name,
             'qty' => $this->qty,
-            'sub_total' => $this->sub_total,
+            'sub_total' => 'R'.$this->sub_total,
             'damaged' => $this->damaged,
-            'damaged_qty' => $this->damaged_qty,
-            'damaged_sub_total' => $this->damaged_sub_total,
+            'damaged_qty' => 'R'.$this->damaged_qty,
+            'damaged_sub_total' => 'R'.$this->damaged_sub_total,
         ];
     }
 }

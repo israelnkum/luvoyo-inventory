@@ -2,10 +2,12 @@
 
 namespace Database\Factories;
 
+use App\Models\Cashup;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Cash-up>
+ * @extends Factory<Cashup>
  */
 class CashUpFactory extends Factory
 {
@@ -16,8 +18,15 @@ class CashUpFactory extends Factory
      */
     public function definition()
     {
+        $cashUp = new Cashup();
         return [
-            //
+            'ref_id' => $cashUp->generateReferenceNumber('ref_id'),
+            'dispatch_order_id',
+            'expected_amount',
+            'received_amount',
+            'balance',
+            'date_time' => $this->faker->dateTimeBetween('2005-01-01'),
+            'user_id'=> User::first()->id
         ];
     }
 }

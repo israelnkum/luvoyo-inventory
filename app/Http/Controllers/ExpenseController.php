@@ -2,30 +2,47 @@
 
 namespace App\Http\Controllers;
 
-use App\Helpers\HelperFunctions;
+use App\Exports\ExportExpenses;
 use App\Http\Requests\StoreExpenseRequest;
 use App\Http\Requests\UpdateExpenseRequest;
 use App\Http\Resources\ExpensesResource;
-use App\Http\Resources\SupplierResource;
 use App\Models\Expense;
 use Exception;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\Response;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use Maatwebsite\Excel\Facades\Excel;
 
 class ExpenseController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
-     * @return AnonymousResourceCollection
+     * @return AnonymousResourceCollection|\Symfony\Component\HttpFoundation\BinaryFileResponse
      */
-    public function index(): AnonymousResourceCollection
+    public function index(Request $request)
     {
-        return ExpensesResource::collection(Expense::paginate(10));
+
+        $date = explode(',', $request->date);
+        $expensesQuery = Expense::query();
+        $expensesQuery->when($request->has('category') && $request->category !== 'all', function ($q) use ($request) {
+            return $q->where('category', $request->category);
+        });
+        $expensesQuery->when($request->has('date') && count($date) !== 1, function ($q) use($date){
+            $formatDate = [Carbon::parse($date[0]), Carbon::parse($date[1])];
+            return $q->whereBetween('date_time', $formatDate);
+        });
+
+        if ($request->has('export') && $request->export === 'true'){
+           return  Excel::download(new ExportExpenses(ExpensesResource::collection($expensesQuery->get())), 'Expenses.xlsx');
+        }
+
+        return ExpensesResource::collection($expensesQuery->paginate(10));
     }
 
     /**

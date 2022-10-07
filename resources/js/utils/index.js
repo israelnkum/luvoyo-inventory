@@ -265,3 +265,8 @@ export const addOrRemoveItem = (items, newItem) => {
     else items.push(newItem)
     return items
 }
+
+
+export const formatAmount = (amount) => {
+    return parseFloat(amount.replace(/[^\d.-]/g, ''))
+}
