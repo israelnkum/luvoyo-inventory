@@ -2,8 +2,6 @@
 
 namespace Database\Seeders;
 
-use App\Models\DispatchOrder;
-use App\Models\TerminationReason;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -13,15 +11,22 @@ class DatabaseSeeder extends Seeder
      *
      * @return void
      */
-    public function run()
+    public function run(): void
     {
         $this->call([
             UserSeeder::class,
+//            EmployeeSeeder::class,
             RoleSeeder::class,
             CompanySeeder::class,
-//            ExpenseSeeder::class,
-            DispatchOrderSeeder::class,
-            CashUpSeeder::class
+            /*  ExpenseSeeder::class,
+             TruckSeeder::class,
+             DispatchOrderSeeder::class,
+             SuppliersSeeder::class,
+             ProductSeeder::class,
+             DispatchOrderItemSeeder::class,
+             CashUpSeeder::class,
+            ReceivedOrderSeeder::class,
+            ReceivedOrderItemSeeder::class*/
         ]);
     }
 }

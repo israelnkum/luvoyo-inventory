@@ -2,10 +2,11 @@
 
 namespace Database\Factories;
 
+use App\Models\ReceivedOrderItem;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\ReceivedOrderItem>
+ * @extends Factory<ReceivedOrderItem>
  */
 class ReceivedOrderItemFactory extends Factory
 {
@@ -14,10 +15,19 @@ class ReceivedOrderItemFactory extends Factory
      *
      * @return array<string, mixed>
      */
-    public function definition()
+    public function definition(): array
     {
+        $qty = $this->faker->numberBetween(1, 500);
+        $price =$this->faker->numberBetween(2, 60);
         return [
-            //
+            'received_order_id' => $this->faker->numberBetween(1, 500),
+            'product_id' => $this->faker->numberBetween(1, 500),
+            'qty' => $qty,
+            'price' => $price,
+            'sub_total' => $price * $qty,
+            'damaged' => 0,
+            'qty_damaged' => 0,
+            'damaged_sub_total' => 0,
         ];
     }
 }

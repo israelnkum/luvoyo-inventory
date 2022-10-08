@@ -15,7 +15,7 @@ class ProductFactory extends Factory
      *
      * @return array<string, mixed>
      */
-    public function definition()
+    public function definition(): array
     {
         $product = new Product();
         return [
@@ -24,10 +24,10 @@ class ProductFactory extends Factory
             'cost_price' => $this->faker->numberBetween(2, 5),
             'selling_price' => $this->faker->numberBetween(2, 5),
             'supplier_id' => $this->faker->numberBetween(1, 500),
-            'profit',
-            'brand',
-            'quantity',
-            'user_id',
+            'profit' => $this->faker->numberBetween(300, 500),
+            'brand' => $this->faker->name,
+            'quantity' =>  $this->faker->numberBetween(220, 9099),
+            'user_id' => 1,
         ];
     }
 }

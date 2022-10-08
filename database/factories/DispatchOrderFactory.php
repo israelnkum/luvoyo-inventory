@@ -23,13 +23,13 @@ class DispatchOrderFactory extends Factory
         $order = new DispatchOrder();
         return [
             'order_no' => $order->generateReferenceNumber('order_no'),
-            'truck_id' => Truck::first()->id,
+            'truck_id' => $this->faker->numberBetween(1, 500),
             'total' => $this->faker->numberBetween(200, 1000),
             'qty' => $this->faker->numberBetween(50, 100),
             'date_time'  => $this->faker->dateTimeBetween('2005-01-01'),
             'return_time' => $this->faker->time,
-            'employee_id' => Employee::first()->id,
-            'user_id' => User::first()->id
+            'employee_id' => 1,
+            'user_id' => 1
         ];
     }
 }

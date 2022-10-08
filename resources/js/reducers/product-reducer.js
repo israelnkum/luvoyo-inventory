@@ -4,7 +4,8 @@ const initialState = {
         data: [],
         meta: {}
     },
-    product: {}
+    product: {},
+    filter: {},
 }
 
 export default function productReducer (state = initialState, action) {

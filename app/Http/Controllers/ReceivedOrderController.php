@@ -2,29 +2,43 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\ReceivedOrderExport;
 use App\Http\Requests\StoreReceivedOrderRequest;
 use App\Http\Requests\UpdateReceivedOrderRequest;
 use App\Http\Resources\ReceivedOrderResource;
 use App\Models\Product;
 use App\Models\ReceivedOrder;
+use App\Traits\UsePrint;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Facades\Excel;
 
 class ReceivedOrderController extends Controller
 {
+    use UsePrint;
     /**
      * Display a listing of the resource.
      *
-     * @return AnonymousResourceCollection
+     * @return AnonymousResourceCollection|Response|\Symfony\Component\HttpFoundation\BinaryFileResponse
      */
-    public function index(): AnonymousResourceCollection
+    public function index(Request $request)
     {
-        return ReceivedOrderResource::collection(ReceivedOrder::paginate(10));
+
+        $orders = ReceivedOrder::query();
+        if ($request->has('export') && $request->export === 'true'){
+            return  Excel::download(new ReceivedOrderExport(ReceivedOrderResource::collection($orders->get())), 'Suppliers.xlsx');
+        }
+
+        if ($request->has('print') && $request->print === 'true'){
+            return $this->pdf('print.received-orders', ReceivedOrderResource::collection($orders->get()),'Suppliers');
+        }
+        return ReceivedOrderResource::collection($orders->paginate(10));
     }
 
 

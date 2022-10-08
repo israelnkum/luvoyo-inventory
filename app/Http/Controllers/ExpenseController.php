@@ -7,6 +7,7 @@ use App\Http\Requests\StoreExpenseRequest;
 use App\Http\Requests\UpdateExpenseRequest;
 use App\Http\Resources\ExpensesResource;
 use App\Models\Expense;
+use App\Traits\UsePrint;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -20,10 +21,11 @@ use Maatwebsite\Excel\Facades\Excel;
 
 class ExpenseController extends Controller
 {
+    use UsePrint;
     /**
      * Display a listing of the resource.
      *
-     * @return AnonymousResourceCollection|\Symfony\Component\HttpFoundation\BinaryFileResponse
+     * @return AnonymousResourceCollection|Response|\Symfony\Component\HttpFoundation\BinaryFileResponse
      */
     public function index(Request $request)
     {
@@ -40,6 +42,10 @@ class ExpenseController extends Controller
 
         if ($request->has('export') && $request->export === 'true'){
            return  Excel::download(new ExportExpenses(ExpensesResource::collection($expensesQuery->get())), 'Expenses.xlsx');
+        }
+
+        if ($request->has('print') && $request->print === 'true'){
+            return $this->pdf('print.expenses', ExpensesResource::collection($expensesQuery->get()),'Expenses');
         }
 
         return ExpensesResource::collection($expensesQuery->paginate(10));

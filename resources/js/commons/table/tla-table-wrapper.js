@@ -16,7 +16,6 @@ function TlaTableWrapper ({ meta, data, callbackFunction, children, numberColumn
         onChange: onSelectChange,
     };
     return (
-
         <TlaPagination extra={extra} meta={meta} loadData={(pageNumber) => {
             const urlParams = new URLSearchParams(filterObj)
             urlParams.append('page', pageNumber);

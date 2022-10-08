@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\ProductExport;
 use App\Http\Requests\StoreProductRequest;
 use App\Http\Resources\ExpensesResource;
 use App\Http\Resources\ProductsResource;
 use App\Http\Requests\UpdateProductRequest;
 use App\Models\Product;
+use App\Traits\UsePrint;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Response;
@@ -14,22 +16,29 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Exception;
+use Maatwebsite\Excel\Facades\Excel;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class ProductController extends Controller
 {
+    use UsePrint;
     /**
      * Display a listing of the resource.
      *
-     * @return AnonymousResourceCollection
+     * @return AnonymousResourceCollection|Response|BinaryFileResponse
      */
-    public function index(Request $request): AnonymousResourceCollection
+    public function index(Request $request)
     {
-        if ($request->query('page') == 0){
-            $product = Product::all();
-        }else{
-            $product = Product::paginate(10);
+        $product = Product::query();
+
+        if ($request->has('export') && $request->export === 'true'){
+            return  Excel::download(new ProductExport(ProductsResource::collection($product->get())), 'Products.xlsx');
         }
-        return ProductsResource::collection($product);
+
+        if ($request->has('print') && $request->print === 'true'){
+            return $this->pdf('print.products', ProductsResource::collection($product->get()),'Products');
+        }
+        return ProductsResource::collection($product->paginate(10));
     }
 
     /**

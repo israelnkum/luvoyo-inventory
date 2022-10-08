@@ -2,8 +2,7 @@
 
 namespace Database\Seeders;
 
-use App\Models\DispatchOrder;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\DispatchOrderItem;
 use Illuminate\Database\Seeder;
 
 class DispatchOrderItemSeeder extends Seeder
@@ -13,8 +12,8 @@ class DispatchOrderItemSeeder extends Seeder
      *
      * @return void
      */
-    public function run()
+    public function run(): void
     {
-        DispatchOrder::factory()->count(1000)->create();
+        DispatchOrderItem::factory()->count(2000)->create();
     }
 }

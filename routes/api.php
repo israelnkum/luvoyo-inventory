@@ -47,6 +47,7 @@ Route::group(['middleware' => ['auth:sanctum']], static function () {
     Route::apiResource('/expenses', ExpenseController::class);
 
     Route::prefix('trucks')->group(function () {
+        Route::get('/print', [TruckController::class, 'downloadPdf']);
         Route::get('/search/{query}', [TruckController::class, 'searchTrucks']);
     });
     Route::apiResource('/trucks', TruckController::class);

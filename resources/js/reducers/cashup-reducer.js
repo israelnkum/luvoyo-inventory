@@ -3,6 +3,9 @@ const initialState = {
     cashUps: {
         data: [],
         meta: {}
+    },
+    filter: {
+        truck_code: ''
     }
 }
 
@@ -11,6 +14,8 @@ export default function cashUpsReducer (state = initialState, action) {
         case Types.ALL_CASH_UPS:
             return { ...state, cashUps: action.payload }
 
+        case Types.ADD_CASHUP_FILTER:
+            return { ...state, filter: action.payload}
 
         case Types.ADD_CASH_UPS:
             return {

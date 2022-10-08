@@ -3,7 +3,8 @@ const initialState = {
     suppliers: {
         data: [],
         meta: {}
-    }
+    },
+    filter: {},
 }
 
 export default function suppliersReducer (state = initialState, action) {

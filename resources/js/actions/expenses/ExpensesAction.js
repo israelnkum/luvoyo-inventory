@@ -1,5 +1,6 @@
 import api from '../../utils/api'
 import {addExpenses, addFilter, allExpenses, deleteExpenses, updateExpenses} from "./ActionCreators";
+import {completeExport} from "../../utils";
 
 export const handleGetAllExpenses = (params) => async (dispatch) => {
     return new Promise((resolve, reject) => {
@@ -17,11 +18,7 @@ export const handleExportExpenses = (params) => async () => {
     return new Promise((resolve, reject) => {
         api().get(`/expenses?${params}`, { responseType: 'blob' })
             .then((res) => {
-                const link = document.createElement('a')
-                link.href = window.URL.createObjectURL(new Blob([res.data]))
-                link.setAttribute('download', 'uploadFormat.xlsx')
-                document.body.appendChild(link)
-                link.click()
+                completeExport(res.data, 'Expenses')
                 resolve()
             }).catch((err) => {
             reject(err)

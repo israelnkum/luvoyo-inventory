@@ -3,32 +3,43 @@
 namespace App\Http\Controllers;
 
 
+use App\Exports\TruckExport;
 use App\Http\Requests\StoreTruckRequest;
 use App\Http\Requests\UpdateTruckRequest;
 use App\Http\Resources\TrucksResource;
 use App\Models\Truck;
+use App\Traits\UsePrint;
+use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Facades\Excel;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class TruckController extends Controller
 {
+    use UsePrint;
     /**
      * Display a listing of the resource.
      *
-     * @return AnonymousResourceCollection
+     * @return AnonymousResourceCollection|Response|BinaryFileResponse
      */
-    public function index(Request $request): AnonymousResourceCollection
+    public function index(Request $request)
     {
-        if ($request->query('page') == 0){
-            $trucks = Truck::all();
-        }else{
-            $trucks = Truck::paginate(10);
+        $trucks = Truck::query();
+
+        if ($request->has('export') && $request->export === 'true'){
+            return  Excel::download(new TruckExport(TrucksResource::collection($trucks->get())), 'Trucks.xlsx');
         }
-        return TrucksResource::collection($trucks);
+
+        if ($request->has('print') && $request->print === 'true'){
+            return $this->pdf('print.trucks',TrucksResource::collection($trucks->get()),'Trucks');
+        }
+
+        return TrucksResource::collection($trucks->paginate(10));
     }
     /**
      * Store a newly created resource in storage.
@@ -46,7 +57,7 @@ class TruckController extends Controller
             $truck = Truck::create($request->all());
             DB::commit();
             return new TrucksResource($truck);
-        }catch (\Exception $exception){
+        }catch (Exception $exception){
             DB::rollBack();
             return response()->json([
                 'message' => $exception->getMessage()
@@ -68,7 +79,7 @@ class TruckController extends Controller
             $truck->update($request->all());
             DB::commit();
             return new TrucksResource($truck);
-        }catch (\Exception $exception){
+        }catch (Exception $exception){
             DB::rollBack();
             return response()->json([
                 'message' => $exception->getMessage()
@@ -89,7 +100,7 @@ class TruckController extends Controller
             $trucks->delete();
             DB::commit();
             return \response()->json('Truck Deleted');
-        } catch (\Exception $exception) {
+        } catch (Exception $exception) {
             DB::rollBack();
             return response()->json('Something went wrong', 422);
         }
@@ -103,4 +114,11 @@ class TruckController extends Controller
             ->orWhere('license_plate', 'like', '%' . $query . '%')->get();
         return TrucksResource::collection($products);
     }
+
+//    public function downloadPdf($data): Response
+//    {
+//        return PDF::loadView('print.trucks', compact('data'))
+//            ->setPaper('a4')
+//            ->download('Trucks.pdf');
+//    }
 }

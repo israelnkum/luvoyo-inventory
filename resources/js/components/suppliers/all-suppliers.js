@@ -8,6 +8,7 @@ import ViewAllWrapper from "../../commons/view-all-wrapper";
 import {handleGetAllSuppliers} from "../../actions/suppliers/SuppliersAction";
 import TlaEdit from "../../commons/tla-edit";
 import TlaImage from "../../commons/tla-image";
+import FilterSuppliers from "./filter-suppliers";
 
 const { Column } = Table
 function AllSuppliers (props) {
@@ -23,20 +24,23 @@ function AllSuppliers (props) {
     }, [])
 
     return (
-        <ViewAllWrapper loading={loading} noData={data.length === 0}>
-            <TlaTableWrapper callbackFunction={getSuppliers} data={data} meta={meta}>
-                <Column title="Photo" render={({name, logo}) => (
-                    <TlaImage size={40} src={logo} name={name}/>
-                )}/>
-                <Column title="Name" dataIndex={'name'}/>
-                <Column title="Contact Person" dataIndex={'contact_person'}/>
-                <Column title="Phone" dataIndex={'phone'}/>
-                <Column title="Location" dataIndex={'location'}/>
-                <Column title="Actions" render={(record) => (
-                    <TlaEdit data={record} icon link={'edit'}/>
-                )}/>
-            </TlaTableWrapper>
-        </ViewAllWrapper>
+        <>
+            <FilterSuppliers/>
+            <ViewAllWrapper loading={loading} noData={data.length === 0}>
+                <TlaTableWrapper callbackFunction={getSuppliers} data={data} meta={meta}>
+                    <Column title="Photo" render={({name, logo}) => (
+                        <TlaImage size={40} src={logo} name={name}/>
+                    )}/>
+                    <Column title="Name" dataIndex={'name'}/>
+                    <Column title="Contact Person" dataIndex={'contact_person'}/>
+                    <Column title="Phone" dataIndex={'phone'}/>
+                    <Column title="Location" dataIndex={'location'}/>
+                    <Column title="Actions" render={(record) => (
+                        <TlaEdit data={record} icon link={'edit'}/>
+                    )}/>
+                </TlaTableWrapper>
+            </ViewAllWrapper>
+        </>
     )
 }
 

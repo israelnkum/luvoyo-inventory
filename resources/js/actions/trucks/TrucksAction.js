@@ -1,9 +1,10 @@
 import api from '../../utils/api'
 import {addTrucks, allTrucks, deleteTrucks, updateTrucks} from "./ActionCreators";
+import {completeExport} from "../../utils";
 
-export const handleGetAllTrucks = (pageNumber = 1) => async (dispatch) => {
+export const handleGetAllTrucks = (params) => async (dispatch) => {
     return new Promise((resolve, reject) => {
-        api().get(`/trucks?page=${pageNumber}`).then((res) => {
+        api().get(`/trucks?${params}`).then((res) => {
             dispatch(allTrucks(res.data))
             resolve(res)
         }).catch((err) => {
@@ -12,6 +13,17 @@ export const handleGetAllTrucks = (pageNumber = 1) => async (dispatch) => {
     })
 }
 
+export const handleExportTrucks = (params) => async () => {
+    return new Promise((resolve, reject) => {
+        api().get(`/trucks?${params}`, { responseType: 'blob' })
+            .then((res) => {
+                completeExport(res.data, 'Trucks')
+                resolve()
+            }).catch((err) => {
+            reject(err)
+        })
+    })
+}
 export const handleAddNewTrucks = (values) => (dispatch) => {
     return new Promise((resolve, reject) => {
         api().post('/trucks', values).then((res) => {
