@@ -2,29 +2,49 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\ExportCashUp;
 use App\Http\Requests\StoreCashUpRequest;
 use App\Http\Requests\UpdateCashUpRequest;
 use App\Http\Resources\CashUpResource;
 use App\Models\CashUp;
 use App\Models\DispatchOrder;
+use App\Traits\UsePrint;
 use Carbon\Carbon;
 use Exception;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use Maatwebsite\Excel\Facades\Excel;
 
 class CashUpController extends Controller
 {
+    use UsePrint;
     /**
      * Display a listing of the resource.
      *
-     * @return AnonymousResourceCollection|Response
+     * @return AnonymousResourceCollection|Response|\Symfony\Component\HttpFoundation\BinaryFileResponse
      */
-    public function index(): Response|AnonymousResourceCollection
+    public function index(Request $request)
     {
-        return CashUpResource::collection(CashUp::paginate(10));
+        $cashUpQuery = CashUp::query();
+        $cashUpQuery->when($request->has('truck_code') && $request->truck_code !== null, static function (Builder $q) use ($request){
+             $q->whereRelation('dispatchOrder.truck', 'truck_code', $request->truck_code);
+        });
+
+        if ($request->has('export') && $request->export === 'true'){
+            return  Excel::download(new ExportCashUp(CashUpResource::collection($cashUpQuery->get())), 'Cashups.xlsx');
+        }
+
+        if ($request->has('print') && $request->print === 'true'){
+            return $this->pdf('print.cash-up', CashUpResource::collection($cashUpQuery->get()),'CashUp');
+        }
+
+        return CashUpResource::collection($cashUpQuery->paginate(10));
     }
 
 
@@ -46,8 +66,6 @@ class CashUpController extends Controller
 
             $cashUp = new CashUp();
             $cashUp->ref_id = $cashUp->generateReferenceNumber('ref_id');
-//            $cashUp->truck_id = $request->truck_id;
-//            $cashUp->employee_id = $request->employee_id;
             $cashUp->dispatch_order_id = $request->dispatch_order_id;
             $cashUp->expected_amount = $dispatchOrder->total;
             $cashUp->received_amount = $request->received_amount;

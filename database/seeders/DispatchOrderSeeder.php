@@ -2,7 +2,7 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\DispatchOrder;
 use Illuminate\Database\Seeder;
 
 class DispatchOrderSeeder extends Seeder
@@ -12,8 +12,8 @@ class DispatchOrderSeeder extends Seeder
      *
      * @return void
      */
-    public function run()
+    public function run(): void
     {
-        //
+        DispatchOrder::factory()->count(500)->create();
     }
 }

@@ -1,13 +1,30 @@
 import api from '../../utils/api'
 import {addReceivedOrders, allReceivedOrders, deleteReceivedOrders, updateReceivedOrders} from "./ActionCreators";
+import {completeExport} from "../../utils";
 
-export const handleGetAllReceivedOrders = () => async (dispatch) => {
-    await api().get('/received-orders')
-        .then((res) => {
+export const handleGetAllReceivedOrders = (params) => (dispatch) => {
+    return new Promise((resolve, reject) => {
+        api().get(`/received-orders?${params}`).then((res) => {
             dispatch(allReceivedOrders(res.data))
+            resolve(res)
+        }).catch((err) => {
+            reject(err)
         })
+    })
 }
 
+
+export const handleExportReceivedOrders = (params) => async () => {
+    return new Promise((resolve, reject) => {
+        api().get(`/received-orders?${params}`, { responseType: 'blob' })
+            .then((res) => {
+                completeExport(res.data, 'Received-Orders')
+                resolve()
+            }).catch((err) => {
+            reject(err)
+        })
+    })
+}
 
 export const handleAddNewReceivedOrders = (values) => (dispatch) => {
     return new Promise((resolve, reject) => {

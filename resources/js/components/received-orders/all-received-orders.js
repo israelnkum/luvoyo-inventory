@@ -10,6 +10,7 @@ import TlaPrint from "../../commons/tla-print";
 import PrintReceivedOrder from "./print-received-order";
 import {FiInfo} from "react-icons/fi";
 import {Link} from "react-router-dom";
+import FilterReceivedOrders from "./filter-received-orders";
 
 
 const { Column } = Table
@@ -26,40 +27,43 @@ function AllReceivedOrders (props) {
     }, [])
 
     return (
-        <ViewAllWrapper loading={loading} noData={data.length === 0}>
-            <TlaTableWrapper callbackFunction={getReceivedOrders} data={data} meta={meta}>
-                <Column title="Invoice No." dataIndex={'invoice_no'}/>
-                <Column title="Date" dataIndex={'date'}/>
-                <Column title="Total" dataIndex={'total'}/>
-                <Column title="damaged total" dataIndex={'damaged_total'}/>
-                <Column title="Items count"
-                        render={({order_items}) => (
-                            <Space>
-                                <Typography.Text>{order_items.length}</Typography.Text>
-                            </Space>
-                        )}
-                />
-                <Column title="Supplier"
-                        render={({supplier}) => (
-                            <Space>
-                                <Typography.Text>{supplier.name}</Typography.Text>
-                            </Space>
-                        )}
-                />
-                <Column title="Action"
-                        render={(record) => (
-                            <Space>
-                                <Link to={`${record.invoice_no}`}>
-                                    <Button title={'Detail'} icon={<FiInfo/>}/>
-                                </Link>
-                                <TlaPrint>
-                                    <PrintReceivedOrder data={record}/>
-                                </TlaPrint>
-                            </Space>
-                        )}
-                />
-            </TlaTableWrapper>
-        </ViewAllWrapper>
+        <>
+            <FilterReceivedOrders/>
+            <ViewAllWrapper loading={loading} noData={data.length === 0}>
+                <TlaTableWrapper callbackFunction={getReceivedOrders} data={data} meta={meta}>
+                    <Column title="Invoice No." dataIndex={'invoice_no'}/>
+                    <Column title="Date" dataIndex={'date'}/>
+                    <Column title="Total" dataIndex={'total'}/>
+                    <Column title="damaged total" dataIndex={'damaged_total'}/>
+                    <Column title="Items count"
+                            render={({order_items}) => (
+                                <Space>
+                                    <Typography.Text>{order_items.length}</Typography.Text>
+                                </Space>
+                            )}
+                    />
+                    <Column title="Supplier"
+                            render={({supplier}) => (
+                                <Space>
+                                    <Typography.Text>{supplier.name}</Typography.Text>
+                                </Space>
+                            )}
+                    />
+                    <Column title="Action"
+                            render={(record) => (
+                                <Space>
+                                    <Link to={`${record.invoice_no}`}>
+                                        <Button title={'Detail'} icon={<FiInfo/>}/>
+                                    </Link>
+                                    <TlaPrint>
+                                        <PrintReceivedOrder data={record}/>
+                                    </TlaPrint>
+                                </Space>
+                            )}
+                    />
+                </TlaTableWrapper>
+            </ViewAllWrapper>
+        </>
     )
 }
 

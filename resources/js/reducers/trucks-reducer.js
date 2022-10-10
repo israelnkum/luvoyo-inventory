@@ -3,7 +3,8 @@ const initialState = {
     trucks: {
         data: [],
         meta: {}
-    }
+    },
+    filter: {}
 }
 
 export default function trucksReducer (state = initialState, action) {

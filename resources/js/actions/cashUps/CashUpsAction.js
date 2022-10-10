@@ -1,13 +1,31 @@
 import api from '../../utils/api'
-import {addCashUps, allCashUps, deleteCashUps, updateCashUps} from "./ActionCreators";
+import {addCashUps, addFilter, allCashUps, deleteCashUps, updateCashUps} from "./ActionCreators";
+import {completeExport} from "../../utils";
 
-export const handleGetAllCashUps = () => async (dispatch) => {
-    await api().get('/cash-ups')
-        .then((res) => {
+export const handleGetAllCashUps = (params) => async (dispatch) => {
+    return new Promise((resolve, reject) => {
+        api().get(`/cash-ups?${params}`).then((res) => {
             dispatch(allCashUps(res.data))
+            params?.delete('page')
+            params && dispatch(addFilter(Object.fromEntries(params)))
+            resolve(res)
+        }).catch((err) => {
+            reject(err)
         })
-} 
+    })
+}
 
+export const handleExportCashUps = (params) => async () => {
+    return new Promise((resolve, reject) => {
+        api().get(`/cash-ups?${params}`, { responseType: 'blob' })
+            .then((res) => {
+                completeExport(res.data, 'Cash-ups')
+                resolve()
+            }).catch((err) => {
+            reject(err)
+        })
+    })
+}
 
 export const handleAddNewCashUps = (values) => (dispatch) => {
     return new Promise((resolve, reject) => {

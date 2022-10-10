@@ -1,9 +1,10 @@
 import api from '../../utils/api'
 import {addSuppliers, allSuppliers, deleteSuppliers, updateSuppliers} from "./ActionCreators";
+import {completeExport} from "../../utils";
 
-export const handleGetAllSuppliers = (pageNumber = 1) => async (dispatch) => {
+export const handleGetAllSuppliers = (params) => async (dispatch) => {
     return new Promise((resolve, reject) => {
-        api().get(`/suppliers?page=${pageNumber}`).then((res) => {
+        api().get(`/suppliers?${params}`).then((res) => {
             dispatch(allSuppliers(res.data))
             resolve(res)
         }).catch((err) => {
@@ -12,6 +13,17 @@ export const handleGetAllSuppliers = (pageNumber = 1) => async (dispatch) => {
     })
 }
 
+export const handleExportSuppliers = (params) => async () => {
+    return new Promise((resolve, reject) => {
+        api().get(`/suppliers?${params}`, { responseType: 'blob' })
+            .then((res) => {
+                completeExport(res.data, 'Suppliers')
+                resolve()
+            }).catch((err) => {
+            reject(err)
+        })
+    })
+}
 
 export const handleAddNewSuppliers = (values) => (dispatch) => {
     return new Promise((resolve, reject) => {

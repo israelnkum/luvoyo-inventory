@@ -1,6 +1,6 @@
 import React, {useState} from 'react'
 import PropTypes from 'prop-types'
-import {Button, Col, Form, Input, InputNumber, notification, Row} from 'antd'
+import {Button, Col, Form, Input, InputNumber, notification, Row, Space, Typography} from 'antd'
 import {connect} from 'react-redux'
 import {TlaModal} from "../../commons/tla-modal";
 import {useLocation, useNavigate} from "react-router-dom";
@@ -9,10 +9,12 @@ import {handleAddNewCashUps, handleUpdateCashUps} from "../../actions/cashUps/Ca
 import DispatchOrders from "../../commons/form/dispatch-orders";
 import moment from "moment/moment";
 import AllowEditing from "../../commons/allow-editing";
+import {formatAmount} from "../../utils";
 
 function CashUpForm (props) {
     const navigate = useNavigate()
     const { addCashUps, updateCashUps } = props
+    const [searchResults, setSearchResults] = useState(null)
     const [form] = Form.useForm()
     const { state } = useLocation()
     const formValues = {
@@ -54,21 +56,11 @@ function CashUpForm (props) {
                 layout="vertical"
                 name="createCashUpForm"
                 initialValues={formValues}>
-                <Row gutter={10}>
+                <Row gutter={[10, 10]}>
                     <Col span={24}>
-                        <DispatchOrders displayContent={true} form={form} editing={formValues.id === 0}/>
-                    </Col> <br/>
-                    <Col span={24}>
-                        <Form.Item name="received_amount" label="Received Amount"
-                                   rules={[
-                                       {
-                                           required: true,
-                                           message: 'Received Amount is Required'
-                                       }
-                                   ]}>
-                            <InputNumber style={{ width: '100%'}} size={'large'}/>
-                        </Form.Item>
+                        <DispatchOrders setSearchResults={setSearchResults} displayContent={true} form={form} editing={formValues.id === 0}/>
                     </Col>
+
                     <Col>
                         <Form.Item hidden name="id" label="ID"
                                    rules={[
@@ -103,15 +95,54 @@ function CashUpForm (props) {
                             </Col>
                         </Row>
                     </Col>*/}
+                    {
+                        searchResults?.cash_up === null ?
+                            <>
+                                <Col span={24}>
+                                    <Form.Item name="received_amount" label="Received Amount"
+                                               rules={[
+                                                   {
+                                                       required: true,
+                                                       message: 'Received Amount is Required'
+                                                   },
+                                                   {
+                                                       min: formatAmount(searchResults?.total),
+                                                       type: 'number',
+                                                       message: 'Amount is less'
+                                                   }, {
+                                                       max: formatAmount(searchResults?.total),
+                                                       type: 'number',
+                                                       message: 'Amount is High'
+                                                   }
+                                               ]}>
+                                        <InputNumber step={0.01} style={{ width: '100%'}} size={'large'}/>
+                                    </Form.Item>
+                                </Col>
+                                <Col span={24}>
+                                    <Form.Item>
+                                        <div align={'right'}>
+                                            <CloseModal/>&nbsp;
+                                            <Button size={'large'} type="primary" htmlType="submit">
+                                                Submit
+                                            </Button>
+                                        </div>
+                                    </Form.Item>
+                                </Col>
+                            </>
+                            :
+                            <>
+                                {
+                                    (searchResults !== null) &&
+                                    <Col span={24}>
+                                        <Space style={{ justifyContent: 'space-between', display: 'flex'}}>
+                                            <Typography.Text type={'danger'}>CashUp already added</Typography.Text>
+                                            <CloseModal btnText={'Close'}/>
+                                        </Space>
+                                    </Col>
+                                }
+                            </>
+                    }
                 </Row>
-                <Form.Item>
-                    <div align={'right'}>
-                        <CloseModal/>&nbsp;
-                        <Button size={'large'} type="primary" htmlType="submit">
-                            Submit
-                        </Button>
-                    </div>
-                </Form.Item>
             </Form>
         </TlaModal>
     )

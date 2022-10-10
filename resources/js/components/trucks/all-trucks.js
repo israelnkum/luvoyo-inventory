@@ -7,6 +7,7 @@ import {useOutletContext} from 'react-router'
 import ViewAllWrapper from "../../commons/view-all-wrapper";
 import {handleGetAllTrucks} from "../../actions/trucks/TrucksAction";
 import TlaEdit from "../../commons/tla-edit";
+import FilterTrucks from "./filter-trucks";
 
 const { Column } = Table
 function AllTrucks (props) {
@@ -22,18 +23,21 @@ function AllTrucks (props) {
     }, [])
 
     return (
-        <ViewAllWrapper loading={loading} noData={data.length === 0}>
-            <TlaTableWrapper callbackFunction={getTrucks} data={data} meta={meta}>
-                <Column title="Truck Code" dataIndex={'truck_code'}/>
-                <Column title="License Plate" dataIndex={'license_plate'}/>
-                <Column title="Vehicle Type" dataIndex={'vehicle_type'}/>
-                <Column title="Vin Number" dataIndex={'vin_number'}/>
-                <Column title="Description" dataIndex={'description'}/>
-                <Column title="Actions" render={(record) => (
-                    <TlaEdit data={record} icon link={'edit'}/>
-                )}/>
-            </TlaTableWrapper>
-        </ViewAllWrapper>
+        <>
+            <FilterTrucks/>
+            <ViewAllWrapper loading={loading} noData={data.length === 0}>
+                <TlaTableWrapper callbackFunction={getTrucks} data={data} meta={meta}>
+                    <Column title="Truck Code" dataIndex={'truck_code'}/>
+                    <Column title="License Plate" dataIndex={'license_plate'}/>
+                    <Column title="Vehicle Type" dataIndex={'vehicle_type'}/>
+                    <Column title="Vin Number" dataIndex={'vin_number'}/>
+                    <Column title="Description" dataIndex={'description'}/>
+                    <Column title="Actions" render={(record) => (
+                        <TlaEdit data={record} icon link={'edit'}/>
+                    )}/>
+                </TlaTableWrapper>
+            </ViewAllWrapper>
+        </>
     )
 }
 

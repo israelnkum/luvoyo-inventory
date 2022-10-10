@@ -14,10 +14,14 @@ class ReceivedOrderFactory extends Factory
      *
      * @return array<string, mixed>
      */
-    public function definition()
+    public function definition(): array
     {
         return [
-            //
+            'invoice_no' => $this->faker->text(10),
+            'date' => $this->faker->date,
+            'total' => $this->faker->numberBetween(200, 500),
+            'user_id' => 1,
+            'supplier_id' => $this->faker->numberBetween(1, 500)
         ];
     }
 }

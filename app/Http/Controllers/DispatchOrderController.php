@@ -2,29 +2,44 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\DispatchOrderExport;
 use App\Helpers\HelperFunctions;
 use App\Http\Requests\StoreDispatchOrderRequest;
 use App\Http\Requests\UpdateDispatchOrderRequest;
 use App\Http\Resources\DispatchOrderResource;
 use App\Models\DispatchOrder;
 use App\Models\Product;
+use App\Traits\UsePrint;
 use Carbon\Carbon;
+use Exception;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Facades\Excel;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class DispatchOrderController extends Controller
 {
+    use UsePrint;
     /**
      * Display a listing of the resource.
      *
-     * @return AnonymousResourceCollection
+     * @return AnonymousResourceCollection|Response|BinaryFileResponse
      */
-    public function index(): AnonymousResourceCollection
+    public function index(Request $request)
     {
-        return DispatchOrderResource::collection(DispatchOrder::paginate(10));
+        $orders = DispatchOrder::query();
+        if ($request->has('export') && $request->export === 'true'){
+            return  Excel::download(new DispatchOrderExport(DispatchOrderResource::collection($orders->get())), 'Suppliers.xlsx');
+        }
+
+        if ($request->has('print') && $request->print === 'true'){
+            return $this->pdf('print.dispatch-orders', DispatchOrderResource::collection($orders->get()),'Suppliers');
+        }
+        return DispatchOrderResource::collection($orders->paginate(10));
     }
 
     public function show(DispatchOrder $dispatchOrder): DispatchOrderResource
@@ -78,7 +93,7 @@ class DispatchOrderController extends Controller
             ]);
             DB::commit();
             return new DispatchOrderResource($order);
-        }catch (\Exception $exception){
+        }catch (Exception $exception){
             DB::rollBack();
             return response()->json([
                 'message' => $exception->getMessage()
@@ -105,7 +120,7 @@ class DispatchOrderController extends Controller
 
             DB::commit();
             return new DispatchOrderResource($supplier);
-        }catch (\Exception $exception){
+        }catch (Exception $exception){
             DB::rollBack();
             return response()->json([
                 'message' => $exception->getMessage()
@@ -126,7 +141,7 @@ class DispatchOrderController extends Controller
             $dispatchOrder->delete();
             DB::commit();
             return \response()->json('Dispatch Order Deleted');
-        } catch (\Exception $exception) {
+        } catch (Exception $exception) {
             DB::rollBack();
             return response()->json('Something went wrong', 422);
         }

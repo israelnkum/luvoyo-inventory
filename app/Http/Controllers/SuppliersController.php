@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\SupplierExport;
 use App\Helpers\HelperFunctions;
 use App\Http\Requests\StoreSuppliersRequest;
 use App\Http\Requests\UpdateSuppliersRequest;
 use App\Http\Resources\SupplierResource;
 use App\Models\Supplier;
+use App\Traits\UsePrint;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -14,22 +16,34 @@ use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Facades\Excel;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class SuppliersController extends Controller
 {
+    use UsePrint;
     /**
      * Display a listing of the resource.
      *
-     * @return AnonymousResourceCollection
+     * @return AnonymousResourceCollection|Response|BinaryFileResponse
      */
-    public function index(Request $request): AnonymousResourceCollection
+    public function index(Request $request)
     {
-        if ($request->query('page') == 0){
-            $suppliers = Supplier::all();
-        }else{
-            $suppliers = Supplier::paginate(10);
+        $suppliers = Supplier::query();
+
+        if ($request->has('export') && $request->export === 'true'){
+            return  Excel::download(new SupplierExport(SupplierResource::collection($suppliers->get())), 'Suppliers.xlsx');
         }
-        return SupplierResource::collection($suppliers);
+
+        if ($request->has('print') && $request->print === 'true'){
+            return $this->pdf('print.suppliers', SupplierResource::collection($suppliers->get()),'Suppliers');
+        }
+        if ($request->page == 0){
+            return SupplierResource::collection($suppliers->get());
+        }
+
+        return SupplierResource::collection($suppliers->paginate(10));
+
     }
     /**
      * Store a newly created resource in storage.

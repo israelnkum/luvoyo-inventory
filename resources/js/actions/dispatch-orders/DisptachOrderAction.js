@@ -1,5 +1,6 @@
 import api from '../../utils/api'
 import {addDispatchOrder, getDispatchOrder, getDispatchOrders, removeDispatchOrder, updateDispatchOrder,} from './ActionCreators'
+import {completeExport} from "../../utils";
 
 /**
  * Store a newly created resource in storage.
@@ -21,12 +22,24 @@ export const handleAddDispatchOrder = (driver) => (dispatch) => {
  * Display a listing of the resource.
  * @returns {function(*): Promise<unknown>}
  */
-export const handleGetAllDispatchOrders = (pageNumber = 1) => (dispatch) => {
+export const handleGetAllDispatchOrders = (params) => (dispatch) => {
     return new Promise((resolve, reject) => {
-        api().get(`/dispatch-orders?page=${pageNumber}`).then((res) => {
+        api().get(`/dispatch-orders?${params}`).then((res) => {
             dispatch(getDispatchOrders(res.data))
             resolve(res)
         }).catch((err) => {
+            reject(err)
+        })
+    })
+}
+
+export const handleExportDispatchOrders = (params) => async () => {
+    return new Promise((resolve, reject) => {
+        api().get(`/dispatch-orders?${params}`, { responseType: 'blob' })
+            .then((res) => {
+                completeExport(res.data, 'Dispatch-Orders')
+                resolve()
+            }).catch((err) => {
             reject(err)
         })
     })

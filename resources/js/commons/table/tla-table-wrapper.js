@@ -4,11 +4,10 @@ import {Table} from 'antd'
 import { connect } from 'react-redux'
 import TlaPagination from "./TlaPagination";
 
-function TlaTableWrapper ({ meta, data, callbackFunction, children, numberColumn, numberColumnTitle, hasSelection, fetchId, extra }) {
+function TlaTableWrapper ({ meta, data, callbackFunction, children, numberColumn, numberColumnTitle, hasSelection, extra, filterObj }) {
     const [loading, setLoading] = useState(false)
     const [selectedRowKeys, setSelectedRowKeys] = useState([]);
     const onSelectChange = (newSelectedRowKeys) => {
-        console.log('selectedRowKeys changed: ', selectedRowKeys);
         setSelectedRowKeys(newSelectedRowKeys);
     };
 
@@ -17,12 +16,11 @@ function TlaTableWrapper ({ meta, data, callbackFunction, children, numberColumn
         onChange: onSelectChange,
     };
     return (
-
         <TlaPagination extra={extra} meta={meta} loadData={(pageNumber) => {
-            const params = fetchId ? ([fetchId, pageNumber]) : [pageNumber]
+            const urlParams = new URLSearchParams(filterObj)
+            urlParams.append('page', pageNumber);
             setLoading(true);
-
-            (callbackFunction(...params)).then(() => {
+            (callbackFunction(urlParams)).then(() => {
                     setLoading(false)
                 }
             )}}>
@@ -56,7 +54,7 @@ TlaTableWrapper.defaultProps = {
     numberColumnTitle: '#',
     numberColumn: true,
     hasSelection: false,
-    fetchId: null
+    filterObj: null,
 }
 
 TlaTableWrapper.propTypes = {
@@ -65,13 +63,10 @@ TlaTableWrapper.propTypes = {
     callbackFunction: PropTypes.func,
     children: PropTypes.any,
     hasSelection: PropTypes.bool,
-    fetchId: PropTypes.oneOfType([
-        PropTypes.string,
-        PropTypes.number
-    ]),
     numberColumnTitle: PropTypes.string,
     numberColumn: PropTypes.bool,
     extra: PropTypes.any,
+    filterObj: PropTypes.object,
 }
 
 const mapStateToProps = () => {

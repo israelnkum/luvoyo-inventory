@@ -1,5 +1,6 @@
 import api from '../../utils/api'
 import {addProduct, getProduct, getProducts, removeProduct, updateProduct} from './ActionCreators'
+import {completeExport} from "../../utils";
 
 /**
  * Store a newly created resource in storage.
@@ -21,9 +22,9 @@ export const handleAddProduct = (driver) => (dispatch) => {
  * Display a listing of the resource.
  * @returns {function(*): Promise<unknown>}
  */
-export const handleGetAllProducts = (pageNumber = 1) => (dispatch) => {
+export const handleGetAllProducts = (params) => (dispatch) => {
     return new Promise((resolve, reject) => {
-        api().get(`/products?page=${pageNumber}`).then((res) => {
+        api().get(`/products?${params}`).then((res) => {
             dispatch(getProducts(res.data))
             resolve(res)
         }).catch((err) => {
@@ -32,6 +33,17 @@ export const handleGetAllProducts = (pageNumber = 1) => (dispatch) => {
     })
 }
 
+export const handleExportProducts = (params) => async () => {
+    return new Promise((resolve, reject) => {
+        api().get(`/products?${params}`, { responseType: 'blob' })
+            .then((res) => {
+                completeExport(res.data, 'Products')
+                resolve()
+            }).catch((err) => {
+            reject(err)
+        })
+    })
+}
 export const handleGetSingleProduct = (id) => (dispatch) => {
     return new Promise((resolve, reject) => {
         api().get(`/products/${id}`).then((res) => {

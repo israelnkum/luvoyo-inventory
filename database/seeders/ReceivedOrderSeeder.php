@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\ReceivedOrder;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -12,8 +13,8 @@ class ReceivedOrderSeeder extends Seeder
      *
      * @return void
      */
-    public function run()
+    public function run(): void
     {
-        //
+        ReceivedOrder::factory()->count(500)->create();
     }
 }

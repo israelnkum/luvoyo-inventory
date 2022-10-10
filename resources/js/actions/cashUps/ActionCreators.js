@@ -29,3 +29,10 @@ export const updateCashUps = (payload) => {
       payload: payload
   }
 }
+
+export const addFilter = (payload) => {
+    return {
+        type: Types.ADD_CASHUP_FILTER,
+        payload: payload
+    }
+}

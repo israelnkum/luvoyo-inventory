@@ -2,7 +2,7 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\CashUp;
 use Illuminate\Database\Seeder;
 
 class CashUpSeeder extends Seeder
@@ -12,8 +12,8 @@ class CashUpSeeder extends Seeder
      *
      * @return void
      */
-    public function run()
+    public function run(): void
     {
-        //
+        CashUp::factory()->count(500)->create();
     }
 }

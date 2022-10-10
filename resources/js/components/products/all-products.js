@@ -7,6 +7,7 @@ import {useOutletContext} from 'react-router'
 import {handleGetAllProducts} from "../../actions/products/ProductAction";
 import ViewAllWrapper from "../../commons/view-all-wrapper";
 import TlaEdit from "../../commons/tla-edit";
+import FilterProducts from "./filter-products";
 
 const { Column } = Table
 function AllTrucks (props) {
@@ -22,31 +23,34 @@ function AllTrucks (props) {
     }, [])
 
     return (
-        <ViewAllWrapper loading={loading} noData={data.length === 0}>
-            <TlaTableWrapper callbackFunction={getProducts} data={data} meta={meta}>
-                <Column title="Item Name"
-                        render={({name, code}) => (
-                            <Space direction={'vertical'}>
-                               <Typography.Text>{name}</Typography.Text>
-                               <Tag>{code}</Tag>
-                            </Space>
-                        )}
-                />
-                <Column title="Selling Price" dataIndex={'selling_price'}/>
-                <Column title="Cost Price" dataIndex={'cost_price'}/>
-                <Column title="Profit" dataIndex={'profit'}/>
-                <Column title="Brand" dataIndex={'brand'}/>
-                <Column title="Quantity" dataIndex={'quantity'}/>
-                <Column title="Supplier" dataIndex={'supplier'}/>
-                <Column title="Action"
-                    render={(record) => (
-                        <Space>
-                            <TlaEdit icon data={record} link={'edit'} type={'text'}/>
-                        </Space>
-                    )}
-                />
-            </TlaTableWrapper>
-        </ViewAllWrapper>
+        <>
+            <FilterProducts/>
+            <ViewAllWrapper loading={loading} noData={data.length === 0}>
+                <TlaTableWrapper callbackFunction={getProducts} data={data} meta={meta}>
+                    <Column title="Item Name"
+                            render={({name, code}) => (
+                                <Space direction={'vertical'}>
+                                    <Typography.Text>{name}</Typography.Text>
+                                    <Tag>{code}</Tag>
+                                </Space>
+                            )}
+                    />
+                    <Column title="Selling Price" dataIndex={'selling_price'}/>
+                    <Column title="Cost Price" dataIndex={'cost_price'}/>
+                    <Column title="Profit" dataIndex={'profit'}/>
+                    <Column title="Brand" dataIndex={'brand'}/>
+                    <Column title="Quantity" dataIndex={'quantity'}/>
+                    <Column title="Supplier" dataIndex={'supplier'}/>
+                    <Column title="Action"
+                            render={(record) => (
+                                <Space>
+                                    <TlaEdit icon data={record} link={'edit'} type={'text'}/>
+                                </Space>
+                            )}
+                    />
+                </TlaTableWrapper>
+            </ViewAllWrapper>
+        </>
     )
 }
 
@@ -61,7 +65,7 @@ const mapStateToProps = (state) => ({
 })
 
 const mapDispatchToProps = (dispatch) => ({
-    getProducts: (payload) => dispatch(handleGetAllProducts(payload))
+    getProducts: (params) => dispatch(handleGetAllProducts(params))
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(AllTrucks)
