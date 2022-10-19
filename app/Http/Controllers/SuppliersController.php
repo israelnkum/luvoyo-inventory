@@ -38,7 +38,7 @@ class SuppliersController extends Controller
         if ($request->has('print') && $request->print === 'true'){
             return $this->pdf('print.suppliers', SupplierResource::collection($suppliers->get()),'Suppliers');
         }
-        if ($request->page == 0){
+        if ($request->has('page') && $request->page == 0){
             return SupplierResource::collection($suppliers->get());
         }
 

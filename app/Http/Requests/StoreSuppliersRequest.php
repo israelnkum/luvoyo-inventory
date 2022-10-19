@@ -21,10 +21,20 @@ class StoreSuppliersRequest extends FormRequest
      *
      * @return array<string, mixed>
      */
-    public function rules()
+    public function rules(): array
     {
         return [
-            //
+            'name' => 'required|unique:suppliers',
+            'location' => 'required',
+            'contact_person' => 'required',
+            'phone' => 'required|numeric',
         ];
+    }
+
+    public function messages(): array
+    {
+       return [
+         'phone.numeric' => 'Invalid Phone Number'
+       ];
     }
 }

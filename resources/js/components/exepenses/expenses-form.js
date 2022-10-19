@@ -90,7 +90,7 @@ function ExpensesForm (props) {
                                 message: 'Amount is Required'
                             }
                         ]}>
-                            <InputNumber style={{ width: '100%'}} step={0.01} size={'large'}/>
+                            <Input type={'number'} style={{ width: '100%'}} step={0.01} size={'large'}/>
                         </Form.Item>
                     </Col>
                     <Col span={24}>

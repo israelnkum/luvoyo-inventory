@@ -1,5 +1,5 @@
 import api from '../../utils/api'
-import {addCashUps, addFilter, allCashUps, deleteCashUps, updateCashUps} from "./ActionCreators";
+import {addCashUps, addFilter, allCashUps, deleteCashUps, getChartData, updateCashUps} from "./ActionCreators";
 import {completeExport} from "../../utils";
 
 export const handleGetAllCashUps = (params) => async (dispatch) => {
@@ -21,6 +21,18 @@ export const handleExportCashUps = (params) => async () => {
             .then((res) => {
                 completeExport(res.data, 'Cash-ups')
                 resolve()
+            }).catch((err) => {
+            reject(err)
+        })
+    })
+}
+
+export const handleGetChartData = (data) => async (dispatch) => {
+    return new Promise((resolve, reject) => {
+        api().post('/cash-ups/chart', data)
+            .then((res) => {
+                dispatch(getChartData(res.data))
+                resolve(res)
             }).catch((err) => {
             reject(err)
         })

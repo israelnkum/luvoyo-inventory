@@ -20,7 +20,7 @@ class SupplierResource extends JsonResource
             'location' => $this->location,
             'contact_person' => $this->contact_person,
             'phone' => $this->phone,
-            'logo' => '/storage/images/suppliers/' . $this->photo->file_name,
+            'logo' => '/storage/suppliers/' . $this->photo->file_name,
             'user_id' => $this->user_id
         ];
     }

@@ -1,5 +1,5 @@
-import { Types } from '../actions/expenses/Types'
-import moment from "moment";
+import {Types} from '../actions/expenses/Types'
+
 const initialState = {
     expenses: {
         data: [],
@@ -8,6 +8,10 @@ const initialState = {
     filter: {
         date: '',
         category: 'all'
+    },
+    chart: {
+        labels: [],
+        series: [],
     }
 }
 
@@ -18,6 +22,9 @@ export default function expensesReducer (state = initialState, action) {
 
         case Types.ADD_EXPENSES_FILTER:
             return { ...state, filter: action.payload}
+
+        case Types.GET_EXPENSES_CHART:
+            return { ...state, chart: action.payload}
 
         case Types.ADD_EXPENSES:
             return {

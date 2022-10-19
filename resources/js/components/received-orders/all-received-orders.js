@@ -20,7 +20,7 @@ function AllReceivedOrders (props) {
     const [loading, setLoading] = useState(true)
     const { setPageInfo } = useOutletContext();
     useEffect(() => {
-        setPageInfo({ title: 'Received Orders', addLink: '/received-orders/add', buttonText: 'Received Orders' })
+        setPageInfo({ title: 'Received Orders', addLink: '/received-orders/add', buttonText: 'Orders' })
         getReceivedOrders().then(() => {
             setLoading(false)
         })

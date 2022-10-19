@@ -3,9 +3,9 @@
         <tbody>
         <tr >
             <td style="background: #fff">
-                Logo
+                <img height="auto" width="150" src="{{public_path('/images/logo.jpeg')}}" alt="Logo">
             </td>
-            <td style="background: #fff; width: 50%"></td>
+            <td style="background: #fff; width: 30%"></td>
             <td  style="text-align: right; background: #fff; line-height: 0.2;">
                 <div style="text-align: left">
                     <h3>{{$business->name}}</h3>

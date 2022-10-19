@@ -39,6 +39,7 @@ class DispatchOrderController extends Controller
         if ($request->has('print') && $request->print === 'true'){
             return $this->pdf('print.dispatch-orders', DispatchOrderResource::collection($orders->get()),'Suppliers');
         }
+
         return DispatchOrderResource::collection($orders->paginate(10));
     }
 

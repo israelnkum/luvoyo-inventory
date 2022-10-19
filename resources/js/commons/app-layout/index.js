@@ -1,6 +1,5 @@
 import React, {useEffect, useState} from 'react'
 import {Layout, Spin} from 'antd'
-import {isMobile} from 'react-device-detect'
 import PropTypes from 'prop-types'
 import AppHeader from "./app-header";
 import AppSidebar from "./app-sidebar";
@@ -29,7 +28,7 @@ const AppLayout = (props) => {
                     <ChangePassword/> :
                     <Layout>
                         <AppSidebar setCollapsed={toggle} collapsed={open}/>
-                        <Layout style={{ marginLeft: isMobile ? 0 : (open ? 80 : 200) }}>
+                        <Layout>
                             <Layout.Content style={{ margin: '0 15px 50px' }}>
                                 <AppHeader/>
                                 {/*<PageCrumbs/>*/}

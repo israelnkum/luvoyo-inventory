@@ -115,10 +115,4 @@ class TruckController extends Controller
         return TrucksResource::collection($products);
     }
 
-//    public function downloadPdf($data): Response
-//    {
-//        return PDF::loadView('print.trucks', compact('data'))
-//            ->setPaper('a4')
-//            ->download('Trucks.pdf');
-//    }
 }

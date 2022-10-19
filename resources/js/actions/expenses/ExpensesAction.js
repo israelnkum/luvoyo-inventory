@@ -1,5 +1,5 @@
 import api from '../../utils/api'
-import {addExpenses, addFilter, allExpenses, deleteExpenses, updateExpenses} from "./ActionCreators";
+import {addExpenses, addFilter, allExpenses, deleteExpenses, getChartData, updateExpenses} from "./ActionCreators";
 import {completeExport} from "../../utils";
 
 export const handleGetAllExpenses = (params) => async (dispatch) => {
@@ -41,6 +41,17 @@ export const handleUpdateExpenses = (values) => (dispatch) => {
     return new Promise((resolve, reject) => {
         api().put(`/expenses/${values.id}`, values).then((res) => {
             dispatch(updateExpenses(res.data))
+            resolve()
+        }).catch((err) => {
+            reject(err)
+        })
+    })
+}
+
+export const handleGetChartData = (data) => (dispatch) => {
+    return new Promise((resolve, reject) => {
+        api().post('expenses/chart', data).then((res) => {
+            dispatch(getChartData(res.data))
             resolve()
         }).catch((err) => {
             reject(err)

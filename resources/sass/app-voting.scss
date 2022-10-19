@@ -254,7 +254,10 @@ div{
 button, input, .ant-input, .ant-picker, .ant-card {
     border-radius: 8px !important;
 }
-
+.print-table th{
+    text-decoration: underline;
+    font-weight: bolder !important;
+}
 th {
     text-transform: uppercase !important;
     font-size: 12px !important;

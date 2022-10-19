@@ -1,7 +1,7 @@
 import React, {useState} from 'react'
 import {connect} from 'react-redux'
 import {Outlet} from 'react-router'
-import {Button, Card, Col, Row, Space} from 'antd'
+import {Button, Card, Col, Row, Space, Typography} from 'antd'
 import {FiPlus} from 'react-icons/fi'
 import {createGlobalStyle} from 'styled-components'
 import TlaAddNew from '../../commons/tla-add-new'
@@ -32,7 +32,7 @@ function PageWrapper () {
             <Col span={12}>
                 <Space>
                     {/*<Button icon={<FiArrowLeft/>}>Go Back</Button>*/}
-                    <h3 className="text-title" style={{ fontSize: 18, paddingTop: 5 }}>{pageInfo.title}</h3>
+                    <Typography.Text style={{ fontSize: 18, paddingTop: 5 }}>{pageInfo.title}</Typography.Text>
                 </Space>
             </Col>
             <Col span={12}>
@@ -42,10 +42,10 @@ function PageWrapper () {
                         {
                             pageInfo.modalLink ?
                                 <Link to={pageInfo.addLink}>
-                                    <Button size={'large'} type={'default'}>{pageInfo.buttonText ?? pageInfo.title}</Button>
+                                    <Button type={'default'}>{pageInfo.buttonText ?? pageInfo.title}</Button>
                                 </Link> :
                                 <TlaAddNew link={pageInfo.addLink} data={pageInfo?.extraInfo}>
-                                    <Button size={'large'} type={'primary'} icon={<FiPlus/>}>&nbsp;Add {pageInfo.buttonText ?? pageInfo.title}</Button>
+                                    <Button type={'primary'} icon={<FiPlus/>}>&nbsp;Add {pageInfo.buttonText ?? pageInfo.title}</Button>
                                 </TlaAddNew>
                         }
 

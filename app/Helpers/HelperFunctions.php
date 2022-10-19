@@ -2,13 +2,14 @@
 
 namespace App\Helpers;
 
+use App\Models\Role;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
 class HelperFunctions
 {
-    static function saveImage($model, $file, $directory): void
+    public static function saveImage($model, $file, $directory): void
     {
         $image_name = uniqid() . '.' . $file->getClientOriginalExtension();
         $file->storeAs(env('APP_PHOTO_PATH') . '/' . $directory . '/', $image_name);
@@ -17,25 +18,11 @@ class HelperFunctions
         ]);
     }
 
-    static function createUserName($firstName, $lastName): string
-    {
-        $username = str_replace(' ', '', $firstName) . '.' . str_replace(' ', '', $lastName);
-        $checkUsername = User::query()->where('username', $username)->count();
-
-        if ($checkUsername > 0) {
-            $username = $username . '_' . mt_rand(10, 150);
-        }
-        return strtolower($username);
-    }
-
-    static function createUserAccount($model, $data, $userName = null): void
+    public static function createUserAccount($model, $data, $userName = null): void
     {
 
-//        $actual = $userName == null
-//            ? self::createUserName($data['first_name'], $data['last_name'])
-//            : $userName;
         $password = strtoupper(Str::random(10));
-        $model::find($data['id'])->user()->updateOrCreate(
+       $user = $model::find($data['id'])->user()->updateOrCreate(
             ['username' => $data['email']],
             [
                 'username' => $data['email'],
@@ -46,6 +33,10 @@ class HelperFunctions
                 'default_password' => $password,
             ]
         );
+
+        $role = Role::where('name', 'Staff')->first();
+
+        $user->roles()->attach($role->id);
     }
 
 

@@ -33,7 +33,7 @@ class CashUpController extends Controller
     {
         $cashUpQuery = CashUp::query();
         $cashUpQuery->when($request->has('truck_code') && $request->truck_code !== null, static function (Builder $q) use ($request){
-             $q->whereRelation('dispatchOrder.truck', 'truck_code', $request->truck_code);
+            $q->whereRelation('dispatchOrder.truck', 'truck_code', $request->truck_code);
         });
 
         if ($request->has('export') && $request->export === 'true'){
@@ -128,5 +128,27 @@ class CashUpController extends Controller
             DB::rollBack();
             return response()->json('Something went wrong', 422);
         }
+    }
+
+    public function getChartData(Request $request): array
+    {
+        if ($request->has('range')){
+            $from = Carbon::parse($request->range[0]);
+            $to = Carbon::parse($request->range[1]);
+        }else{
+            $from = Carbon::parse()->startOfMonth();
+            $to = Carbon::parse()->endOfMonth();
+        }
+
+        $cashUps = CashUp::query()->whereBetween('created_at',[$from, $to])->get();
+
+        return [
+            'labels' => ['Expected', 'Received', 'Balance'],
+            'series' => [
+                $cashUps->sum('expected_amount'),
+                $cashUps->sum('received_amount'),
+                $cashUps->sum('balance'),
+            ]
+        ];
     }
 }

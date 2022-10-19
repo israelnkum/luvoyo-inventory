@@ -40,6 +40,18 @@ function ReceivedOrdersForm (props) {
             })
         })
     }
+
+    const onFieldsChange = (changedFields, allFields) => {
+        const allItems =  JSON.parse(localStorage.getItem('received_items')) || []
+        const {name, value} = changedFields[0]
+        const item = allItems[name[1]]
+        if (item !== undefined){
+            item[name[2]] = value
+        }
+
+        localStorage.setItem('received_items', JSON.stringify(allItems))
+    }
+
     return (
         <>
             {
@@ -54,6 +66,7 @@ function ReceivedOrdersForm (props) {
                 title={(formValues.id === 0 ? "New" : "Edit") + " Received Order"}
             >
                 <Form
+                    onFieldsChange={onFieldsChange}
                     form={form}
                     onFinish={submit}
                     layout="vertical"
@@ -99,17 +112,7 @@ function ReceivedOrdersForm (props) {
                                         </Form.Item>
                                     </Col>
                                     <Col span={24}>
-                                        <Form.Item
-                                            name="supplier_id"
-                                            rules={[
-                                                {
-                                                    required: true,
-                                                    message: "Supplier ID is Required",
-                                                },
-                                            ]}
-                                        >
-                                            <Suppliers form={form} />
-                                        </Form.Item>
+                                        <Suppliers form={form} />
                                     </Col>
                                 </Row>
                             </Card>

@@ -18,6 +18,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Maatwebsite\Excel\Facades\Excel;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class ExpenseController extends Controller
 {
@@ -25,7 +26,7 @@ class ExpenseController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return AnonymousResourceCollection|Response|\Symfony\Component\HttpFoundation\BinaryFileResponse
+     * @return AnonymousResourceCollection|Response|BinaryFileResponse
      */
     public function index(Request $request)
     {
@@ -41,7 +42,7 @@ class ExpenseController extends Controller
         });
 
         if ($request->has('export') && $request->export === 'true'){
-           return  Excel::download(new ExportExpenses(ExpensesResource::collection($expensesQuery->get())), 'Expenses.xlsx');
+            return  Excel::download(new ExportExpenses(ExpensesResource::collection($expensesQuery->get())), 'Expenses.xlsx');
         }
 
         if ($request->has('print') && $request->print === 'true'){
@@ -120,5 +121,26 @@ class ExpenseController extends Controller
             DB::rollBack();
             return response()->json('Something went wrong', 422);
         }
+    }
+
+    public function getChartData(Request $request){
+        if ($request->has('range')){
+            $from = \Carbon\Carbon::parse($request->range[0]);
+            $to = Carbon::parse($request->range[1]);
+        }else{
+            $from = Carbon::parse()->startOfMonth();
+            $to = Carbon::parse()->endOfMonth();
+        }
+
+        $expenses = Expense::query()->whereBetween('created_at',[$from, $to])
+            ->get()->groupBy('category')
+            ->map(function ($row) {
+                return $row->sum('amount');
+            });
+
+        return [
+            'labels' => $expenses->keys(),
+            'series' => $expenses->values()
+        ];
     }
 }

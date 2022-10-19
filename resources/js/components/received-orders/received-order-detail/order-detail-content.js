@@ -14,11 +14,11 @@ function OrderDetailContent({data, cols}) {
                           xs: cols,
                       }}>
             <Descriptions.Item label="invoice no">{data.invoice_no}</Descriptions.Item>
-            <Descriptions.Item label="Total">{data.total}</Descriptions.Item>
+            <Descriptions.Item label="Total">R{data.total - data.damaged_total}</Descriptions.Item>
 
             {/*<Descriptions.Item label="Qty">{data.order_items.length}</Descriptions.Item>
             <Descriptions.Item label="Supplier">{data.supplier.name}</Descriptions.Item>*/}
-            <Descriptions.Item label="damaged total">{data.damaged_total}</Descriptions.Item>
+            <Descriptions.Item label="damaged total">R{data.damaged_total}</Descriptions.Item>
             <Descriptions.Item label="date">{data.date}</Descriptions.Item>
         </Descriptions>
     )

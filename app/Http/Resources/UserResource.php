@@ -23,6 +23,7 @@ class UserResource extends JsonResource
             'username' => $this->username,
             'phone_number' => $this->phone_number,
             'default_password' => $this->default_password,
+            'photo' => $this->userable->photo ? '/storage/employees/' . $this->userable->photo->file_name : null,
             'roles' => $this->roles
         ];
     }

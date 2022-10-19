@@ -21,12 +21,13 @@ function EmployeeForm (props) {
         id: 0,
         create_account: false,
         staff_id: null,
+        home_address: '',
+        remarks: '',
         ...{...state.data, dob: state?.data ? moment(state?.data.dob) : ''}
     }
     const [editing, setEditing] = useState(formValues.id !== 0)
 
     const submit = (values) => {
-
         const formData = new FormData()
         values.id !== 0 && formData.append('_method', 'PUT')
         formData.append('file', selectedFile);
@@ -89,7 +90,7 @@ function EmployeeForm (props) {
                                    rules={[
                                        {
                                            required: true,
-                                           message: 'Surname is Required'
+                                           message: 'Other name is Required'
                                        }
                                    ]}>
                             <Input size={'large'}/>
@@ -118,7 +119,7 @@ function EmployeeForm (props) {
                                            message: 'Mobile No. is Required'
                                        }
                                    ]}>
-                            <Input size={'large'}/>
+                            <Input type={'number'} size={'large'}/>
                         </Form.Item>
                     </Col>
                     <Col span={8}>

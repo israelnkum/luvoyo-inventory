@@ -22,7 +22,7 @@ class DispatchOrderResource extends JsonResource
             'order_no' => $this->order_no,
             'truck_id' => $this->truck_id,
             'truck' => new TrucksResource($this->truck),
-            'total' => 'R'.$this->total,
+            'total' => $this->total,
             'qty' => $this->qty,
             'date_time' => $this->date_time,
             'order_items' =>DispatchOrderItemResource::collection($this->orderItems),

@@ -19,10 +19,11 @@ function DispatchOrderForm (props) {
     const navigate = useNavigate()
     const { addDispatchOrder } = props
     const [form] = Form.useForm()
+    const existingItems =  JSON.parse(localStorage.getItem('items')) || []
     const formValues = {
         id: 0,
         dispatch_date: moment(),
-        products: JSON.parse(localStorage.getItem('items')) || []
+        products: existingItems
     }
 
     const submit = (values) => {
@@ -43,6 +44,15 @@ function DispatchOrderForm (props) {
         })
     }
 
+    const onFieldsChange = (changedFields, allFields) => {
+        const allItems =  JSON.parse(localStorage.getItem('items')) || []
+        const {name, value} = changedFields[0]
+        const item = allItems[name[1]]
+        if (item !== undefined){
+            item.qty = value
+            localStorage.setItem('items', JSON.stringify(allItems))
+        }
+    }
     return (
         <>
             {
@@ -53,6 +63,7 @@ function DispatchOrderForm (props) {
             }
             <TlaModal width={'90%'} title={(formValues.id === 0 ? 'New' : 'Edit') + ' Dispatch Order'}>
                 <Form
+                    onFieldsChange={onFieldsChange}
                     form={form}
                     onFinish={submit}
                     layout="vertical"

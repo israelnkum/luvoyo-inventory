@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import {Image} from "antd";
-import Logo from '../../../assets/img/defalut-logo.png'
+import Logo from '../../../assets/img/logo.jpeg'
 import '../../../assets/css/print-invoice.css'
 import {connect} from "react-redux";
 import {createGlobalStyle} from "styled-components";

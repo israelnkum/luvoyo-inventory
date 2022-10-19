@@ -12,6 +12,7 @@ use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -25,24 +26,33 @@ class UserController extends Controller
     {
         $this->middleware('auth');
     }
+
     /**
      * Display a listing of the resource.
      *
-     * @return
+     * @return AnonymousResourceCollection
      */
-    public function index()
+    public function index(): AnonymousResourceCollection
     {
         return UserResource::collection(User::withTrashed()->whereHas('activeRoles', function ($q){
             $q->where('name', 'Admin')->orWhere('name', 'EC')->orWhere('name', 'Agent');
         })->get());
     }
 
-    public function getActiveRoles($id): array
+    public function getActiveRoles()
     {
         $loggedInUser = Auth::user();
-        $activeRoles = [];
+        if ($loggedInUser) {
+            $activeRoles = $loggedInUser->roles()->first()->name;
+            return [
+                new UserResource($loggedInUser),
+                [$activeRoles]
+            ];
+        }
 
-        return [$loggedInUser->only(['id', 'name', 'username', 'default_password']), $activeRoles];
+        return response()->json([
+            'message' => 'Unauthenticated'
+        ]);
 
     }
 
@@ -52,13 +62,13 @@ class UserController extends Controller
      * @param Request $request
      * @return Response
      */
-    public function store(Request $request)
+    public function store(Request $request): ?Response
     {
         $username = $request->firstName.'.'.$request->lastName;
         $checkUsername = User::where('username',$username)->count();
 
         if ($checkUsername >= 1){
-            $username = $username.'_'.mt_rand(10,150);
+            $username .= '_' . mt_rand(10, 150);
         }
         DB::beginTransaction();
         $request['username'] = strtolower($username);
@@ -74,16 +84,6 @@ class UserController extends Controller
         }
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return Response
-     */
-    public function show($id)
-    {
-        //
-    }
 
     /**
      * Update the specified resource in storage.
@@ -101,7 +101,7 @@ class UserController extends Controller
             DB::commit();
 
             $user = User::find($id);
-            return \response($request->has('voter') ? new VoterResource($user) : new UserResource($user));
+            return \response(new UserResource($user));
 
         }catch (Exception $exception){
             DB::rollBack();
@@ -109,7 +109,8 @@ class UserController extends Controller
         }
     }
 
-    public function getUserRoles($id){
+    public function getUserRoles($id): array
+    {
         $userRoles = User::find($id)->roles;
         $otherRoles = Role::whereNotIn('id', $userRoles->pluck('pivot.roleId'))->get();
 
@@ -148,7 +149,6 @@ class UserController extends Controller
             ]);
             DB::commit();
             return [$user->only(['id', 'name', 'username', 'default_password']), []];
-//            return \response(new UserResource($user));
         }catch (Exception $exception){
             DB::rollBack();
             return \response('Something went wrong!', 400);

@@ -16,6 +16,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Maatwebsite\Excel\Facades\Excel;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
@@ -37,6 +38,7 @@ class EmployeeController extends Controller
         if ($request->has('print') && $request->print === 'true'){
             return $this->pdf('print.employees', EmployeeResource::collection($employees->get()),'Employees', 'landscape');
         }
+
         return EmployeeResource::collection($employees->paginate(10));
     }
 
@@ -53,7 +55,7 @@ class EmployeeController extends Controller
             $request['user_id'] = Auth::user()->id;
             $request['dob'] = Carbon::parse($request->dob)->format('Y-m-d');
             $employee = Employee::create($request->all());
-            if ($request->has('create_account') && $request->create_account == 'true'){
+            if ($request->has('create_account') && $request->create_account === 'true'){
                 $data = [
                     'id' => $employee->id,
                     'first_name' => $request->other_names,
@@ -64,7 +66,7 @@ class EmployeeController extends Controller
             }
 
             // upload picture if picture is part of request
-            if ($request->has('file') && $request->file != "null"){
+            if ($request->has('file') && $request->file !== "null"){
                HelperFunctions::saveImage($employee, $request->file('file'), 'employees');
             }
 
@@ -72,6 +74,7 @@ class EmployeeController extends Controller
             return new EmployeeResource($employee);
         }catch (Exception $exception){
             DB::rollBack();
+            Log::info($exception);
             return response()->json([
                 'message' => $exception->getMessage()
             ], 400);

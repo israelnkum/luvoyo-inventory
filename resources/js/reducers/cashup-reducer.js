@@ -6,6 +6,10 @@ const initialState = {
     },
     filter: {
         truck_code: ''
+    },
+    chart: {
+        labels: [],
+        series: [],
     }
 }
 
@@ -13,6 +17,9 @@ export default function cashUpsReducer (state = initialState, action) {
     switch (action.type) {
         case Types.ALL_CASH_UPS:
             return { ...state, cashUps: action.payload }
+
+        case Types.GET_CHART_DATA:
+            return { ...state, chart: action.payload }
 
         case Types.ADD_CASHUP_FILTER:
             return { ...state, filter: action.payload}

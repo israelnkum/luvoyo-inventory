@@ -25,7 +25,15 @@ class StoreEmployeeRequest extends FormRequest
     public function rules(): array
     {
         return [
-
+            'surname' => 'required',
+            'email' => 'required|unique:users',
+            'other_names' => 'required',
+            'dob' => 'required',
+            'gender' => 'required',
+            'telephone' => 'required',
+            'home_address',
+            'id_type' => 'required',
+            'id_number' => 'required',
         ];
     }
 }

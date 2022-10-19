@@ -21,7 +21,7 @@ const PrintStyles = createGlobalStyle`
     font-weight: 700;
 }
 .signature-title{
-    font-size: 15px;
+    font-size: 12px;
 }
 `
 function PrintFooter (props) {
@@ -33,9 +33,9 @@ function PrintFooter (props) {
             <div className='summary'>
                 <div className='total-amount'>
                     <div>
-                        <h5>TOTAL</h5>
+                        <h6>TOTAL</h6>
                         {/*GH&#8373;*/}
-                        <h3>{total}</h3> <br/>
+                        <h6>R{total}</h6> <br/>
                     </div>
                 </div>
                 <div className={'note'}>
@@ -52,7 +52,7 @@ function PrintFooter (props) {
                             <p>........................................</p>
                             <p className={'signature-title'}>Truck Driver</p>
                         </div>
-                    </Space>
+                    </Space> <br/>
                 </div>
             </div>
         </>

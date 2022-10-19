@@ -38,6 +38,7 @@ class ProductController extends Controller
         if ($request->has('print') && $request->print === 'true'){
             return $this->pdf('print.products', ProductsResource::collection($product->get()),'Products');
         }
+
         return ProductsResource::collection($product->paginate(10));
     }
 

@@ -36,3 +36,10 @@ export const addFilter = (payload) => {
         payload: payload
     }
 }
+
+export const getChartData = (payload) => {
+    return {
+        type: Types.GET_CHART_DATA,
+        payload: payload
+    }
+}

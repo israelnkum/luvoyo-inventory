@@ -26,15 +26,6 @@ class OrderReturnController extends Controller
         return OrderReturnResource::collection(OrderReturn::paginate(10));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return Response
-     */
-    public function create()
-    {
-        //
-    }
 
     /**
      * Store a newly created resource in storage.
@@ -69,50 +60,5 @@ class OrderReturnController extends Controller
                 'message' => $exception->getMessage()
             ], 400);
         }
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param OrderReturn $dispatchOrderReturn
-     * @return Response
-     */
-    public function show(OrderReturn $dispatchOrderReturn)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param OrderReturn $dispatchOrderReturn
-     * @return Response
-     */
-    public function edit(OrderReturn $dispatchOrderReturn)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param UpdateDispatchOrderReturnRequest $request
-     * @param OrderReturn $dispatchOrderReturn
-     * @return Response
-     */
-    public function update(UpdateDispatchOrderReturnRequest $request, OrderReturn $dispatchOrderReturn)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param OrderReturn $dispatchOrderReturn
-     * @return Response
-     */
-    public function destroy(OrderReturn $dispatchOrderReturn)
-    {
-        //
     }
 }

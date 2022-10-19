@@ -12,9 +12,14 @@ function Products(props) {
             search={getProducts} onChangeCallback={(product) => {
             if (product !== undefined) {
                 const items = JSON.parse(localStorage.getItem(localKey)) || []
-                localStorage.setItem(localKey, JSON.stringify(addOrRemoveItem(items, {
-                    id: product.id, name: product.name, selling_price: product.selling_price
-                })))
+                localStorage.setItem(localKey, JSON.stringify(
+                    addOrRemoveItem(items, {
+                        id: product.id,
+                        name: product.name,
+                        selling_price: product.selling_price,
+                        qty_damaged: 0
+                    })
+                ))
                 onChange(items.findIndex(itm => itm.id === product.id) > -1)
             }
         }}/>

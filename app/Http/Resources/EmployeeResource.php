@@ -25,7 +25,7 @@ class EmployeeResource extends JsonResource
             'gender' => $this->gender,
             'email' => $this->email,
             'telephone' => $this->telephone,
-            'photo' => $this->photo ? '/storage/images/employees/' . $this->photo->file_name : null,
+            'photo' => $this->photo ? '/storage/employees/' . $this->photo->file_name : null,
             'home_address' => $this->home_address,
             'id_type' => $this->id_type,
             'id_number' => $this->id_number,

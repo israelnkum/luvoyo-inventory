@@ -22,6 +22,7 @@ use Maatwebsite\Excel\Facades\Excel;
 class ReceivedOrderController extends Controller
 {
     use UsePrint;
+
     /**
      * Display a listing of the resource.
      *
@@ -31,12 +32,13 @@ class ReceivedOrderController extends Controller
     {
 
         $orders = ReceivedOrder::query();
-        if ($request->has('export') && $request->export === 'true'){
-            return  Excel::download(new ReceivedOrderExport(ReceivedOrderResource::collection($orders->get())), 'Suppliers.xlsx');
+        if ($request->has('export') && $request->export === 'true') {
+            return Excel::download(new ReceivedOrderExport(ReceivedOrderResource::collection($orders->get())),
+                'Suppliers.xlsx');
         }
 
-        if ($request->has('print') && $request->print === 'true'){
-            return $this->pdf('print.received-orders', ReceivedOrderResource::collection($orders->get()),'Suppliers');
+        if ($request->has('print') && $request->print === 'true') {
+            return $this->pdf('print.received-orders', ReceivedOrderResource::collection($orders->get()), 'Suppliers');
         }
         return ReceivedOrderResource::collection($orders->paginate(10));
     }
@@ -63,7 +65,7 @@ class ReceivedOrderController extends Controller
             ]);
 
             $total = 0;
-            foreach ($request['products'] as $product){
+            foreach ($request['products'] as $product) {
                 $findProduct = Product::find($product['id']);
 
                 // deduct or add up to qty
@@ -72,7 +74,7 @@ class ReceivedOrderController extends Controller
                 ]);
 
                 $subTotal = $product['qty'] * $findProduct->selling_price;
-                $total  = $total + $subTotal;
+                $total = $total + $subTotal;
 
                 $order->orderItems()->create([
                     'product_id' => $findProduct->id,
@@ -87,36 +89,11 @@ class ReceivedOrderController extends Controller
             $order->update(['total' => $total]);
             DB::commit();
             return new ReceivedOrderResource($order);
-        }catch (Exception $exception){
+        } catch (Exception $exception) {
             DB::rollBack();
             return response()->json([
                 'message' => $exception->getMessage()
             ], 400);
         }
-    }
-
-
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param UpdateReceivedOrderRequest $request
-     * @param ReceivedOrder $receivedOrder
-     * @return Response
-     */
-    public function update(UpdateReceivedOrderRequest $request, ReceivedOrder $receivedOrder)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param ReceivedOrder $receivedOrder
-     * @return Response
-     */
-    public function destroy(ReceivedOrder $receivedOrder)
-    {
-        //
     }
 }

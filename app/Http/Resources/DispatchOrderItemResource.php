@@ -18,10 +18,10 @@ class DispatchOrderItemResource extends JsonResource
             'id' => $this->id,
             'product_id' => $this->product_id,
             'item' => $this->product->name,
-            'selling_price' => 'R'.$this->selling_price,
+            'selling_price' => $this->selling_price,
             'dispatch_order_id' => $this->dispatch_order_id,
             'qty' => $this->qty,
-            'sub_total' => 'R'.$this->sub_total,
+            'sub_total' => $this->sub_total,
         ];
     }
 }

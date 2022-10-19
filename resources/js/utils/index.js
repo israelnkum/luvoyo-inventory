@@ -112,7 +112,7 @@ export const SidebarMenus = [
         title: 'Cash-ups',
         link: '/cash-ups',
         children: [],
-        permissions: ['Admin'],
+        permissions: ['Admin', 'Staff'],
         icon: 'cash-up'
     },
     /*  {
@@ -152,7 +152,7 @@ export const SidebarMenus = [
                 link: '/dispatch-orders',
             }
         ],
-        permissions: ['Admin'],
+        permissions: ['Admin', 'Staff'],
         icon: 'dispatch-order'
     },
     {
@@ -172,7 +172,7 @@ export const SidebarMenus = [
                 link: '/received-orders',
             }
         ],
-        permissions: ['Admin'],
+        permissions: ['Admin', 'Staff'],
         icon: 'dispatch-order'
     },
     {
@@ -215,26 +215,6 @@ export const SidebarMenus = [
         permissions: ['Admin'],
         icon: 'trucks'
     },
-    /*{
-        title: 'Business',
-        link: '#',
-        children: [
-            {
-                permission: '',
-                modal: true,
-                title: 'Add Business',
-                link: '/businesses/add',
-            },
-            {
-                permission: '',
-                modal: false,
-                title: 'All Business',
-                link: '/businesses',
-            }
-        ],
-        permissions: ['Admin'],
-        icon: 'businesses'
-    },*/
 ]
 
 export const expensesCategories = [
@@ -242,6 +222,7 @@ export const expensesCategories = [
     'Salary',
     'Utility',
     'Bills',
+    'Wages',
 ]
 
 export const capitalize = (word) => {
@@ -295,6 +276,4 @@ export const completeExport = (data, filename = 'report') => {
         document.body.appendChild(link)
         link.click()
     }
-
-
 }

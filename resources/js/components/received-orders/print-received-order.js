@@ -33,7 +33,7 @@ function PrintReceivedOrder (props) {
                 </div>
 
                 {/* Invoice Details Table */}
-                <Table dataSource={data.order_items} pagination={false} rowKey={'id'}>
+                <Table className={'print-table'} dataSource={data.order_items} pagination={false} rowKey={'id'}>
                     <Table.Column title={'#'} dataIndex={'id'}/>
                     <Table.Column title={'Item'} dataIndex={'item'}/>
                     <Table.Column title={'qty'} dataIndex={'qty'}/>
@@ -41,7 +41,7 @@ function PrintReceivedOrder (props) {
                     <Table.Column title={'sub Total'} dataIndex={'sub_total'}/>
                 </Table>
             </div>
-            <PrintFooter total={data.total}/>
+            <PrintFooter total={data.total - data.damaged_total}/>
         </div>
         </>
     )

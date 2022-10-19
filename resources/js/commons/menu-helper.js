@@ -42,7 +42,7 @@ function MenuHelper ({ activeRoles, menus, direction, icons, linkStyles, disable
                                 </Link>, icons[child.icon] ?? '', child.title
                             ) :
 
-                            permissions.includes(child.permission) &&
+                            activeRoles.includes(child.permission) &&
                             getItem(
                                 <Link className={'nav-item'} style={linkStyles} state={{ background: child.modal && location }} to={child.link}>
                                     {child.title}
@@ -78,9 +78,9 @@ MenuHelper.propTypes = {
     linkStyles: PropTypes.object,
 }
 
-const mapStateToProps = () => {
+const mapStateToProps = (state) => {
     return {
-        activeRoles : ['Admin']
+        activeRoles : state.userReducer.activeRoles
     }
 }
 

@@ -13,7 +13,7 @@ class OrderReturn extends Model
     use HasFactory, SoftDeletes;
 
     protected $fillable = [
-        'dispatch_id',
+        'dispatch_order_id',
         'user_id',
     ];
 

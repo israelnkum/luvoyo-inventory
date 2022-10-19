@@ -44,6 +44,7 @@ Route::group(['middleware' => ['auth:sanctum']], static function () {
     });
     Route::apiResource('/employees', EmployeeController::class);
 
+    Route::post('/expenses/chart', [ExpenseController::class, 'getChartData']);
     Route::apiResource('/expenses', ExpenseController::class);
 
     Route::prefix('trucks')->group(function () {
@@ -54,6 +55,7 @@ Route::group(['middleware' => ['auth:sanctum']], static function () {
 
     Route::apiResource('/suppliers', SuppliersController::class);
 
+    Route::post('/cash-ups/chart', [CashUpController::class, 'getChartData']);
     Route::apiResource('/cash-ups', CashUpController::class);
 
     Route::get('business/detail', [HomeController::class, 'getBusinessDetail']);
@@ -81,5 +83,3 @@ Route::group(['middleware' => ['auth:sanctum']], static function () {
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
-
-Route::get('/test', [HomeController::class, 'getDashboardData']);

@@ -44,7 +44,7 @@ class HomeController extends Controller
     {
         $staff = Employee::query()->count();
         $suppliers = Supplier::query()->count();
-        $expenses = Expense::query()->count();
+        $expenses = Expense::query()->sum('amount');
         $dispatchOrders = DispatchOrder::query()->count();
         $receivedOrders = ReceivedOrder::query()->count();
         $trucks = Truck::query()->count();
@@ -53,7 +53,7 @@ class HomeController extends Controller
         return response()->json([
             'staff' => $staff,
             'suppliers' => $suppliers,
-            'expenses' => 'R'.number_format($expenses,'2'),
+            'expenses' => number_format($expenses,'2'),
             'dispatch_orders' => $dispatchOrders,
             'received_orders' => $receivedOrders,
             'trucks' => $trucks,
