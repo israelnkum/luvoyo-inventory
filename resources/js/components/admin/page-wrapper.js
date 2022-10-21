@@ -42,7 +42,7 @@ function PageWrapper () {
                         {
                             pageInfo.modalLink ?
                                 <Link to={pageInfo.addLink}>
-                                    <Button type={'default'}>{pageInfo.buttonText ?? pageInfo.title}</Button>
+                                    <Button type={'primary'}>{pageInfo.buttonText ?? pageInfo.title}</Button>
                                 </Link> :
                                 <TlaAddNew link={pageInfo.addLink} data={pageInfo?.extraInfo}>
                                     <Button type={'primary'} icon={<FiPlus/>}>&nbsp;Add {pageInfo.buttonText ?? pageInfo.title}</Button>

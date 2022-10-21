@@ -20,6 +20,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Maatwebsite\Excel\Facades\Excel;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class CashUpController extends Controller
 {
@@ -27,7 +28,7 @@ class CashUpController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return AnonymousResourceCollection|Response|\Symfony\Component\HttpFoundation\BinaryFileResponse
+     * @return AnonymousResourceCollection|Response|BinaryFileResponse
      */
     public function index(Request $request)
     {
@@ -64,12 +65,14 @@ class CashUpController extends Controller
                 'return_time' => Carbon::now()->format('h:m:s')
             ]);
 
+            $latestCashUp = CashUp::where('dispatch_order_id', $request->dispatch_order_id)->latest()->first();
+
             $cashUp = new CashUp();
             $cashUp->ref_id = $cashUp->generateReferenceNumber('ref_id');
             $cashUp->dispatch_order_id = $request->dispatch_order_id;
-            $cashUp->expected_amount = $dispatchOrder->total;
+            $cashUp->expected_amount = $latestCashUp ? $latestCashUp ->balance : $dispatchOrder->total;
             $cashUp->received_amount = $request->received_amount;
-            $cashUp->balance = $dispatchOrder->total - $request->received_amount;
+            $cashUp->balance =  ($latestCashUp ? $latestCashUp ->balance : $dispatchOrder->total) - $request->received_amount;
             $cashUp->date_time = Carbon::parse($request->date_time)->format('Y-m-d h:m');
             $cashUp->user_id = Auth::user()->id;
 

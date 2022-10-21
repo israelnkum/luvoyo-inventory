@@ -28,7 +28,7 @@ class DispatchOrderResource extends JsonResource
             'order_items' =>DispatchOrderItemResource::collection($this->orderItems),
             'return_time' =>$this->return_time,
             'employee_id' =>$this->employee_id,
-            'cash_up' => $this->cashUp ?: null,
+            'cash_up' => $this->cashUps->sum('received_amount'),
             'employee' => new EmployeeResource($this->employee),
         ];
     }

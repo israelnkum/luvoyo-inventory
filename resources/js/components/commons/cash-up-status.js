@@ -4,17 +4,17 @@ import PropTypes from 'prop-types'
 
 function CashUpStatus ({cash_up}) {
     return (
-        cash_up ?
-            <Typography.Text>{cash_up.received_amount}</Typography.Text>
+        cash_up > 0 ?
+            <Typography.Text>{cash_up}</Typography.Text>
             : <Tag color='darkred'>No Cash Up</Tag>
     )
 }
 
 CashUpStatus.defaultProps = {
-    cash_up: null
+    cash_up: 0
 }
 CashUpStatus.propTypes = {
-    cash_up: PropTypes.object,
+    cash_up: PropTypes.number,
 }
 
 export default CashUpStatus

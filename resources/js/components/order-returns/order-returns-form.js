@@ -85,20 +85,20 @@ function OrderReturnsForm (props) {
                                                         <Form.Item
                                                             help={<small style={{ color: 'red'}}>Qty Returned</small>}
                                                             {...restField}
-                                                            initialValue={1}
+                                                            initialValue={0}
                                                             name={[name, 'qty_returned']}
                                                             rules={[{
                                                                 required: true,
                                                                 message: 'Qty',
                                                             },]}>
-                                                            <InputNumber style={{ width: '100%' }} min={1} placeholder="Qty" />
+                                                            <InputNumber type={'number'} style={{ width: '100%' }} min={0} placeholder="Qty" />
                                                         </Form.Item>
                                                     </Col>
                                                     <Col span={3} xs={12} sm={3} md={3} lg={3}>
                                                         <Form.Item help={<small style={{ color: 'red'}}>Qty Damaged</small>} initialValue={0}
                                                                    {...restField}
                                                                    name={[name, 'qty_damaged']}>
-                                                            <InputNumber style={{ width: '100%' }} min={0} placeholder="Qty Damaged" />
+                                                            <InputNumber type={'number'} style={{ width: '100%' }} min={0} placeholder="Qty Damaged" />
                                                         </Form.Item>
                                                     </Col>
 

@@ -72,75 +72,49 @@ function CashUpForm (props) {
                             <Input size={'large'}/>
                         </Form.Item>
                     </Col>
-                    {/*<Col span={12}>
-                        <Row gutter={10}>
-                           <Col span={12}>
-                                <Trucks form={form} editing={formValues.id === 0}/>
-                            </Col>
-                            <Col span={12}>
-                                <Employees form={form} editing={formValues.id === 0}/>
-                            </Col>
-                            <Col span={12}>
-                                <Form.Item name="date_time" label="Dispatch Date"
+                    {
+                        (searchResults?.cash_up  < searchResults?.total) &&
+                        <>
+                            <Col span={24}>
+                                <Form.Item name="received_amount" label="Received Amount"
                                            rules={[
                                                {
                                                    required: true,
-                                                   message: 'Date is Required'
+                                                   message: 'Received Amount is Required'
+                                               },
+                                               {
+                                                   min: 1,
+                                                   type: 'number',
+                                                   message: 'Amount is less'
+                                               }, {
+                                                   max: formatAmount(searchResults?.total),
+                                                   type: 'number',
+                                                   message: 'Amount is High'
                                                }
                                            ]}>
-                                    <DatePicker showTime={{
-                                        format: 'HH:mm',
-                                    }} size={'large'}  style={{ width: '100%' }}/>
+                                    <InputNumber type={'number'} step={0.01} style={{ width: '100%'}} size={'large'}/>
                                 </Form.Item>
                             </Col>
-                        </Row>
-                    </Col>*/}
+                            <Col span={24}>
+                                <Form.Item>
+                                    <div align={'right'}>
+                                        <CloseModal/>&nbsp;
+                                        <Button size={'large'} type="primary" htmlType="submit">
+                                            Submit
+                                        </Button>
+                                    </div>
+                                </Form.Item>
+                            </Col>
+                        </>
+                    }
                     {
-                        searchResults?.cash_up === null ?
-                            <>
-                                <Col span={24}>
-                                    <Form.Item name="received_amount" label="Received Amount"
-                                               rules={[
-                                                   {
-                                                       required: true,
-                                                       message: 'Received Amount is Required'
-                                                   },
-                                                   {
-                                                       min: formatAmount(searchResults?.total),
-                                                       type: 'number',
-                                                       message: 'Amount is less'
-                                                   }, {
-                                                       max: formatAmount(searchResults?.total),
-                                                       type: 'number',
-                                                       message: 'Amount is High'
-                                                   }
-                                               ]}>
-                                        <InputNumber step={0.01} style={{ width: '100%'}} size={'large'}/>
-                                    </Form.Item>
-                                </Col>
-                                <Col span={24}>
-                                    <Form.Item>
-                                        <div align={'right'}>
-                                            <CloseModal/>&nbsp;
-                                            <Button size={'large'} type="primary" htmlType="submit">
-                                                Submit
-                                            </Button>
-                                        </div>
-                                    </Form.Item>
-                                </Col>
-                            </>
-                            :
-                            <>
-                                {
-                                    (searchResults !== null) &&
-                                    <Col span={24}>
-                                        <Space style={{ justifyContent: 'space-between', display: 'flex'}}>
-                                            <Typography.Text type={'danger'}>CashUp already added</Typography.Text>
-                                            <CloseModal btnText={'Close'}/>
-                                        </Space>
-                                    </Col>
-                                }
-                            </>
+                        (searchResults?.cash_up  >= searchResults?.total) &&
+                        <Col span={24}>
+                            <Space style={{justifyContent: 'space-between', display: 'flex'}}>
+                                <Typography.Text type={'danger'}>CashUp already added</Typography.Text>
+                                <CloseModal btnText={'Close'}/>
+                            </Space>
+                        </Col>
                     }
                 </Row>
             </Form>

@@ -3,7 +3,7 @@ import {Button, Col, Row, Space, Table} from 'antd'
 import PropTypes from 'prop-types'
 import {connect} from "react-redux";
 import TlaTableWrapper from "../../commons/table/tla-table-wrapper";
-import {useOutletContext} from 'react-router'
+import {useOutletContext, useParams} from 'react-router'
 import ViewAllWrapper from "../../commons/view-all-wrapper";
 import TlaEdit from "../../commons/tla-edit";
 import {handleGetAllOrderReturns} from "../../actions/order-returns/OrderReturnsAction";
@@ -12,13 +12,13 @@ import TlaAddNew from "../../commons/tla-add-new";
 const { Column } = Table
 function AllOrderReturns (props) {
     const { getReturnOrders, returnOrders } = props
-    const [colSize, setColSize] = useState(24)
+    const { orderNumber } = useParams()
     const { data, meta }= returnOrders
     const [loading, setLoading] = useState(true)
     const { setPageInfo } = useOutletContext();
     useEffect(() => {
         setPageInfo({ title: 'Dispatch Order Return', addLink: '/dispatch-order-returns/add', buttonText: 'Return' })
-        getReturnOrders().then(() => {
+        getReturnOrders(orderNumber).then(() => {
             setLoading(false)
         })
     }, [])
@@ -55,7 +55,7 @@ const mapStateToProps = (state) => ({
 })
 
 const mapDispatchToProps = (dispatch) => ({
-    getReturnOrders: (payload) => dispatch(handleGetAllOrderReturns(payload))
+    getReturnOrders: (orderNumber) => dispatch(handleGetAllOrderReturns(orderNumber))
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(AllOrderReturns)

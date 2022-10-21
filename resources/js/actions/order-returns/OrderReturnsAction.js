@@ -1,8 +1,8 @@
 import api from '../../utils/api'
 import {addOrderReturns, allOrderReturns, deleteOrderReturns, updateOrderReturns} from "./ActionCreators";
 
-export const handleGetAllOrderReturns = () => async (dispatch) => {
-    await api().get('/order-returns')
+export const handleGetAllOrderReturns = (id) => async (dispatch) => {
+    await api().get(`/order-returns/${id}`)
         .then((res) => {
             dispatch(allOrderReturns(res.data))
         })

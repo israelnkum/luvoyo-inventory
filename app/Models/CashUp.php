@@ -12,6 +12,7 @@ class CashUp extends Model
 {
     use HasFactory, SoftDeletes, HasReferenceNumber;
 
+    public string $prefix = 'CHP';
     protected $fillable = [
         'ref_id',
         'dispatch_order_id',

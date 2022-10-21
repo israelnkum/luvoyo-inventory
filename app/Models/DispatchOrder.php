@@ -45,8 +45,8 @@ class DispatchOrder extends Model
         return $this->belongsTo(Truck::class);
     }
 
-    public function cashUp(): HasOne
+    public function cashUps(): HasMany
     {
-        return $this->hasOne(CashUp::class);
+        return $this->hasMany(CashUp::class);
     }
 }

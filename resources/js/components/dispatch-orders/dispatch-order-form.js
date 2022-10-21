@@ -169,7 +169,7 @@ function DispatchOrderForm (props) {
                                                                         required: true,
                                                                         message: 'Qty',
                                                                     },]}>
-                                                                    <InputNumber style={{ width: '100%' }} min={1} placeholder="Qty" />
+                                                                    <InputNumber type={'number'} style={{ width: '100%' }} min={1} placeholder="Qty" />
                                                                 </Form.Item>
                                                                 <Form.Item
                                                                     {...restField}

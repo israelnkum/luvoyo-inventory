@@ -31,7 +31,8 @@ OrderDetailContent.defaultProps = {
 }
 
 OrderDetailContent.propTypes = {
-    data: PropTypes.object
+    data: PropTypes.object,
+    cols: PropTypes.number,
 }
 
 export default OrderDetailContent
