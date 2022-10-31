@@ -30,7 +30,6 @@ class ExpenseController extends Controller
      */
     public function index(Request $request)
     {
-
         $date = explode(',', $request->date);
         $expensesQuery = Expense::query();
         $expensesQuery->when($request->has('category') && $request->category !== 'all', function ($q) use ($request) {

@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import {connect} from "react-redux";
 import {handleExportExpenses, handleGetAllExpenses} from "../../actions/expenses/ExpensesAction";
-import {DatePicker, Form, Input, Select} from "antd";
+import {DatePicker, Form, Select} from "antd";
 import {expensesCategories} from "../../utils";
 import moment from "moment";
 import FilterWrapper from "../../commons/filter/filter-wrapper";

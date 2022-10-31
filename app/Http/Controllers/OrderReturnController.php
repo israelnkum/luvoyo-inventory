@@ -2,29 +2,55 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\ExportExpenses;
+use App\Exports\OrderReturnExport;
 use App\Http\Requests\StoreDispatchOrderReturnRequest;
 use App\Http\Requests\UpdateDispatchOrderReturnRequest;
+use App\Http\Resources\ExpensesResource;
 use App\Http\Resources\OrderReturnResource;
 use App\Models\DispatchOrder;
+use App\Models\DispatchOrderItem;
+use App\Models\Expense;
 use App\Models\OrderReturn;
 use App\Models\Product;
+use App\Traits\UsePrint;
 use Exception;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\Response;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Facades\Excel;
 
 class OrderReturnController extends Controller
 {
+    use UsePrint;
     /**
      * Display a listing of the resource.
      *
-     * @return AnonymousResourceCollection
+     * @return AnonymousResourceCollection|Response|\Symfony\Component\HttpFoundation\BinaryFileResponse
      */
-    public function index(): AnonymousResourceCollection
+    public function index(Request $request)
     {
-        return OrderReturnResource::collection(OrderReturn::paginate(10));
+        $date = explode(',', $request->date);
+        $orderReturnQuery = OrderReturn::query();
+
+        $orderReturnQuery->when($request->has('date') && count($date) !== 1, function ($q) use($date){
+            $formatDate = [Carbon::parse($date[0]), Carbon::parse($date[1])];
+            return $q->whereBetween('created_at', $formatDate);
+        });
+
+        if ($request->has('export') && $request->export === 'true'){
+            return  Excel::download(new OrderReturnExport(OrderReturnResource::collection($orderReturnQuery->get())), 'Expenses.xlsx');
+        }
+
+        if ($request->has('print') && $request->print === 'true'){
+            return $this->pdf('print.order-returns', OrderReturnResource::collection($orderReturnQuery->get()),'Expenses');
+        }
+
+        return OrderReturnResource::collection($orderReturnQuery->paginate(10));
     }
 
 
@@ -75,6 +101,12 @@ class OrderReturnController extends Controller
             foreach ($products as $product){
                 if ($product['qty_returned'] > 0) {
                     $subTotal = $product['qty_returned'] * $product['selling_price'];
+
+                    $dispatchOrderItem =  DispatchOrderItem::find($product['id']);
+                    $dispatchOrderItem->update([
+                        'qty' => $dispatchOrderItem->qty - ($product['qty_returned'] + $product['qty_damaged'])
+                    ]);
+
                     $orderReturn->orderReturnItems()->create([
                         'product_id' => $product['product_id'],
                         'qty'=> $product['qty_returned'],

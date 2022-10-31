@@ -22,7 +22,7 @@ class ProductsResource extends JsonResource
             'selling_price' => $this->selling_price,
             'supplier' => $this->supplier->name,
             'supplier_id' => $this->supplier_id,
-            'profit' => $this->profit,
+            'profit' => round($this->profit),
             'brand' => $this->brand,
             'quantity' => $this->quantity,
             'user_id' => $this->user_id,

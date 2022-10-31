@@ -10,8 +10,8 @@
                 <div style="text-align: left">
                     <h3>{{$business->name}}</h3>
                     <p><b>Phone:</b> {{$business->phone_number}}</p>
-                    <p><b>Email:</b> {{$business->email}}</p>
-                    <p><b>Address:</b> {{$business->address}}</p>
+                    <p style="margin-bottom: 4px;"><b>Email:</b> {{$business->email}}</p>
+                    <p style="line-height: 1; margin-top: 0;"><b>Address:</b> {{$business->address}}</p>
                 </div>
             </td>
         </tr>

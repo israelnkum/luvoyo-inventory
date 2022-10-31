@@ -15,8 +15,8 @@ class CompanySeeder extends Seeder
     public function run()
     {
         Company::updateOrCreate(['name' => 'LOXION BUSINESS'],[
-            'phone_number' => '0544513074',
-            'address' => 'South Africa',
+            'phone_number' => '0213608075',
+            'address' => 'ASLA Business Park, Unit 7 Apex Park, Somerset',
             'email' => 'info@lexionbusiness.com'
         ]);
     }

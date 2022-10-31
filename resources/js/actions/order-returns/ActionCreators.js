@@ -27,3 +27,10 @@ export const updateOrderReturns = (payload) => {
       payload: payload
   }
 }
+
+export const addFilter = (payload) => {
+    return {
+        type: Types.ADD_RETURNS_FILTER,
+        payload: payload
+    }
+}

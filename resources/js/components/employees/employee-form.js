@@ -22,10 +22,12 @@ function EmployeeForm (props) {
         create_account: false,
         staff_id: null,
         home_address: '',
+        email: '',
         remarks: '',
         ...{...state.data, dob: state?.data ? moment(state?.data.dob) : ''}
     }
     const [editing, setEditing] = useState(formValues.id !== 0)
+    const [checkNick, setCheckNick] = useState(false);
 
     const submit = (values) => {
         const formData = new FormData()
@@ -51,6 +53,11 @@ function EmployeeForm (props) {
         })
     }
 
+    const onCheckboxChange = (e) => {
+        setCheckNick(e.target.checked);
+    };
+
+
     return (
         <TlaModal
             title={(formValues.id === 0 ? 'New' : 'Edit') + ' Staff'}
@@ -69,7 +76,7 @@ function EmployeeForm (props) {
                     {
                         formValues.id === 0 &&
                         <Col span={24}>
-                            <Form.Item name="create_account" valuePropName="checked">
+                            <Form.Item name="create_account" onChange={onCheckboxChange} valuePropName="checked">
                                 <Checkbox>Create user account</Checkbox>
                             </Form.Item>
                         </Col>
@@ -165,7 +172,7 @@ function EmployeeForm (props) {
                                    rules={[
                                        {
                                            type: 'email',
-                                           required: true,
+                                           required: checkNick,
                                            message: 'Email is Required'
                                        }
                                    ]}>

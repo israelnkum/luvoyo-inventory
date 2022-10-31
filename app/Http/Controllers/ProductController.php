@@ -83,6 +83,7 @@ class ProductController extends Controller
     {
         DB::beginTransaction();
         try {
+            $request['quantity'] = $product->quantity + $request->quantity;
             $request['profit'] = $request->selling_price - $request->cost_price;
             $product->update($request->all());
             DB::commit();

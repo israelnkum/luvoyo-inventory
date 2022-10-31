@@ -3,7 +3,10 @@ const initialState = {
     returnOrders: {
         data: [],
         meta: {}
-    }
+    },
+    filter: {
+        date: '',
+    },
 }
 
 export default function returnOrdersReducer (state = initialState, action) {
@@ -28,6 +31,9 @@ export default function returnOrdersReducer (state = initialState, action) {
                     })
                 }
             }
+
+        case Types.ADD_RETURNS_FILTER:
+            return { ...state, filter: action.payload}
 
         case Types.DELETE_ORDER_RETURNS:
             return {

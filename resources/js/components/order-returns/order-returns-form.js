@@ -62,7 +62,7 @@ function OrderReturnsForm (props) {
                                                                    rules={[
                                                                        {
                                                                            required: true,
-                                                                           message: 'Product ID',
+                                                                           message: 'Dispatch Order Item ID',
                                                                        },
                                                                    ]}
                                                         >
