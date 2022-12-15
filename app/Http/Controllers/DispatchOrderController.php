@@ -59,7 +59,8 @@ class DispatchOrderController extends Controller
         DB::beginTransaction();
         try {
 
-            $dateTime =  Carbon::parse($request->dispatch_date)->format('Y-m-d'). ' '.Carbon::now()->format('h:m');
+            $dateTime =  Carbon::parse($request->dispatch_date)->format('Y-m-d').
+                            ' '.Carbon::now()->format('h:m');
             $order = new DispatchOrder();
             $order->order_no = $order->generateReferenceNumber('order_no');
             $order->truck_id = $request->truck_id;
@@ -82,10 +83,10 @@ class DispatchOrderController extends Controller
                 $total += $subTotal;
                 $qty += $product['qty'];
                 $order->orderItems()->create([
-                   'product_id' => $findProduct->id,
-                   'selling_price' => $product['selling_price'],
-                   'qty' => $product['qty'],
-                   'sub_total' => $subTotal,
+                    'product_id' => $findProduct->id,
+                    'selling_price' => $product['selling_price'],
+                    'qty' => $product['qty'],
+                    'sub_total' => $subTotal,
                 ]);
             }
             $order->update([

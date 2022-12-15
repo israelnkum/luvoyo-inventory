@@ -84,6 +84,7 @@ SearchItems.defaultProps = {
     text: "Type to search...",
     displayField: 'name'
 }
+
 SearchItems.propTypes = {
     text: PropTypes.string,
     displayField: PropTypes.string,

@@ -84,10 +84,10 @@ function DispatchOrderForm (props) {
                                                    rules={[
                                                        {
                                                            required: true,
-                                                           message: 'Date of Birth is Required'
+                                                           message: 'Date is Required'
                                                        }
                                                    ]}>
-                                            <DatePicker disabled size={'large'}  style={{ width: '100%' }}/>
+                                            <DatePicker size={'large'}  style={{ width: '100%' }}/>
                                         </Form.Item>
                                     </Col>
                                     {/*<Col span={12} xs={24} sm={24} md={12} lg={12}>
