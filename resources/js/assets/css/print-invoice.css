@@ -1,0 +1,21 @@
+.print-wrapper {
+    background: #fff;
+    /*width: 1020px;*/
+    /*border: 2px solid #a3a4e5;*/
+}
+
+.print-content {
+    padding: 10mm 10mm 5mm;
+}
+.billing-info {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 1.3rem;
+}
+.billing-info h6, .billing-info p {
+    margin: 0;
+    /*line-height: 12px;*/
+    font-size: 12px;
+}

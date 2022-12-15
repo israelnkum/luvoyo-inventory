@@ -1,5 +1,4 @@
 import React from 'react'
-import {isMobile} from 'react-device-detect'
 import {Layout} from 'antd'
 import MenuHelper from "../menu-helper";
 import {SidebarMenus} from "../../utils";
@@ -13,19 +12,31 @@ import {RiProductHuntLine} from "react-icons/ri";
 import {GoListUnordered} from "react-icons/go";
 import {TbCash} from "react-icons/tb";
 import {SiExpensify} from "react-icons/si";
+import {createGlobalStyle} from "styled-components";
 
+const GlobalStyles = createGlobalStyle`
+    .ant-menu.ant-menu-dark, .ant-menu-dark .ant-menu-sub, .ant-menu.ant-menu-dark .ant-menu-sub {
+        color: rgba(255, 255, 255, 0.65);
+        background: #ffffff;
+    }
+`
 function AppSidebar (props) {
-    const {name, collapsed, setCollapsed} = props
+    const {authUser} = props
 
     return (
-        <Layout.Sider theme={'light'} className={'sideBar'}  collapsed={collapsed} onCollapse={setCollapsed}
-                      breakpoint="lg" collapsedWidth={isMobile ? 0 : 80}
-                      style={isMobile ? { height: '100vh', zIndex: 1, position: 'fixed', left: 0 } : {height: '100vh', position: 'fixed', left: 8, top: 5 }}
+        <Layout.Sider
+            theme={'light'}
+            breakpoint="lg"
+            collapsedWidth="80"
+            onCollapse={(collapsed, type) => {
+                console.log(collapsed, type);
+            }}
         >
+            <GlobalStyles/>
             <div align={'center'}>
-                <SideProfile name={name}/>
+                <SideProfile name={authUser.name} photo={authUser.photo}/>
             </div>
-            <MenuHelper icons={{
+            <MenuHelper disabled={authUser.default_password !== null} icons={{
                 home: <FiHome/>,
                 pim: <FiUser/>,
                 config: <FiSettings/>,
@@ -45,12 +56,12 @@ AppSidebar.defaultProps = {
     setCollapsed: ()=>{},
 }
 AppSidebar.propTypes = {
-    name: PropTypes.string.isRequired,
+    authUser: PropTypes.object.isRequired,
     collapsed: PropTypes.bool,
     setCollapsed: PropTypes.func,
 }
 const mapStateToProps = (state) => ({
-    name : state.userReducer.loggedInUser.name,
+    authUser : state.userReducer.loggedInUser,
 })
 
 export default connect(mapStateToProps)(AppSidebar)

@@ -1,8 +1,8 @@
 import React, {useState} from 'react'
 import {connect} from 'react-redux'
 import {Outlet} from 'react-router'
-import {Button, Card, Col, Row, Space} from 'antd'
-import {FiArrowLeft, FiPlus} from 'react-icons/fi'
+import {Button, Card, Col, Row, Space, Typography} from 'antd'
+import {FiPlus} from 'react-icons/fi'
 import {createGlobalStyle} from 'styled-components'
 import TlaAddNew from '../../commons/tla-add-new'
 import {Link} from 'react-router-dom'
@@ -32,7 +32,7 @@ function PageWrapper () {
             <Col span={12}>
                 <Space>
                     {/*<Button icon={<FiArrowLeft/>}>Go Back</Button>*/}
-                    <h3 className="text-title" style={{ fontSize: 18, paddingTop: 5 }}>{pageInfo.title}</h3>
+                    <Typography.Text style={{ fontSize: 18, paddingTop: 5 }}>{pageInfo.title}</Typography.Text>
                 </Space>
             </Col>
             <Col span={12}>
@@ -40,13 +40,13 @@ function PageWrapper () {
                     pageInfo.addLink &&
                     <div align={'right'}>
                         {
-                            !pageInfo.modalLink ?
-                                <TlaAddNew link={pageInfo.addLink} data={pageInfo?.extraInfo}>
-                                    <Button size={'large'} className={'btn tla-btn-primary'} icon={<FiPlus/>}>&nbsp;Add {pageInfo.buttonText ?? pageInfo.title}</Button>
-                                </TlaAddNew> :
+                            pageInfo.modalLink ?
                                 <Link to={pageInfo.addLink}>
-                                    <Button size={'large'} className={'btn tla-btn-primary'} icon={<FiPlus/>}>&nbsp;Add {pageInfo.buttonText ?? pageInfo.title}</Button>
-                                </Link>
+                                    <Button type={'primary'}>{pageInfo.buttonText ?? pageInfo.title}</Button>
+                                </Link> :
+                                <TlaAddNew link={pageInfo.addLink} data={pageInfo?.extraInfo}>
+                                    <Button type={'primary'} icon={<FiPlus/>}>&nbsp;Add {pageInfo.buttonText ?? pageInfo.title}</Button>
+                                </TlaAddNew>
                         }
 
                     </div>

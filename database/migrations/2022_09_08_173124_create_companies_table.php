@@ -20,8 +20,8 @@ return new class extends Migration
             $table->string('logo')->nullable();
             $table->string('phone_number');
             $table->text('address')->nullable();
-            $table->text('email')->unique()->nullable();
-            $table->foreignIdFor(User::class);
+            $table->string('email')->unique()->nullable();
+            $table->foreignIdFor(User::class)->nullable();
             $table->softDeletes();
             $table->timestamps();
         });
@@ -32,7 +32,7 @@ return new class extends Migration
      *
      * @return void
      */
-    public function down()
+    public function down(): void
     {
         Schema::dropIfExists('companies');
     }

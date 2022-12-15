@@ -2,18 +2,14 @@
 
 namespace App\Models;
 
-use App\Http\Traits\UsesUuid;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\Pivot;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-/**
- * @method static updateOrcreate(array $array, array $array1)
- */
+
 class User extends Authenticatable
 {
     use HasFactory, Notifiable, SoftDeletes;
@@ -23,7 +19,7 @@ class User extends Authenticatable
 
     public function getNameAttribute(): string
     {
-        return  $this->firstName." ".$this->lastName;
+        return  $this->first_name." ".$this->last_name;
     }
     /**
      * The attributes that are mass assignable.
@@ -31,12 +27,13 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'firstName',
-        'lastName',
+        'first_name',
+        'last_name',
         'username',
         'email',
         'password',
-        'phoneNumber',
+        'phone_number',
+        'default_password'
     ];
 
     /**
@@ -70,6 +67,14 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(Role::class,'role_user','user_id','role_id')
            ->wherePivot('deleted_at',null);
+    }
+
+    public function userable(): MorphTo
+    {
+        return $this->morphTo()->withDefault([
+            'email' => $this->email,
+            'username' => $this->username,
+        ]);
     }
 
 }

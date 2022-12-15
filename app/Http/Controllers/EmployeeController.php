@@ -2,40 +2,46 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\EmployeeExport;
+use App\Helpers\HelperFunctions;
 use App\Http\Requests\StoreEmployeeRequest;
 use App\Http\Requests\UpdateEmployeeRequest;
 use App\Http\Resources\EmployeeResource;
 use App\Models\Employee;
+use App\Traits\UsePrint;
+use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Maatwebsite\Excel\Facades\Excel;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
+use function response;
 
 class EmployeeController extends Controller
 {
+    use UsePrint;
     /**
      * Display a listing of the resource.
      *
-     * @return AnonymousResourceCollection
+     * @return AnonymousResourceCollection|Response|BinaryFileResponse
      */
-    public function index()
+    public function index(Request $request)
     {
-        $employees = Employee::paginate(10);
+        $employees = Employee::query();
+        if ($request->has('export') && $request->export === 'true'){
+            return  Excel::download(new EmployeeExport(EmployeeResource::collection($employees->get())), 'Suppliers.xlsx');
+        }
 
-        return EmployeeResource::collection($employees);
-    }
+        if ($request->has('print') && $request->print === 'true'){
+            return $this->pdf('print.employees', EmployeeResource::collection($employees->get()),'Employees', 'landscape');
+        }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return Response
-     */
-    public function create()
-    {
-        //
+        return EmployeeResource::collection($employees->paginate(10));
     }
 
     /**
@@ -49,11 +55,28 @@ class EmployeeController extends Controller
         DB::beginTransaction();
         try {
             $request['user_id'] = Auth::user()->id;
+            $request['dob'] = Carbon::parse($request->dob)->format('Y-m-d');
             $employee = Employee::create($request->all());
+            if ($request->has('create_account') && $request->create_account === 'true'){
+                $data = [
+                    'id' => $employee->id,
+                    'first_name' => $request->other_names,
+                    'last_name' => $request->surname,
+                    'email' => $request->email
+                ];
+                HelperFunctions::createUserAccount($employee, $data);
+            }
+
+            // upload picture if picture is part of request
+            if ($request->has('file') && $request->file !== "null"){
+               HelperFunctions::saveImage($employee, $request->file('file'), 'employees');
+            }
+
             DB::commit();
             return new EmployeeResource($employee);
         }catch (Exception $exception){
             DB::rollBack();
+            Log::info($exception);
             return response()->json([
                 'message' => $exception->getMessage()
             ], 400);
@@ -70,8 +93,12 @@ class EmployeeController extends Controller
     {
         DB::beginTransaction();
         try {
-            Log::debug('test', $request->all());
+            $request['dob'] = Carbon::parse($request->dob)->format('Y-m-d');
             $employee->update($request->all());
+            // upload picture if picture is part of request
+            if ($request->has('file') && $request->file != "null"){
+                HelperFunctions::saveImage($employee, $request->file('file'), 'employees');
+            }
             DB::commit();
             return new EmployeeResource($employee);
         }catch (Exception $exception){
@@ -85,10 +112,27 @@ class EmployeeController extends Controller
      * Remove the specified resource from storage.
      *
      * @param Employee $employee
-     * @return Response
+     * @return JsonResponse
      */
-    public function destroy(Employee $employee)
+    public function destroy(Employee $employee): JsonResponse
     {
-        //
+        DB::beginTransaction();
+        try {
+            $employee->delete();
+            DB::commit();
+            return response()->json('Employee Deleted');
+        } catch (Exception $exception) {
+            DB::rollBack();
+            return response()->json('Something went wrong', 422);
+        }
+    }
+
+    public function searchEmployees($query): AnonymousResourceCollection
+    {
+        $products = Employee::query()
+            ->where('surname', 'like', '%' . $query . '%')
+            ->orWhere('other_names', 'like', '%' . $query . '%')
+            ->orWhere('email', 'like', '%' . $query . '%')->get();
+        return EmployeeResource::collection($products);
     }
 }

@@ -1,10 +1,8 @@
 import React from 'react'
-import styled, { createGlobalStyle } from 'styled-components'
-import { connect } from 'react-redux'
+import styled, {createGlobalStyle} from 'styled-components'
 import ProfileBg from '../../assets/img/dashboard/profile-bg.svg'
-import Avatar from '../../assets/img/profile/avata.svg'
-import { Image } from 'antd'
 import PropTypes from 'prop-types'
+import TlaImage from "../tla-image";
 
 const GlobalStyles = createGlobalStyle`
 
@@ -48,26 +46,22 @@ const AvatarContainer = styled.div`
   align-content: center;
   margin-bottom: 5px;
 `
-function Profile ({name}) {
+function Profile ({name, photo}) {
     return (
         <>
             <GlobalStyles/>
             <ProfileContainer/>
             <AvatarContainer>
-                <Image src={Avatar} preview={false} className={'profile-image'}/>
+                <TlaImage name={name} preview={false} size={70} src={photo}/>
                 <h3 className={'text-md-medium profile-name'}>{name}</h3>
             </AvatarContainer>
         </>
     )
 }
 Profile.propTypes = {
-    name: PropTypes.string
+    name: PropTypes.string,
+    photo: PropTypes.string,
 }
 
-const mapStateToProps = () => {
-    return {
 
-    }
-}
-
-export default connect(mapStateToProps)(Profile)
+export default Profile

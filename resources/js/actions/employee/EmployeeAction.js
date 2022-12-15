@@ -1,5 +1,6 @@
 import api from '../../utils/api'
 import {addEmployee, getEmployee, getEmployees, removeEmployee, updateEmployee,} from './ActionCreators'
+import {completeExport} from "../../utils";
 
 /**
  * Store a newly created resource in storage.
@@ -21,12 +22,24 @@ export const handleAddEmployee = (driver) => (dispatch) => {
  * Display a listing of the resource.
  * @returns {function(*): Promise<unknown>}
  */
-export const handleGetAllEmployees = (pageNumber = 1) => (dispatch) => {
+export const handleGetAllEmployees = (params) => (dispatch) => {
     return new Promise((resolve, reject) => {
-        api().get(`/employees?page=${pageNumber}`).then((res) => {
+        api().get(`/employees?${params}`).then((res) => {
             dispatch(getEmployees(res.data))
             resolve(res)
         }).catch((err) => {
+            reject(err)
+        })
+    })
+}
+
+export const handleExportEmployees = (params) => async () => {
+    return new Promise((resolve, reject) => {
+        api().get(`/employees?${params}`, { responseType: 'blob' })
+            .then((res) => {
+                completeExport(res.data, 'Employees')
+                resolve()
+            }).catch((err) => {
             reject(err)
         })
     })
@@ -49,7 +62,7 @@ export const handleGetSingleEmployee = (id) => (dispatch) => {
  */
 export const handleUpdateEmployee = (data) => (dispatch) => {
     return new Promise((resolve, reject) => {
-        api().put(`/employees/${data.get('id')}`, data, {
+        api().post(`/employees/${data.get('id')}`, data, {
             headers: { 'Content-type': 'multipart/employee-data' }
         }).then((res) => {
             dispatch(updateEmployee(res.data))

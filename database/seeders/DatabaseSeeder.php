@@ -2,7 +2,6 @@
 
 namespace Database\Seeders;
 
-use App\Models\TerminationReason;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -12,11 +11,22 @@ class DatabaseSeeder extends Seeder
      *
      * @return void
      */
-    public function run()
+    public function run(): void
     {
         $this->call([
             UserSeeder::class,
-            RoleSeeder::class
+            EmployeeSeeder::class,
+            RoleSeeder::class,
+            CompanySeeder::class,
+            ExpenseSeeder::class,
+            TruckSeeder::class,
+            DispatchOrderSeeder::class,
+            SuppliersSeeder::class,
+            ProductSeeder::class,
+            DispatchOrderItemSeeder::class,
+            CashUpSeeder::class,
+            ReceivedOrderSeeder::class,
+            ReceivedOrderItemSeeder::class
         ]);
     }
 }

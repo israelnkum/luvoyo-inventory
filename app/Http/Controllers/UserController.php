@@ -8,8 +8,11 @@ use App\Imports\VoterImport;
 use App\Models\Role;
 use App\Models\User;
 use Exception;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -23,24 +26,33 @@ class UserController extends Controller
     {
         $this->middleware('auth');
     }
+
     /**
      * Display a listing of the resource.
      *
-     * @return
+     * @return AnonymousResourceCollection
      */
-    public function index()
+    public function index(): AnonymousResourceCollection
     {
         return UserResource::collection(User::withTrashed()->whereHas('activeRoles', function ($q){
             $q->where('name', 'Admin')->orWhere('name', 'EC')->orWhere('name', 'Agent');
         })->get());
     }
 
-    public function getActiveRoles($id): array
+    public function getActiveRoles()
     {
         $loggedInUser = Auth::user();
-        $activeRoles = [];
+        if ($loggedInUser) {
+            $activeRoles = $loggedInUser->roles()->first()->name;
+            return [
+                new UserResource($loggedInUser),
+                [$activeRoles]
+            ];
+        }
 
-        return [$loggedInUser->only(['id', 'name', 'username']), $activeRoles];
+        return response()->json([
+            'message' => 'Unauthenticated'
+        ]);
 
     }
 
@@ -50,13 +62,13 @@ class UserController extends Controller
      * @param Request $request
      * @return Response
      */
-    public function store(Request $request)
+    public function store(Request $request): ?Response
     {
         $username = $request->firstName.'.'.$request->lastName;
         $checkUsername = User::where('username',$username)->count();
 
         if ($checkUsername >= 1){
-            $username = $username.'_'.mt_rand(10,150);
+            $username .= '_' . mt_rand(10, 150);
         }
         DB::beginTransaction();
         $request['username'] = strtolower($username);
@@ -72,16 +84,6 @@ class UserController extends Controller
         }
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return Response
-     */
-    public function show($id)
-    {
-        //
-    }
 
     /**
      * Update the specified resource in storage.
@@ -99,7 +101,7 @@ class UserController extends Controller
             DB::commit();
 
             $user = User::find($id);
-            return \response($request->has('voter') ? new VoterResource($user) : new UserResource($user));
+            return \response(new UserResource($user));
 
         }catch (Exception $exception){
             DB::rollBack();
@@ -107,67 +109,49 @@ class UserController extends Controller
         }
     }
 
-    public function getUserRoles($id){
+    public function getUserRoles($id): array
+    {
         $userRoles = User::find($id)->roles;
         $otherRoles = Role::whereNotIn('id', $userRoles->pluck('pivot.roleId'))->get();
 
         return [ $userRoles, $otherRoles ];
     }
-
-
-
-    public function importVoters(Request $request)
+    public function changePassword(Request $request)
     {
-        ini_set('memory_limit', '-1');
-        ini_set('MAX_EXECUTION_TIME', '-1');
-        set_time_limit(0);
+        $this->validate($request,[
+            'password' => ['required', 'string', 'min:8', 'confirmed'],
+        ]);
 
-        $valid_exts = array('csv','xls','xlsx'); // valid extensions
-        $file = $request->file('file');
-        if (!empty($file)) {
-            $ext = strtolower($file->getClientOriginalExtension());
-            if (in_array($ext, $valid_exts)) {
-                $voterList= Excel::toCollection(new VoterImport(),$file);
-                $voters = $voterList[0];
-                DB::beginTransaction();
-                try {
-
-                    $uploaded = [];
-                    for ($i = 0; $i < count($voters); $i++) {
-                        $user = User::updateOrcreate([
-                            'username' => $voters[$i]['username']
-                        ],[
-                            'firstName' => $voters[$i]['first_name'] ?? $voters[$i]['last_name'],
-                            'lastName'  => $voters[$i]['last_name'] ?? $voters[$i]['first_name'],
-                            'username'  => $voters[$i]['username'],
-                            'email'  => $voters[$i]['email'],
-                            'phoneNumber'  => $voters[$i]['phone_number'],
-                            'password'  => Hash::make($voters[$i]['password']),
-                        ]);
-
-
-                        $uploaded[] = $user->id;
-                    }
-                    DB::commit();
-                    return response()->json([
-                        'message' => count($uploaded) . '  Voters uploaded successful'
-                    ]);
-//                    return \response(VoterResource::collection($allVoters->get()));
-                }catch (Exception $exception){
-                    DB::rollBack();
-                    return response($exception->getMessage(), 422);
-                }
-            }else {
-                return response('Only excel file is accepted!', 422);
-            }
-        } else {
-            return \response('Please upload an excel file!', 422);
+        DB::beginTransaction();
+        $user = Auth::user();
+        if (!$user) {
+            return response()->json([
+                'message' => 'User not found'
+            ], 400);
         }
-    }
+        try {
+            if (!Hash::check($request['currentPassword'], $user->password)) {
+                return response()->json([
+                    'message' => 'Current Password is incorrect'
+                ], 400);
+            }
 
-    public function downloadUploadFormat(): BinaryFileResponse
-    {
-        $pathToFile = public_path('assets/voterUploadFormat.xlsx');
-        return response()->download($pathToFile);
+            if (Hash::check($request['password'], $user->password)) {
+                return response()->json([
+                    'message' => 'New Password is the same as current'
+                ], 400);
+
+            }
+
+            $user->update([
+                'password' => Hash::make($request->password),
+                'default_password' => NULL,
+            ]);
+            DB::commit();
+            return [$user->only(['id', 'name', 'username', 'default_password']), []];
+        }catch (Exception $exception){
+            DB::rollBack();
+            return \response('Something went wrong!', 400);
+        }
     }
 }

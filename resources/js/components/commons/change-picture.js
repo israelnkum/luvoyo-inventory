@@ -6,7 +6,7 @@ import {
 } from 'antd'
 import ImgCrop from 'antd-img-crop'
 export default function ChangePicture (props) {
-    const {selectedFile} = props
+    const {selectedFile, setSelectedFile, editing} = props
     const [preview, setPreview] = useState({
         image: '',
         visible: false,
@@ -32,10 +32,24 @@ export default function ChangePicture (props) {
     }
     useEffect(() => {
     }, [])
+    const uploadProps = {
+        beforeUpload: (file) => {
+            setSelectedFile(file)
+            return true
+        },
+        listType: 'picture-card',
+        maxCount: 1,
+        onRemove: () => {
+            setSelectedFile(null)
+        },
+        disabled: editing,
+        accept: 'image/*',
+        method: 'get'
+    }
     return (
         <div align={'center'}>
             <ImgCrop rotate>
-                <Upload {...props.uploadProps} onPreview={onPreview}>
+                <Upload {...uploadProps} onPreview={onPreview}>
                     {selectedFile == null ? 'Select' : 'Change'} Image
                 </Upload>
             </ImgCrop>
@@ -51,6 +65,7 @@ export default function ChangePicture (props) {
     )
 }
 ChangePicture.propTypes = {
-    uploadProps: PropTypes.object.isRequired,
-    selectedFile: PropTypes.any
+    selectedFile: PropTypes.any,
+    setSelectedFile: PropTypes.func,
+    editing: PropTypes.bool,
 }

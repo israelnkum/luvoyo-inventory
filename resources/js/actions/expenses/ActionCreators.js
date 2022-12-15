@@ -29,3 +29,17 @@ export const updateExpenses = (payload) => {
       payload: payload
   }
 }
+
+export const addFilter = (payload) => {
+  return {
+    type: Types.ADD_EXPENSES_FILTER,
+      payload: payload
+  }
+}
+
+export const getChartData = (payload) => {
+  return {
+    type: Types.GET_EXPENSES_CHART,
+      payload: payload
+  }
+}

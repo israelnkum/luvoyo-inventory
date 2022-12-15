@@ -1,10 +1,18 @@
 import api from '../../utils/api'
-import {addBusiness, allBusinesses, deleteBusiness, updateBusiness} from "./ActionCreators";
+import {addBusiness, allBusinesses, deleteBusiness, getBusinessDetail, updateBusiness} from "./ActionCreators";
 
 export const handleGetAllBusiness = () => async (dispatch) => {
   await api().get('/business')
     .then((res) => {
       dispatch(allBusinesses(res.data))
+    })
+}
+
+
+export const handleGetBusinessDetail = () => async (dispatch) => {
+  await api().get('/business/detail')
+    .then((res) => {
+      dispatch(getBusinessDetail(res.data))
     })
 }
 
@@ -22,7 +30,7 @@ export const handleAddNewBusiness = (values) => (dispatch) => {
 
 export const handleUpdateBusiness = (values) => (dispatch) => {
   return new Promise((resolve, reject) => {
-    api().put(`/business/${values.id}`, values).then((res) => {
+    api().post(`/business/${values.id}`, values).then((res) => {
       dispatch(updateBusiness(res.data))
       resolve()
     }).catch((err) => {

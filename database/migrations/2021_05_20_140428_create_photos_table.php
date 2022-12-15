@@ -1,6 +1,5 @@
 <?php
 
-use App\Models\Photo;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -16,9 +15,8 @@ class CreatePhotosTable extends Migration
     {
         Schema::create('photos', function (Blueprint $table) {
             $table->id();
-            $table->uuidMorphs('photoable');
-            $table->string('photoUrl')->nullable();
-            $table->string('qrCodeUrl')->nullable();
+            $table->morphs('photoable');
+            $table->string('file_name')->nullable();
             $table->softDeletes();
             $table->timestamps();
         });

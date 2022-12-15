@@ -14,10 +14,16 @@ class DispatchOrderItemFactory extends Factory
      *
      * @return array<string, mixed>
      */
-    public function definition()
+    public function definition(): array
     {
+        $qty = $this->faker->numberBetween(1, 500);
+        $price =$this->faker->numberBetween(2, 60);
         return [
-            //
+            'product_id' => $this->faker->numberBetween(1, 500),
+            'selling_price' => $price,
+            'dispatch_order_id' => $this->faker->numberBetween(1, 500),
+            'qty' => $qty,
+            'sub_total' => $price * $qty,
         ];
     }
 }
