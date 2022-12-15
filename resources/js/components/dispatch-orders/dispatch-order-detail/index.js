@@ -15,11 +15,18 @@ function DispatchOrderDetail({ dispatchOrders }) {
         const foundOrder = dispatchOrders.data.find((order) => order.order_no === orderNumber)
         setOrder(foundOrder)
         localStorage.setItem('dispatched_order' , JSON.stringify(foundOrder.order_items))
-        setPageInfo({ title: `${orderNumber}`, modalLink: true, addLink: `/dispatch-orders/${orderNumber}/returns`, buttonText: 'Returns' })
+        const addLink = foundOrder.cash_up === 0 ? `/dispatch-orders/${orderNumber}/returns` : null;
+        setPageInfo({
+            title: `${orderNumber}`,
+            modalLink: true,
+            addLink: addLink,
+            buttonText: foundOrder.cash_up === 0 ? 'Returns' : ''
+        })
     }, [])
     return (
         <Row gutter={[20, 20]}>
            <Col span={24}>
+               {JSON.stringify(order.cash_up === 0)}
                <OrderDetailContent data={order}/>
            </Col>
             <Col span={24}>

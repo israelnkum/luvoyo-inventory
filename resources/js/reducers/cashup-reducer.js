@@ -5,7 +5,7 @@ const initialState = {
         meta: {}
     },
     filter: {
-        truck_code: ''
+        date: '',
     },
     chart: {
         labels: [],

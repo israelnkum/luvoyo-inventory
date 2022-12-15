@@ -12,7 +12,7 @@ class HelperFunctions
     public static function saveImage($model, $file, $directory): void
     {
         $image_name = uniqid() . '.' . $file->getClientOriginalExtension();
-        $file->storeAs(env('APP_PHOTO_PATH') . '/' . $directory . '/', $image_name);
+            $file->storeAs(env('APP_PHOTO_PATH') . '/' . $directory . '/', $image_name);
         $model->photo()->updateOrCreate(['photoable_id' => $model->id], [
             'file_name' => $image_name
         ]);

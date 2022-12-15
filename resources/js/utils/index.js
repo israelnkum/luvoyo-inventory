@@ -115,26 +115,13 @@ export const SidebarMenus = [
         permissions: ['Admin', 'Staff'],
         icon: 'cash-up'
     },
-    /*  {
-          title: 'Order - Returns',
-          link: '#',
-          children: [
-              {
-                  permission: '',
-                  modal: true,
-                  title: 'Add Return',
-                  link: '/dispatch-order-returns/add',
-              },
-              {
-                  permission: '',
-                  modal: false,
-                  title: 'All Returns',
-                  link: '/dispatch-order-returns',
-              }
-          ],
+      {
+          title: 'Return Orders',
+          link: '/return-orders',
+          children: [],
           permissions: ['Admin'],
           icon: 'dispatch-order'
-      },*/
+      },
     {
         title: 'Dispatch Orders',
         link: '#',
@@ -223,6 +210,7 @@ export const expensesCategories = [
     'Utility',
     'Bills',
     'Wages',
+    'Petty Cash',
 ]
 
 export const capitalize = (word) => {

@@ -1,13 +1,39 @@
 import api from '../../utils/api'
-import {addOrderReturns, allOrderReturns, deleteOrderReturns, updateOrderReturns} from "./ActionCreators";
+import {addOrderReturns, allOrderReturns, deleteOrderReturns, updateOrderReturns, addFilter} from "./ActionCreators";
+import {completeExport} from "../../utils";
 
-export const handleGetAllOrderReturns = (id) => async (dispatch) => {
+export const handleGetAllOrderReturns = (params) => async (dispatch) => {
+    return new Promise((resolve, reject) => {
+        api().get(`/order-returns?${params}`).then((res) => {
+            dispatch(allOrderReturns(res.data))
+            params?.delete('page')
+            params && dispatch(addFilter(Object.fromEntries(params)))
+            resolve(res)
+        }).catch((err) => {
+            reject(err)
+        })
+    })
+}
+
+export const handleExportOrderReturns = (params) => async () => {
+    return new Promise((resolve, reject) => {
+        api().get(`/order-returns?${params}`, { responseType: 'blob' })
+            .then((res) => {
+                completeExport(res.data, 'order-returns')
+                resolve()
+            }).catch((err) => {
+            reject(err)
+        })
+    })
+}
+
+// get return orders for a specific dispatch order
+export const handleGetDispatchReturnOrders = (id) => async (dispatch) => {
     await api().get(`/order-returns/${id}`)
         .then((res) => {
             dispatch(allOrderReturns(res.data))
         })
 }
-
 
 export const handleAddNewOrderReturns = (values) => (dispatch) => {
     return new Promise((resolve, reject) => {

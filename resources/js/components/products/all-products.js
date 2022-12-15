@@ -41,6 +41,15 @@ function AllTrucks (props) {
                     <Column title="Brand" dataIndex={'brand'}/>
                     <Column title="Quantity" dataIndex={'quantity'}/>
                     <Column title="Supplier" dataIndex={'supplier'}/>
+                    <Column title="Product Level"
+                            render={({quantity}) => (
+                                <div>
+                                    {quantity <= 0 && <Tag color={'darkred'}>Empty</Tag>}
+                                    {(quantity > 0 && quantity < 200 )&& <Tag color={'#106369'}>Low</Tag>}
+                                    {quantity > 200 && <Tag color={'darkgreen'}>OK</Tag>}
+                                </div>
+                            )}
+                    />
                     <Column title="Action"
                             render={(record) => (
                                 <Space>

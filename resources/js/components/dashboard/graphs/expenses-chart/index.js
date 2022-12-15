@@ -15,7 +15,7 @@ function ExpensesChart ({ getChartData, data }) {
             plotOptions: {
                 pie: {
                     donut: {
-                        size: '60%'
+                        size: '80%'
                     }
                 }
             },

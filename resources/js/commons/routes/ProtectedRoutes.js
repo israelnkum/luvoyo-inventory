@@ -37,6 +37,7 @@ const ProtectedRoutes = () => {
                     <Route path='suppliers' element={<AllSuppliers/>}/>
                     <Route path='trucks' element={<AllTrucks/>}/>
                     <Route path='cash-ups' element={<AllCashUps/>}/>
+                    <Route path='return-orders' element={<AllOrderReturns/>}/>
                     <Route path='dispatch-orders' element={<AllDispatchOrders/>}/>
                     <Route path='dispatch-orders/:orderNumber' element={<DispatchOrderDetail/>}/>
                     <Route path='dispatch-orders/:orderNumber/returns' element={<AllOrderReturns/>}/>

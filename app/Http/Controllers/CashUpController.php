@@ -11,14 +11,12 @@ use App\Models\DispatchOrder;
 use App\Traits\UsePrint;
 use Carbon\Carbon;
 use Exception;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 use Maatwebsite\Excel\Facades\Excel;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
@@ -33,8 +31,11 @@ class CashUpController extends Controller
     public function index(Request $request)
     {
         $cashUpQuery = CashUp::query();
-        $cashUpQuery->when($request->has('truck_code') && $request->truck_code !== null, static function (Builder $q) use ($request){
-            $q->whereRelation('dispatchOrder.truck', 'truck_code', $request->truck_code);
+        $date = explode(',', $request->date);
+
+        $cashUpQuery->when($request->has('date') && count($date) !== 1, function ($q) use($date){
+            $formatDate = [\Illuminate\Support\Carbon::parse($date[0]), Carbon::parse($date[1])];
+            return $q->whereBetween('date_time', $formatDate);
         });
 
         if ($request->has('export') && $request->export === 'true'){

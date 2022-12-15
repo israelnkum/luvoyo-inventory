@@ -14,11 +14,13 @@ use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Maatwebsite\Excel\Facades\Excel;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
+use function response;
 
 class EmployeeController extends Controller
 {
@@ -26,7 +28,7 @@ class EmployeeController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return AnonymousResourceCollection|\Illuminate\Http\Response|BinaryFileResponse
+     * @return AnonymousResourceCollection|Response|BinaryFileResponse
      */
     public function index(Request $request)
     {
@@ -118,7 +120,7 @@ class EmployeeController extends Controller
         try {
             $employee->delete();
             DB::commit();
-            return \response()->json('Employee Deleted');
+            return response()->json('Employee Deleted');
         } catch (Exception $exception) {
             DB::rollBack();
             return response()->json('Something went wrong', 422);
@@ -132,36 +134,5 @@ class EmployeeController extends Controller
             ->orWhere('other_names', 'like', '%' . $query . '%')
             ->orWhere('email', 'like', '%' . $query . '%')->get();
         return EmployeeResource::collection($products);
-    }
-
-    public function me (){
-        try {
-            $fields = $request->only('project_id', 'user_device', 'user_os', 'user_location', 'user_view', 'user_browser');
-            $rules = [
-                'project_id' => 'required',
-                'user_device' => 'required',
-                'user_os' => 'required',
-                'user_location' => 'required',
-                'user_view' => 'required',
-                'user_browser' => 'required',
-            ];
-
-            $validator = Validator::make($fields, $rules);
-            if($validator->fails()) {
-                return response()->json(['success'=> false, 'error'=> $validator->messages()]);
-            }
-            $stat = new Stat();
-            $stat->project_id = $request->project_id;
-            $stat->user_device = $request->user_device;
-            $stat->user_os = $request->user_os;
-            $stat->user_location = $request->user_location;
-            $stat->user_view = $request->user_view;
-            $stat->user_browser = $request->user_browser;
-            if($stat->save()){
-                return response()->json(['success'=> true, 'message'=> 'Stat saved successfully']);
-            }
-        }catch(\Exception $e){
-            \Log::info($e);
-        }
     }
 }
