@@ -64,7 +64,9 @@
                             </form>
                         </div>
                         <div class="text-center">
-                            <p> &copy; {{date('Y')}} - Powered by TechLineAfrica</p>
+                            <p> &copy; {{date('Y')}} - Powered by
+                                <a href="http://www.fusem.co.za/" target="_blank">FUSEM</a>
+                            </p>
                         </div>
                     </div>
                 </div>
